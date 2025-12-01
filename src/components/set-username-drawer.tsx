@@ -21,11 +21,11 @@ export function SetUsernameDrawer({ open, setOpen }: Props) {
     // Only allow letters, numbers, underscores, and dots
     const filtered = value.replace(/[^a-zA-Z0-9_.]/g, "");
     setUsername(filtered);
-    setOpen(false);
   };
-
+  
   const handleContinue = async () => {
     await mutateAsync({ username, bio: "" });
+    setOpen(false);
   }
 
   return (
@@ -39,6 +39,7 @@ export function SetUsernameDrawer({ open, setOpen }: Props) {
         <View className="w-full gap-12 justify-between">
           <View className="gap-2 w-full">
             <Input
+              autoCapitalize="none"
               value={username}
               onChangeText={handleUsernameChange}
             />

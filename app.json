@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "si.aiken.echo",
+      "bundleIdentifier": "club.echobook.app",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -22,7 +22,7 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "package": "si.aiken.echo",
+      "package": "club.echobook.app",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },

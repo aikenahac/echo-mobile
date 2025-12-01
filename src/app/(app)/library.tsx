@@ -1,6 +1,5 @@
 import { FullScreenLoader } from '@/components/full-screen-loader';
 import { ScreenContainer } from '@/components/screen-container';
-import { SetUsernameDrawer } from '@/components/set-username-drawer';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { useProfile } from '@/hooks/api/user/use-get-me';
@@ -11,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
 
-export default function HomeScreen() {
+export default function LibraryScreen() {
   const { t } = useTranslation();
   const { signOut } = useAuth();
   const [open, setOpen] = useState(false);
@@ -105,8 +104,6 @@ export default function HomeScreen() {
             </View>
           )}
         </View>
-
-        <SetUsernameDrawer open={open} setOpen={setOpen} />
 
         <Button className="w-full" onPress={() => signOut()}>
           <Text>{t('auth.logout')}</Text>
