@@ -21,6 +21,14 @@
       "want": "Want to Read",
       "reading": "Currently Reading",
       "finished": "Finished"
+    },
+    "noContent": "No books in this category yet.",
+    "noContentSubtext": "Start by searching for books and adding them to your library.",
+    "pageEdit": {
+      "title": "Pages Manager",
+      "currentPage": "Current Page",
+      "pageCount": "Page Count",
+      "save": "Save"
     }
   },
   "auth": {

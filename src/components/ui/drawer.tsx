@@ -185,7 +185,7 @@ function DrawerContent({ className, portalHost, children, ...props }: DrawerCont
 function DrawerHandle() {
   return (
     <View className="flex items-center pb-2">
-      <View className="bg-muted h-1 w-12 rounded-full" />
+      <View className="bg-muted-foreground h-1 w-12 rounded-full" />
     </View>
   );
 }
