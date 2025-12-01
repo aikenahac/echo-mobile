@@ -1,0 +1,46 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "language": "Language",
+    "settings": "Settings"
+  },
+  "home": {
+    "title": "Welcome to Expo Boilerplate",
+    "description": "This is an example of internationalization using i18next",
+    "changeLanguage": "Change Language",
+    "changeTheme": "Change Theme"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign Up",
+    "registered": "Already have an account?",
+    "email": "Email",
+    "emailPlaceholder": "Enter email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "passwordPlaceholderSet": "Set your password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your chosen password",
+    "signOut": "Sign Out",
+    "verifyEmail": "Verify your email",
+    "enterVerificationCode": "Enter your verification code",
+    "verify": "Verify",
+    "openMail": "Open Mail app",
+    "passwordsDontMatch": "The passwords do not match",
+    "enterAllDetails": "Please enter all information",
+    "invalidEmail": "The entered email is not valid",
+    "logout": "Logout"
+  },
+  "languageSwitcher": {
+    "selectLanguage": "Select Language",
+    "english": "English",
+    "slovenian": "Slovenian"
+  },
+  "themeSwitcher": {
+    "selectTheme": "Select Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  }
+}
