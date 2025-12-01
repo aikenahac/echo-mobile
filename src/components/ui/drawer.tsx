@@ -94,7 +94,7 @@ function DrawerContent({ className, portalHost, children, ...props }: DrawerCont
   const { height } = useWindowDimensions();
   const translateY = useSharedValue(0);
 
-  const minHeight = height * 0.4; // 40vh
+  const minHeight = height * 0.35; // 40vh
   const maxHeight = height * 0.7; // 70vh
 
   const handleClose = React.useCallback(() => {

@@ -20,7 +20,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
   inputClassName = '',
 }) => {
   const [code, setCode] = useState(value.slice(0, length));
-  const inputs = useRef<(TextInput | null)[]>([]);
+  const inputs = useRef<Array<TextInput | null>>([]);
 
   const handleChange = (text: string, index: number) => {
     if (!/^[0-9]*$/.test(text)) return;

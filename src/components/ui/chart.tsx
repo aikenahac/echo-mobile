@@ -1,11 +1,10 @@
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Text } from '@/components/ui/text';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Circle } from '@shopify/react-native-skia';
 import React, { useState } from 'react';
-import { View, type ViewProps, Dimensions, StyleSheet } from 'react-native';
-import { CartesianChart, Line, Bar, Area, type PointsArray } from 'victory-native';
-import { Circle, useFont } from '@shopify/react-native-skia';
+import { StyleSheet, View, type ViewProps } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
-import * as Haptics from 'expo-haptics';
+import { Area, Bar, CartesianChart, Line } from 'victory-native';
 
 // Types
 export interface ChartDataPoint {
@@ -18,7 +17,7 @@ export interface ChartContainerProps extends ViewProps {
 }
 
 export interface ChartProps {
-  data: ChartDataPoint[];
+  data: Array<ChartDataPoint>;
   color?: string;
   height?: number;
   showGrid?: boolean;

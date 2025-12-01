@@ -59,7 +59,7 @@ function clearLocalStorage(): void {
  *
  * @returns An array of all keys currently in storage
  */
-function getAllLocalStorageKeys(): string[] {
+function getAllLocalStorageKeys(): Array<string> {
   return storage.getAllKeys();
 }
 

@@ -41,8 +41,12 @@ export function useFetch() {
   const { getToken } = useAuth();
 
   const authenticatedFetch = useCallback(
-    async (url: string, options: FetchOptions = {}) => {
+    async (endpoint: string, options: FetchOptions = {}) => {
       const token = await getToken();
+
+      const baseUrl = process.env.EXPO_PUBLIC_API_URL ?? "https://echo.aiken.si/api";
+      const url = baseUrl + endpoint;
+
       return fetchWithAuth(url, token, options);
     },
     [getToken]

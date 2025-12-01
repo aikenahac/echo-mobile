@@ -8,7 +8,11 @@
     "title": "Welcome to Expo Boilerplate",
     "description": "This is an example of internationalization using i18next",
     "changeLanguage": "Change Language",
-    "changeTheme": "Change Theme"
+    "changeTheme": "Change Theme",
+    "setUsername": "Set your username",
+    "usernamePlaceholder": "Choose a username",
+    "usernameRules": "Only letters, numbers, underscores (_), and dots (.) allowed. 3-30 characters.",
+    "continue": "Continue"
   },
   "auth": {
     "signIn": "Sign In",

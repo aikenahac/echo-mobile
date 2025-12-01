@@ -25,6 +25,16 @@ import { Toaster } from "sonner-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "../global.css";
 
+import NetInfo from '@react-native-community/netinfo';
+import { onlineManager, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+onlineManager.setEventListener((setOnline) => {
+  return NetInfo.addEventListener((state) => {
+    setOnline(!!state.isConnected)
+  })
+})
+
+
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
@@ -55,6 +65,9 @@ export default function RootLayout() {
   );
 }
 
+const queryClient = new QueryClient()
+
+
 function RootLayoutContent() {
   const { colorScheme } = useColorScheme();
   const effectiveColorScheme = colorScheme ?? "light";
@@ -62,27 +75,29 @@ function RootLayoutContent() {
   return (
     <SafeAreaProvider style={{ flex: 1 }}>
       <NavThemeProvider value={NAV_THEME[effectiveColorScheme]}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <View
-            style={{ flex: 1 }}
-            className={
-              effectiveColorScheme === "dark"
-                ? "dark bg-background"
-                : "bg-background"
-            }
-          >
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="home/index" />
-            </Stack>
-            <StatusBar
-              style={effectiveColorScheme === "dark" ? "light" : "dark"}
-              translucent
-              backgroundColor="transparent"
-            />
-            <PortalHost />
-            <Toaster position="bottom-center" />
-          </View>
-        </GestureHandlerRootView>
+        <QueryClientProvider client={queryClient}>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <View
+              style={{ flex: 1 }}
+              className={
+                effectiveColorScheme === "dark"
+                  ? "dark bg-background"
+                  : "bg-background"
+              }
+            >
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="home/index" />
+              </Stack>
+              <StatusBar
+                style={effectiveColorScheme === "dark" ? "light" : "dark"}
+                translucent
+                backgroundColor="transparent"
+              />
+              <PortalHost />
+              <Toaster position="bottom-center" />
+            </View>
+          </GestureHandlerRootView>
+        </QueryClientProvider>
       </NavThemeProvider>
     </SafeAreaProvider>
   );
