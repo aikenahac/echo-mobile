@@ -3,6 +3,8 @@ import { createMMKV } from "react-native-mmkv";
 export const STORAGE_KEYS = {
   LANGUAGE: "app_language",
   THEME: "app_theme",
+  LIBRARY_VIEW: "library_view",
+  LIBRARY_TAB: "library_tab",
 }
 
 const storage = createMMKV({

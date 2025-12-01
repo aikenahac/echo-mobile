@@ -1,6 +1,6 @@
 import { useUsersApi } from "@/lib/api/user";
 import { useQuery } from "@tanstack/react-query";
-import { profileQueryKeys } from "../query-keys";
+import { profileQueryKeys } from "../../query-keys";
 
 
 export const useProfile = () => {

@@ -1,22 +1,27 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 // ============================================================================
 // ENUMS
 // ============================================================================
 
-export const ReadingStatusSchema = z.enum(['want', 'reading', 'finished']);
+export const ReadingStatusSchema = z.enum(["want", "reading", "finished"]);
 
-export const UserRoleSchema = z.enum(['user', 'moderator', 'admin']);
+export const UserRoleSchema = z.enum(["user", "moderator", "admin"]);
 
-export const BillingIntervalSchema = z.enum(['month', 'year', 'lifetime', 'free']);
+export const BillingIntervalSchema = z.enum([
+  "month",
+  "year",
+  "lifetime",
+  "free",
+]);
 
 export const SubscriptionStatusSchema = z.enum([
-  'active',
-  'canceled',
-  'past_due',
-  'unpaid',
-  'trialing',
-  'incomplete',
+  "active",
+  "canceled",
+  "past_due",
+  "unpaid",
+  "trialing",
+  "incomplete",
 ]);
 
 // ============================================================================
@@ -179,6 +184,14 @@ export const ApiErrorSchema = z.object({
 // Profile response schema (can be User or UserWithStats)
 export const ProfileResponseSchema = z.union([UserSchema, UserWithStatsSchema]);
 
+// Library response schema
+export const LibraryResponseSchema = z.object({
+  favoriteBooks: z.array(UserBookSchema),
+  wantToRead: z.array(UserBookSchema),
+  currentlyReading: z.array(UserBookSchema),
+  finished: z.array(UserBookSchema),
+});
+
 // ============================================================================
 // TYPE EXPORTS (inferred from schemas)
 // ============================================================================
@@ -193,9 +206,12 @@ export type SubscriptionPlan = z.infer<typeof SubscriptionPlanSchema>;
 export type UserSubscription = z.infer<typeof UserSubscriptionSchema>;
 export type Collection = z.infer<typeof CollectionSchema>;
 export type UserWithStats = z.infer<typeof UserWithStatsSchema>;
-export type UserSubscriptionWithPlan = z.infer<typeof UserSubscriptionWithPlanSchema>;
+export type UserSubscriptionWithPlan = z.infer<
+  typeof UserSubscriptionWithPlanSchema
+>;
 export type ApiError = z.infer<typeof ApiErrorSchema>;
 export type ProfileResponse = z.infer<typeof ProfileResponseSchema>;
+export type LibraryResponse = z.infer<typeof LibraryResponseSchema>;
 
 // Re-export enum types
 export type ReadingStatus = z.infer<typeof ReadingStatusSchema>;

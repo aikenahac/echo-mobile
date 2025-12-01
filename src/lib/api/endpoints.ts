@@ -29,6 +29,10 @@ export const Endpoints = {
     update: "/v1/profile",
   },
 
+  library: {
+    get: "/v1/library"
+  },
+
   collections: {
     getAll: "/v1/collections",
     create: "/v1/collections",

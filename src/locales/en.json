@@ -14,6 +14,15 @@
     "usernameRules": "Only letters, numbers, underscores (_), and dots (.) allowed. 3-30 characters.",
     "continue": "Continue"
   },
+  "library": {
+    "title": "My Library",
+    "tabs": {
+      "favorites": "Favorites",
+      "want": "Want to Read",
+      "reading": "Currently Reading",
+      "finished": "Finished"
+    }
+  },
   "auth": {
     "signIn": "Sign In",
     "noAccount": "Don't have an account?",

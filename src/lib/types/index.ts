@@ -2,19 +2,21 @@
 // ENUMS
 // ============================================================================
 
-export type ReadingStatus = 'want' | 'reading' | 'finished';
+import { LibraryResponse } from "../schemas";
 
-export type UserRole = 'user' | 'moderator' | 'admin';
+export type ReadingStatus = "want" | "reading" | "finished";
 
-export type BillingInterval = 'month' | 'year' | 'lifetime' | 'free';
+export type UserRole = "user" | "moderator" | "admin";
+
+export type BillingInterval = "month" | "year" | "lifetime" | "free";
 
 export type SubscriptionStatus =
-  | 'active'
-  | 'canceled'
-  | 'past_due'
-  | 'unpaid'
-  | 'trialing'
-  | 'incomplete';
+  | "active"
+  | "canceled"
+  | "past_due"
+  | "unpaid"
+  | "trialing"
+  | "incomplete";
 
 // ============================================================================
 // DATABASE MODELS
@@ -320,6 +322,17 @@ export interface SubscriptionUsageCheck {
 // ============================================================================
 // UTILITY TYPES
 // ============================================================================
+export type LibraryViews = "grid" | "list";
+export type LibraryTabsRaw = "favorites" | "want" | "reading" | "finished";
+export type LibraryTabs = LibraryTabsRaw | "collection"
+
+export const LibraryTabsApiMap: Record<LibraryTabs, keyof LibraryResponse | "collection"> = {
+  "favorites": "favoriteBooks",
+  "want": "wantToRead",
+  "reading": "currentlyReading",
+  "finished": "finished",
+  "collection": "collection"
+}
 
 export type DateString = string; // ISO 8601 date string
 
@@ -341,7 +354,7 @@ export interface PaginatedResponse<T> {
 export interface SearchParams extends PaginationParams {
   query?: string;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
 }
 
 // ============================================================================
@@ -350,13 +363,15 @@ export interface SearchParams extends PaginationParams {
 
 export function isApiError(response: unknown): response is ApiError {
   return (
-    typeof response === 'object' &&
+    typeof response === "object" &&
     response !== null &&
-    'error' in response &&
-    typeof (response as ApiError).error === 'string'
+    "error" in response &&
+    typeof (response as ApiError).error === "string"
   );
 }
 
-export function hasLimitReached(response: unknown): response is Required<ApiError> {
+export function hasLimitReached(
+  response: unknown,
+): response is Required<ApiError> {
   return isApiError(response) && response.limitReached === true;
 }
