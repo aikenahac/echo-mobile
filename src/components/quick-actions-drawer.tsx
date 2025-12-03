@@ -70,10 +70,10 @@ export function QuickActionsDrawer({
       <DrawerContent className="pb-8">
         <Text className="text-lg">{t("library.quickActions.title")}</Text>
         <View className="w-full gap-4">
-          <Label className="mb-2">{t("library.quickActions.currentPage")}</Label>
+          <Label>{t("library.quickActions.currentPage")}</Label>
           <NumberSpinner value={currentPage} onChange={setCurrentPage} />
 
-          <Label className="mb-2">{t("library.quickActions.pageCount")}</Label>
+          <Label>{t("library.quickActions.pageCount")}</Label>
           <NumberSpinner value={pageCount} onChange={setPageCount} />
 
           <View className="flex flex-row items-center gap-2 my-4">

@@ -1,3 +1,4 @@
+import { HeartIcon } from "@/lib/icons";
 import { UserBook } from "@/lib/types";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
@@ -34,7 +35,10 @@ export function LibraryBookListItem({ userBook }: { userBook: UserBook }) {
         <View className="flex flex-col">
           <Text className="font-bold">{userBook.book.title}</Text>
           <Text className="text-muted-foreground">{userBook.book.author}</Text>
+          <View className="flex flex-row items-center gap-2">
           <Text className="text-muted-foreground">{currentPage} / {pageCount}</Text>
+            {userBook.isFavorite ? <HeartIcon fill="#ff6467" className="text-destructive" size={18} /> : null}
+          </View>
         </View>
       </TouchableOpacity>
       <Separator className="my-2" />
