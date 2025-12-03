@@ -3,25 +3,25 @@ export const Endpoints = {
     getAll: "/v1/books",
     add: "/v1/books",
     search: "/v1/books/search",
-    getById: "/v1/books/:id",
-    remove: "/v1/books/:id",
-    updateStatus: "/v1/books/:id/status",
-    updateProgress: "/v1/books/:id/progress",
-    rate: "/v1/books/:id/rating",
-    toggleFavorite: "/v1/books/:id/favorite",
+    getById: (id: string) => `/v1/books/${id}`,
+    remove: (id: string) => `/v1/books/${id}`,
+    updateStatus: (id: string) => `/v1/books/${id}/status`,
+    updateProgress: (id: string) => `/v1/books/${id}/progress`,
+    rate: (id: string) => `/v1/books/${id}/rating`,
+    toggleFavorite: (id: string) => `/v1/books/${id}/favorite`,
   },
 
   reviews: {
     getAll: "/v1/reviews",
     create: "/v1/reviews",
-    getById: "/v1/reviews/:id",
-    update: "/v1/reviews/:id",
-    delete: "/v1/reviews/:id",
+    getById: (id: string) => `/v1/reviews/${id}`,
+    update: (id: string) => `/v1/reviews/${id}`,
+    delete: (id: string) => `/v1/reviews/${id}`,
   },
 
   social: {
     follow: "/v1/social/follow",
-    unfollow: "/v1/social/follow/:userId",
+    unfollow: (userId: string) => `/v1/social/follow/${userId}`,
   },
 
   profile: {
@@ -36,11 +36,11 @@ export const Endpoints = {
   collections: {
     getAll: "/v1/collections",
     create: "/v1/collections",
-    getById: "/v1/collections/:id",
-    update: "/v1/collections/:id",
-    delete: "/v1/collections/:id",
-    addBook: "/v1/collections/:id/books",
-    removeBook: "/v1/collections/:id/books",
+    getById: (id: string) => `/v1/collections/${id}`,
+    update: (id: string) => `/v1/collections/${id}`,
+    delete: (id: string) => `/v1/collections/${id}`,
+    addBook: (id: string) => `/v1/collections/${id}/books`,
+    removeBook: (id: string) => `/v1/collections/${id}/books`,
   },
 
   feed: {

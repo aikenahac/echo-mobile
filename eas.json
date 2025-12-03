@@ -18,7 +18,7 @@
       "distribution": "internal",
       "env": {
         "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_c2VsZWN0LXdvbGYtNDkuY2xlcmsuYWNjb3VudHMuZGV2JA",
-        "EXPO_PUBLIC_API_URL": "https://echo.aiken.si/api"
+        "EXPO_PUBLIC_API_URL": "https://echobook.club/api"
       }
     },
     "production": {
@@ -28,7 +28,7 @@
       },
       "env": {
         "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_c2VsZWN0LXdvbGYtNDkuY2xlcmsuYWNjb3VudHMuZGV2JA",
-        "EXPO_PUBLIC_API_URL": "https://echo.aiken.si/api"
+        "EXPO_PUBLIC_API_URL": "https://echobook.club/api"
       }
     }
   },

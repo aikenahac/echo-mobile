@@ -24,11 +24,11 @@
     },
     "noContent": "No books in this category yet.",
     "noContentSubtext": "Start by searching for books and adding them to your library.",
-    "pageEdit": {
-      "title": "Pages Manager",
+    "quickActions": {
+      "title": "Quick Actions",
       "currentPage": "Current Page",
       "pageCount": "Page Count",
-      "save": "Save"
+      "addToCollection": "Add to collection"
     }
   },
   "auth": {

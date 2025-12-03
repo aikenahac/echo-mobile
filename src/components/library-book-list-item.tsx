@@ -3,7 +3,7 @@ import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
 import { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
-import { PageEditDrawer } from "./page-edit-drawer";
+import { QuickActionsDrawer } from "./quick-actions-drawer";
 import { Separator } from "./ui/separator";
 import { Text } from "./ui/text";
 
@@ -40,13 +40,15 @@ export function LibraryBookListItem({ userBook }: { userBook: UserBook }) {
       <Separator className="my-2" />
       <Text>{JSON.stringify(userBook, null, 2)}</Text>
 
-      <PageEditDrawer
+      <QuickActionsDrawer
+        userBookId={userBook.id}
         open={pageEditOpen}
         setOpen={setPageEditOpen}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         pageCount={pageCount}
         setPageCount={setPageCount}
+        isFavorite={userBook.isFavorite}
       />
     </View>
   );

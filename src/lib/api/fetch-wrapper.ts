@@ -45,7 +45,7 @@ export function useFetch() {
       const token = await getToken();
       console.log({ token });
 
-      const baseUrl = process.env.EXPO_PUBLIC_API_URL ?? "https://echo.aiken.si/api";
+      const baseUrl = process.env.EXPO_PUBLIC_API_URL ?? "https://echobook.club/api";
       const url = baseUrl + endpoint;
 
       return fetchWithAuth(url, token, options);
