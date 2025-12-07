@@ -192,6 +192,44 @@ export const LibraryResponseSchema = z.object({
   finished: z.array(UserBookSchema),
 });
 
+// Rate book request/response schemas
+export const RateBookRequestSchema = z.object({
+  rating: z.number().int().min(1).max(5),
+});
+
+export const RateBookResponseSchema = z.object({
+  success: z.boolean(),
+  userBook: UserBookWithoutBookSchema.optional(),
+});
+
+// Review array response schema
+export const ReviewsResponseSchema = z.array(ReviewWithUserSchema);
+
+// Create review request schema
+export const CreateReviewRequestSchema = z.object({
+  bookId: z.string().uuid(),
+  content: z.string().min(1).max(5000),
+  isPrivate: z.boolean().optional().default(false),
+});
+
+// Update review request schema
+export const UpdateReviewRequestSchema = z.object({
+  content: z.string().min(1).max(5000).optional(),
+  isPrivate: z.boolean().optional(),
+});
+
+// Review response schemas
+export const CreateReviewResponseSchema = z.object({
+  success: z.boolean(),
+  review: ReviewSchema.optional(),
+});
+
+export const UpdateReviewResponseSchema = CreateReviewResponseSchema;
+
+export const DeleteReviewResponseSchema = z.object({
+  success: z.boolean(),
+});
+
 // ============================================================================
 // TYPE EXPORTS (inferred from schemas)
 // ============================================================================
@@ -212,6 +250,17 @@ export type UserSubscriptionWithPlan = z.infer<
 export type ApiError = z.infer<typeof ApiErrorSchema>;
 export type ProfileResponse = z.infer<typeof ProfileResponseSchema>;
 export type LibraryResponse = z.infer<typeof LibraryResponseSchema>;
+export type RateBookRequest = z.infer<typeof RateBookRequestSchema>;
+export type RateBookResponse = z.infer<typeof RateBookResponseSchema>;
+export type ReviewsResponse = z.infer<typeof ReviewsResponseSchema>;
+export type CreateReviewRequest = z.infer<typeof CreateReviewRequestSchema>;
+export type UpdateReviewRequest = z.infer<typeof UpdateReviewRequestSchema>;
+export type CreateReviewResponse = z.infer<typeof CreateReviewResponseSchema>;
+export type UpdateReviewResponse = z.infer<typeof UpdateReviewResponseSchema>;
+export type DeleteReviewResponse = z.infer<typeof DeleteReviewResponseSchema>;
+export type ReviewWithUser = z.infer<typeof ReviewWithUserSchema>;
+export type ReviewWithBook = z.infer<typeof ReviewWithBookSchema>;
+export type ReviewWithDetails = z.infer<typeof ReviewWithDetailsSchema>;
 
 // Re-export enum types
 export type ReadingStatus = z.infer<typeof ReadingStatusSchema>;

@@ -1,6 +1,6 @@
 export const Endpoints = {
-  books: {
-    getAll: "/v1/books",
+  library: {
+    get: "/v1/books",
     add: "/v1/books",
     search: "/v1/books/search",
     getById: (id: string) => `/v1/books/${id}`,
@@ -27,10 +27,6 @@ export const Endpoints = {
   profile: {
     get: "/v1/profile",
     update: "/v1/profile",
-  },
-
-  library: {
-    get: "/v1/library"
   },
 
   collections: {

@@ -51,11 +51,20 @@
         "expo-asset",
         {
           "assets": [
-            "./assets/images/echo_logo.png"
+            "./assets/images/echo_logo.png",
+            "./assets/images/google_icon.png",
+            "./assets/images/apple_icon_light.png",
+            "./assets/images/apple_icon_dark.png"
           ]
         }
       ],
-      "expo-font"
+      "expo-font",
+      [
+        "expo-web-browser",
+        {
+          "experimentalLauncherActivity": true
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

@@ -1,9 +1,12 @@
+import OAuthButton from "@/components/oauth-button";
 import { ScreenContainer } from "@/components/screen-container";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { OtpInput } from "@/components/ui/otp-input";
+import { Separator } from "@/components/ui/separator";
 import { Text } from "@/components/ui/text";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { MailIcon } from "@/lib/icons";
 import { isValidEmail } from "@/lib/utils";
 import { useSignIn } from "@clerk/clerk-expo";
@@ -18,6 +21,9 @@ export default function Page() {
   const { t } = useTranslation();
   const { signIn, setActive, isLoaded } = useSignIn();
   const router = useRouter();
+
+  const { colorScheme } = useColorScheme();
+  const effectiveColorScheme = colorScheme ?? "light";
 
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
@@ -95,7 +101,7 @@ export default function Page() {
       // Use the code the user provided to attempt verification
       const signUpAttempt = await signIn.attemptSecondFactor({
         code,
-        strategy: "email_code"
+        strategy: "email_code",
       });
 
       // If verification was completed, set the session to active
@@ -149,6 +155,29 @@ export default function Page() {
         className="w-64 h-32 object-contain"
         transition={1000}
       />
+
+      <View className="w-full flex flex-row items-center justify-between gap-2">
+        <OAuthButton strategy="oauth_google">
+          <Image
+            source={{ uri: "google_icon" }}
+            style={{ width: 18, height: 18 }}
+          />
+        </OAuthButton>
+
+        <OAuthButton strategy="oauth_apple">
+          <Image
+            source={{
+              uri:
+                effectiveColorScheme === "dark"
+                  ? "apple_icon_light"
+                  : "apple_icon_dark",
+            }}
+            style={{ width: 15, height: 18 }}
+          />
+        </OAuthButton>
+      </View>
+
+      <Separator />
 
       <View className="my-4 w-full gap-4">
         <Text className="font-bold text-3xl">{t("auth.signIn")}</Text>

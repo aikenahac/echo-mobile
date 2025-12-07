@@ -9,5 +9,6 @@ export { MailIcon } from "./mail";
 export { MenuIcon } from "./menu-icon";
 export { MinusIcon } from "./minus";
 export { PlusIcon } from "./plus";
+export { StarIcon } from "./star";
 export { XIcon } from "./x";
 

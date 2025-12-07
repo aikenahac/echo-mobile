@@ -11,6 +11,7 @@ import {
   EBGaramond_700Bold,
   useFonts,
 } from "@expo-google-fonts/eb-garamond";
+import { Roboto_500Medium } from "@expo-google-fonts/roboto";
 import { ThemeProvider as NavThemeProvider } from "@react-navigation/native";
 import { PortalHost } from "@rn-primitives/portal";
 import { Stack } from "expo-router";
@@ -44,6 +45,7 @@ export default function RootLayout() {
     EBGaramond_500Medium,
     EBGaramond_600SemiBold,
     EBGaramond_700Bold,
+    Roboto_500Medium,
   });
 
   useEffect(() => {

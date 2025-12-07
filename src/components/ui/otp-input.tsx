@@ -58,6 +58,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
           maxLength={1}
           autoFocus={autoFocus && i === 0}
           className={`w-12 h-14 text-center text-2xl rounded-xl border border-neutral-300 dark:border-neutral-700 ${inputClassName}`}
+          style={{ fontFamily: 'EBGaramond_400Regular' }}
         />
       ))}
     </View>

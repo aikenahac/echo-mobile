@@ -9,6 +9,7 @@ module.exports = {
         display: ['EBGaramond_600SemiBold', 'EBGaramond_700Bold'],
         body: ['EBGaramond_400Regular', 'EBGaramond_500Medium'],
         sans: ['EBGaramond_400Regular', 'EBGaramond_500Medium'],
+        google: ['Roboto_500Medium'],
       },
       colors: {
         border: "var(--border)",
