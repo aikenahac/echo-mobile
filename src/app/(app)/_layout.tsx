@@ -31,8 +31,7 @@ export default function AppRoutesLayout() {
   const { isSignedIn } = useAuth();
   const [open, setOpen] = useState(false);
 
-  // Fetch user profile with error handling and validation
-  const { data: profile, isLoading, error, refetch } = useProfile();
+  const { data: profile, isLoading } = useProfile();
 
   useEffect(() => {
     if (profile && (!profile.username || profile.username.length === 0)) {

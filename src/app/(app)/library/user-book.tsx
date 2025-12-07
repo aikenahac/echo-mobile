@@ -1,10 +1,7 @@
 import { BookMetadataCard } from "@/components/book-metadata-card";
 import { ReviewDrawer } from "@/components/review-drawer";
 import { ReviewItem } from "@/components/review-item";
-import { ScreenContainer } from "@/components/screen-container";
 import { StarRating } from "@/components/star-rating";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,6 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text";
@@ -28,6 +26,7 @@ import { Image } from "expo-image";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RefreshControl, ScrollView, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function UserBookScreen() {
   const { t } = useTranslation();
@@ -103,28 +102,28 @@ export default function UserBookScreen() {
 
   if (isLoading) {
     return (
-      <ScreenContainer className="p-4">
+      <SafeAreaView style={{ flex: 1 }} edges={["bottom"]} className="bg-background px-6 py-4">
         <View className="gap-4">
           <Skeleton className="h-48 w-full rounded-lg" />
           <Skeleton className="h-32 w-full rounded-lg" />
           <Skeleton className="h-24 w-full rounded-lg" />
         </View>
-      </ScreenContainer>
+      </SafeAreaView>
     );
   }
 
   if (error || !userBook) {
     return (
-      <ScreenContainer className="flex items-center justify-center">
+      <SafeAreaView style={{ flex: 1 }} edges={["bottom"]} className="bg-background px-6 py-4 flex items-center justify-center">
         <Text className="text-destructive">
           {t("common.error", "Error loading book")}
         </Text>
-      </ScreenContainer>
+      </SafeAreaView>
     );
   }
 
   return (
-    <ScreenContainer>
+    <SafeAreaView style={{ flex: 1 }} edges={["bottom"]} className="bg-background px-6 py-4">
       <ScrollView
         className="flex-1"
         contentContainerClassName="p-4 gap-6"
@@ -258,6 +257,6 @@ export default function UserBookScreen() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </ScreenContainer>
+    </SafeAreaView>
   );
 }

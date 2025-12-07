@@ -1,4 +1,5 @@
 import { FullScreenLoader } from "@/components/full-screen-loader";
+import { LibraryBookGridItem } from "@/components/library-book-grid-item";
 import { LibraryBookListItem } from "@/components/library-book-list-item";
 import { LibraryDrawer } from "@/components/library-drawer";
 import { LibraryViewSwitcher } from "@/components/library-view-switcher";
@@ -9,7 +10,7 @@ import { useLibraryTab } from "@/hooks/use-library-tab";
 import { useLibraryView } from "@/hooks/use-library-view";
 import { UserBook } from "@/lib/types";
 import { useTranslation } from "react-i18next";
-import { RefreshControl, View } from "react-native";
+import { FlatList, RefreshControl, useWindowDimensions, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 export default function LibraryScreen() {
@@ -47,23 +48,29 @@ export default function LibraryScreen() {
         />
       </View>
 
-      <LibraryBookListView
+      <LibraryBookView
         books={getContent()}
         refreshing={isLoading}
         onRefresh={() => refetch()}
+        activeView={activeView}
       />
     </ScreenContainer>
   );
 }
 
-type ListViewProps = {
+type BookViewProps = {
   books: Array<UserBook> | undefined;
   refreshing: boolean;
   onRefresh: () => void;
+  activeView: "grid" | "list";
 };
 
-function LibraryBookListView({ books, refreshing, onRefresh }: ListViewProps) {
+function LibraryBookView({ books, refreshing, onRefresh, activeView }: BookViewProps) {
   const { t } = useTranslation();
+  const { width } = useWindowDimensions();
+
+  // Calculate columns based on screen width
+  const numColumns = width > 768 ? 3 : 2;
 
   if (!books || books.length === 0) {
     return (
@@ -74,6 +81,25 @@ function LibraryBookListView({ books, refreshing, onRefresh }: ListViewProps) {
     );
   }
 
+  // Grid View
+  if (activeView === "grid") {
+    return (
+      <FlatList
+        key={numColumns}
+        data={books}
+        renderItem={({ item }) => <LibraryBookGridItem userBook={item} />}
+        keyExtractor={(item) => item.id}
+        numColumns={numColumns}
+        columnWrapperStyle={{ gap: 16 }}
+        contentContainerStyle={{ paddingBottom: 16 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
+    );
+  }
+
+  // List View
   return (
     <ScrollView
       refreshControl={

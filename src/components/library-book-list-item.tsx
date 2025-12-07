@@ -35,16 +35,28 @@ export function LibraryBookListItem({ userBook }: { userBook: UserBook }) {
         }}
         className="flex flex-row items-center gap-4 w-full px-4 py-3 rounded-lg"
       >
-        <Image
-          source={userBook.book.coverUrl}
-          className="h-full w-full flex-1"
-          style={{
-            height: 100,
-            width: 80,
-          }}
-          contentFit="contain"
-        />
-        <View className="flex flex-col">
+        {userBook.book.coverUrl ? (
+          <Image
+            source={userBook.book.coverUrl}
+            className="rounded-md"
+            style={{
+              height: 100,
+              width: 80,
+            }}
+            contentFit="cover"
+          />
+        ) : (
+          <View
+            className="bg-muted rounded-md flex items-center justify-center"
+            style={{
+              height: 100,
+              width: 80,
+            }}
+          >
+            <Text className="text-muted-foreground text-xs">No Cover</Text>
+          </View>
+        )}
+        <View className="flex flex-col flex-1">
           <Text className="font-bold">{userBook.book.title}</Text>
           <Text className="text-muted-foreground">{userBook.book.author}</Text>
           <View className="flex flex-row items-center gap-2">
@@ -62,7 +74,6 @@ export function LibraryBookListItem({ userBook }: { userBook: UserBook }) {
         </View>
       </TouchableOpacity>
       <Separator className="my-2" />
-      <Text>{JSON.stringify(userBook, null, 2)}</Text>
 
       <QuickActionsDrawer
         userBookId={userBook.id}
