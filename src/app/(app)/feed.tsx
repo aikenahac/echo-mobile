@@ -32,7 +32,7 @@ export default function FeedScreen() {
   }
 
   return (
-    <ScreenContainer className="flex flex-col items-center w-screen h-screen justify-between mt-24">
+    <ScreenContainer className="flex flex-col items-center w-screen h-screen justify-between mt-24 mb-12">
       <Image
         source={{ uri: 'echo_logo' }}
         style={{ width: 220, height: 100 }}

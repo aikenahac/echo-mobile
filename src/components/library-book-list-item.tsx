@@ -21,7 +21,6 @@ export function LibraryBookListItem({ userBook }: { userBook: UserBook }) {
     <View>
       <TouchableOpacity
         onPress={() =>{
-          console.log("pushing")
           router.push({
             pathname: "/(app)/library/user-book",
             params: {

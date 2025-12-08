@@ -15,10 +15,6 @@ export function useUsersApi() {
   const getMe = async (): Promise<ProfileResponse> => {
     const response = await authenticatedFetch(Endpoints.profile.get);
 
-    console.log("me response")
-    const body = await response.json()
-    console.log({ body })
-
     // Handle response with validation
     return handleApiResponse(response, ProfileResponseSchema);
   };
