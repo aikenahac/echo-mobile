@@ -357,6 +357,22 @@ export interface SearchParams extends PaginationParams {
   sortOrder?: "asc" | "desc";
 }
 
+// Book search result types
+export interface SearchResult {
+  id?: string;
+  key?: string;
+  isbn: string | null;
+  title: string;
+  author: string;
+  coverUrl?: string | null;
+  pages: number | null;
+  publishedYear: number | null;
+  source: "internal" | "external";
+}
+
+// API returns array directly, not an object
+export type SearchResponse = Array<SearchResult>;
+
 // ============================================================================
 // HELPER TYPE GUARDS
 // ============================================================================

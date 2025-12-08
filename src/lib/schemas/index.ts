@@ -34,6 +34,8 @@ export const UserSchema = z.object({
   username: z.string().nullable(),
   bio: z.string().nullable(),
   role: UserRoleSchema,
+  isPremium: z.boolean(),
+  planName: z.string().nullable(),
   createdAt: z.union([z.string(), z.date()]),
   updatedAt: z.union([z.string(), z.date()]),
 });
@@ -230,6 +232,43 @@ export const DeleteReviewResponseSchema = z.object({
   success: z.boolean(),
 });
 
+// Search result schema
+export const SearchResultSchema = z.object({
+  id: z.string().uuid().optional(),
+  key: z.string().optional(),
+  isbn: z.string().nullable(),
+  title: z.string(),
+  author: z.string(),
+  coverUrl: z.string().nullable().optional(),
+  pages: z.number().int().positive().nullable(),
+  publishedYear: z.number().int().nullable(),
+  source: z.enum(["internal", "external"]),
+});
+
+// Search response schema - API returns array directly
+export const SearchResponseSchema = z.array(SearchResultSchema);
+
+// Add book to library request schema
+export const AddBookToLibraryRequestSchema = z.object({
+  book: z.object({
+    isbn: z.string().nullable().optional(),
+    title: z.string(),
+    author: z.string(),
+    coverUrl: z.string().url().nullable().optional(),
+    pages: z.number().int().positive().nullable().optional(),
+    publishedYear: z.number().int().nullable().optional(),
+  }),
+  status: ReadingStatusSchema,
+  isFavorite: z.boolean().optional().default(false),
+});
+
+// Add book to library response schema
+export const AddBookToLibraryResponseSchema = z.object({
+  success: z.boolean(),
+  userBook: UserBookWithoutBookSchema.optional(),
+  error: z.string().optional(),
+});
+
 // ============================================================================
 // TYPE EXPORTS (inferred from schemas)
 // ============================================================================
@@ -261,6 +300,14 @@ export type DeleteReviewResponse = z.infer<typeof DeleteReviewResponseSchema>;
 export type ReviewWithUser = z.infer<typeof ReviewWithUserSchema>;
 export type ReviewWithBook = z.infer<typeof ReviewWithBookSchema>;
 export type ReviewWithDetails = z.infer<typeof ReviewWithDetailsSchema>;
+export type SearchResult = z.infer<typeof SearchResultSchema>;
+export type SearchResponse = z.infer<typeof SearchResponseSchema>; // Array<SearchResult>
+export type AddBookToLibraryRequest = z.infer<
+  typeof AddBookToLibraryRequestSchema
+>;
+export type AddBookToLibraryResponse = z.infer<
+  typeof AddBookToLibraryResponseSchema
+>;
 
 // Re-export enum types
 export type ReadingStatus = z.infer<typeof ReadingStatusSchema>;

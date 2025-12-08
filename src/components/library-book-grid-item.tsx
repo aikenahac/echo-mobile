@@ -16,7 +16,7 @@ export function LibraryBookGridItem({ userBook }: { userBook: UserBook }) {
   const [pageCount, setPageCount] = useState(userBook.pageCount || 0);
 
   return (
-    <View className="mb-4">
+    <View className="mb-4 flex-1">
       <TouchableOpacity
         onPress={() => {
           router.push({
@@ -32,15 +32,15 @@ export function LibraryBookGridItem({ userBook }: { userBook: UserBook }) {
         }}
       >
         {/* Book Cover with Favorite Badge */}
-        <View className="relative rounded-lg overflow-hidden">
+        <View className="relative rounded-lg overflow-hidden w-full aspect-[17/22]">
           {userBook.book.coverUrl ? (
             <Image
               source={userBook.book.coverUrl}
               style={{
-                height: 170,
-                width: 136,
+                height: 200,
+                width: 160,
               }}
-              contentFit="contain"
+              contentFit="cover"
             />
           ) : (
             <View className="w-full h-full bg-muted flex items-center justify-center">
@@ -57,7 +57,7 @@ export function LibraryBookGridItem({ userBook }: { userBook: UserBook }) {
         </View>
 
         {/* Book Info */}
-        <View className="mt-2 gap-1">
+        <View className="mt-2 gap-1 w-full">
           <Text className="font-semibold text-sm" numberOfLines={2}>
             {userBook.book.title}
           </Text>

@@ -1,118 +1,185 @@
-import { FullScreenLoader } from '@/components/full-screen-loader';
-import { ScreenContainer } from '@/components/screen-container';
-import { SetUsernameDrawer } from '@/components/set-username-drawer';
-import { Button } from '@/components/ui/button';
-import { Text } from '@/components/ui/text';
-import { useProfile } from '@/hooks/api/user/use-get-me';
-import { getErrorMessage, isApiRequestError } from '@/lib/api/errors';
-import { useAuth } from '@clerk/clerk-expo';
-import { Image } from 'expo-image';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, View } from 'react-native';
+import { AddToLibraryDrawer } from "@/components/add-to-library-drawer";
+import { FullScreenLoader } from "@/components/full-screen-loader";
+import { ScreenContainer } from "@/components/screen-container";
+import { SearchResultItem } from "@/components/search-result-item";
+import { SetUsernameDrawer } from "@/components/set-username-drawer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Text } from "@/components/ui/text";
+import { useSearchBooks } from "@/hooks/api/search/use-search-books";
+import { useProfile } from "@/hooks/api/user/use-get-me";
+import { getErrorMessage } from "@/lib/api/errors";
+import { LayoutGridIcon, ListIcon } from "@/lib/icons";
+import { getFromLocalStorage, setInLocalStorage, STORAGE_KEYS } from "@/lib/storage";
+import { LibraryViews, SearchResult } from "@/lib/types";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { ActivityIndicator, FlatList, View } from "react-native";
 
 export default function SearchScreen() {
   const { t } = useTranslation();
-  const { signOut } = useAuth();
-  const [open, setOpen] = useState(false);
+  const [usernameDrawerOpen, setUsernameDrawerOpen] = useState(false);
 
   // Fetch user profile with error handling and validation
-  const { data: profile, isLoading, error, refetch } = useProfile();
+  const { data: profile, isLoading: profileLoading } = useProfile();
 
+  // Search state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [selectedResult, setSelectedResult] = useState<SearchResult | null>(
+    null
+  );
+  const [addDrawerOpen, setAddDrawerOpen] = useState(false);
+
+  // View mode state
+  const [view, setView] = useState<LibraryViews>(
+    getFromLocalStorage<LibraryViews>(STORAGE_KEYS.SEARCH_VIEW) ?? "list"
+  );
+
+  // Search query with debouncing
+  const {
+    data,
+    isLoading: searchLoading,
+    error: searchError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useSearchBooks(debouncedQuery);
+
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Show username drawer if needed
   useEffect(() => {
     if (profile && (!profile.username || profile.username.length === 0)) {
-      setOpen(true);
+      setUsernameDrawerOpen(true);
     }
-  }, [profile])
+  }, [profile]);
 
-  if (isLoading) {
-    return (
-      <FullScreenLoader />
-    )
+  // Toggle view mode
+  const toggleView = () => {
+    const newView: LibraryViews = view === "list" ? "grid" : "list";
+    setView(newView);
+    setInLocalStorage(STORAGE_KEYS.SEARCH_VIEW, newView);
+  };
+
+  // Handle long press on search result
+  const handleResultLongPress = (result: SearchResult) => {
+    setSelectedResult(result);
+    setAddDrawerOpen(true);
+  };
+
+  // Flatten all results from pages (API returns array directly)
+  const allResults = data?.pages.flatMap((page) => page) ?? [];
+
+  if (profileLoading) {
+    return <FullScreenLoader />;
   }
 
   return (
-    <ScreenContainer className="flex flex-col items-center w-screen h-screen justify-between mt-24">
-      <Image
-        source={{ uri: 'echo_logo' }}
-        style={{ width: 220, height: 100 }}
-        className="w-64 h-32 object-contain"
-        transition={1000}
-      />
-
-      <View className="w-full flex items-center gap-2">
-        {/* Profile Section with Error Handling */}
-        <View className="w-full p-4 items-center gap-2">
-          {isLoading && (
-            <View className="flex-row items-center gap-2">
-              <ActivityIndicator size="small" />
-              <Text className="text-muted-foreground">Loading profile...</Text>
-            </View>
-          )}
-
-          {error && (
-            <View className="w-full bg-destructive/10 p-4 rounded-lg border border-destructive items-center gap-2">
-              <Text className="text-destructive font-semibold">Profile Error</Text>
-              <Text className="text-destructive text-center">{getErrorMessage(error)}</Text>
-              {isApiRequestError(error) && error.statusCode && (
-                <Text className="text-destructive/70 text-sm">Status: {error.statusCode}</Text>
-              )}
-              <Button variant="outline" size="sm" onPress={() => refetch()}>
-                <Text>Retry</Text>
-              </Button>
-            </View>
-          )}
-
-          {profile && !error && (
-            <View className="w-full bg-accent/50 p-4 rounded-lg border border-border items-center gap-2">
-              <Text className="font-semibold text-lg">Profile Loaded ✓</Text>
-              <View className="items-center gap-1">
-                <Text className="text-muted-foreground text-sm">Email:</Text>
-                <Text className="font-medium">{profile.email}</Text>
-              </View>
-              {profile.username && (
-                <View className="items-center gap-1">
-                  <Text className="text-muted-foreground text-sm">Username:</Text>
-                  <Text className="font-medium">@{profile.username}</Text>
-                </View>
-              )}
-              <View className="items-center gap-1">
-                <Text className="text-muted-foreground text-sm">Role:</Text>
-                <Text className="font-medium capitalize">{profile.role}</Text>
-              </View>
-              {'_count' in profile && profile._count && (
-                <View className="flex-row gap-4 mt-2">
-                  {profile._count.followers !== undefined && (
-                    <View className="items-center">
-                      <Text className="text-lg font-bold">{profile._count.followers}</Text>
-                      <Text className="text-muted-foreground text-xs">Followers</Text>
-                    </View>
-                  )}
-                  {profile._count.following !== undefined && (
-                    <View className="items-center">
-                      <Text className="text-lg font-bold">{profile._count.following}</Text>
-                      <Text className="text-muted-foreground text-xs">Following</Text>
-                    </View>
-                  )}
-                  {profile._count.userBooks !== undefined && (
-                    <View className="items-center">
-                      <Text className="text-lg font-bold">{profile._count.userBooks}</Text>
-                      <Text className="text-muted-foreground text-xs">Books</Text>
-                    </View>
-                  )}
-                </View>
-              )}
-            </View>
-          )}
+    <ScreenContainer className="flex flex-col h-full mb-12">
+      {/* Header with Search Input and View Toggle */}
+      <View className="py-4 gap-3">
+        <View className="flex flex-row items-center gap-2">
+          <Input
+            placeholder={t("search.placeholder")}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            className="flex-1"
+          />
+          <Button size="icon" variant="outline" onPress={toggleView}>
+            {view === "list" ? <LayoutGridIcon /> : <ListIcon />}
+          </Button>
         </View>
-
-        <SetUsernameDrawer open={open} setOpen={setOpen} />
-
-        <Text>Search</Text>
-        <Button className="w-full" onPress={() => signOut()}>
-          <Text>{t('auth.logout')}</Text>
-        </Button>
       </View>
+
+      {/* Search Results */}
+      <View className="flex-1">
+        {!debouncedQuery.trim() ? (
+          // Empty state - no search query
+          <View className="flex-1 items-center justify-center p-8">
+            <Text className="text-muted-foreground text-center">
+              {t("search.emptyState")}
+            </Text>
+          </View>
+        ) : searchLoading ? (
+          // Loading state
+          <View className="flex-1 items-center justify-center">
+            <ActivityIndicator size="large" />
+          </View>
+        ) : searchError ? (
+          // Error state
+          <View className="flex-1 items-center justify-center p-8">
+            <Text className="text-destructive text-center mb-4">
+              {getErrorMessage(searchError)}
+            </Text>
+          </View>
+        ) : allResults.length === 0 ? (
+          // No results found
+          <View className="flex-1 items-center justify-center p-8">
+            <Text className="text-muted-foreground text-center">
+              {t("search.noResults", { query: debouncedQuery })}
+            </Text>
+          </View>
+        ) : (
+          // Results list
+          <FlatList
+            data={allResults}
+            keyExtractor={(item, index) =>
+              item.id || item.key || `${item.isbn}-${index}`
+            }
+            numColumns={view === "grid" ? 2 : 1}
+            key={view}
+            contentContainerClassName="gap-3"
+            columnWrapperClassName={view === "grid" ? "gap-3" : undefined}
+            renderItem={({ item }) => (
+              <View className={view === "grid" ? "flex-1" : "w-full"}>
+                <SearchResultItem
+                  result={item}
+                  onLongPress={() => handleResultLongPress(item)}
+                  viewMode={view}
+                />
+              </View>
+            )}
+            ListFooterComponent={
+              hasNextPage ? (
+                <View className="py-4">
+                  <Button
+                    variant="outline"
+                    onPress={() => fetchNextPage()}
+                    disabled={isFetchingNextPage}
+                  >
+                    {isFetchingNextPage ? (
+                      <View className="flex flex-row items-center gap-2">
+                        <ActivityIndicator size="small" />
+                        <Text>{t("search.loadMore")}</Text>
+                      </View>
+                    ) : (
+                      <Text>{t("search.loadMore")}</Text>
+                    )}
+                  </Button>
+                </View>
+              ) : null
+            }
+          />
+        )}
+      </View>
+
+      {/* Drawers */}
+      <SetUsernameDrawer
+        open={usernameDrawerOpen}
+        setOpen={setUsernameDrawerOpen}
+      />
+      <AddToLibraryDrawer
+        open={addDrawerOpen}
+        setOpen={setAddDrawerOpen}
+        searchResult={selectedResult}
+      />
     </ScreenContainer>
   );
 }

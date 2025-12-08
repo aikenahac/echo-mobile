@@ -99,5 +99,32 @@
       "reading": "Currently Reading",
       "finished": "Finished"
     }
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search for books...",
+    "emptyState": "Search for books to add to your library",
+    "noResults": "No books found for '{{query}}'",
+    "loadMore": "Load More",
+    "source": {
+      "internal": "Database",
+      "external": "Open Library"
+    },
+    "addToLibrary": {
+      "title": "Add to Library",
+      "selectStatus": "Select a reading status to add this book:",
+      "currentStatus": "This book is already in your library:",
+      "status": {
+        "want": "Want to Read",
+        "reading": "Reading",
+        "finished": "Finished"
+      },
+      "favorite": "Mark as Favorite",
+      "collection": "Add to Collection",
+      "premium": "Premium",
+      "addButton": "Add to Library",
+      "success": "Book added to library!",
+      "error": "Failed to add book"
+    }
   }
 }

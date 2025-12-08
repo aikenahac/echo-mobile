@@ -1,11 +1,13 @@
 import {
+  AddBookToLibraryResponseSchema,
   LibraryResponse,
   LibraryResponseSchema,
   RateBookResponse,
   RateBookResponseSchema,
+  ReadingStatus,
   UserBookSchema,
 } from "../schemas";
-import { UserBook } from "../types";
+import { SearchResult, UserBook } from "../types";
 import { Endpoints } from "./endpoints";
 import { handleApiResponse } from "./errors";
 import { useFetch } from "./fetch-wrapper";
@@ -77,6 +79,48 @@ export function useLibraryApi() {
     return handleApiResponse(response, RateBookResponseSchema);
   };
 
+  const addBookToLibrary = async (
+    bookData: SearchResult,
+    status: ReadingStatus,
+    isFavorite: boolean = false
+  ) => {
+    const response = await authenticatedFetch(Endpoints.library.add, {
+      method: "POST",
+      body: JSON.stringify({
+        bookData: {
+          isbn: bookData.isbn,
+          title: bookData.title,
+          author: bookData.author,
+          coverUrl: bookData.coverUrl,
+          pages: bookData.pages,
+          publishedYear: bookData.publishedYear,
+        },
+        status,
+        isFavorite,
+      }),
+    });
+
+    const result = await handleApiResponse(response, AddBookToLibraryResponseSchema);
+
+    if (result.error) {
+      throw new Error(result.error);
+    }
+
+    return result;
+  };
+
+  const updateStatus = async (userBookId: string, status: ReadingStatus) => {
+    const response = await authenticatedFetch(
+      Endpoints.library.updateStatus(userBookId),
+      {
+        method: "PUT",
+        body: JSON.stringify({ status }),
+      }
+    );
+
+    return handleApiResponse(response);
+  };
+
   return {
     getMyLibrary,
     updateCurrentPage,
@@ -84,5 +128,7 @@ export function useLibraryApi() {
     toggleFavorite,
     getUserBook,
     rateBook,
+    addBookToLibrary,
+    updateStatus,
   };
 }

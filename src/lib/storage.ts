@@ -5,6 +5,7 @@ export const STORAGE_KEYS = {
   THEME: "app_theme",
   LIBRARY_VIEW: "library_view",
   LIBRARY_TAB: "library_tab",
+  SEARCH_VIEW: "search_view",
 }
 
 const storage = createMMKV({

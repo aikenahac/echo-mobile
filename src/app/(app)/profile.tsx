@@ -79,6 +79,8 @@ export default function ProfileScreen() {
               <View className="items-center gap-1">
                 <Text className="text-muted-foreground text-sm">Role:</Text>
                 <Text className="font-medium capitalize">{profile.role}</Text>
+                <Text className="font-medium capitalize">Is premium: {profile.isPremium.toString()}</Text>
+
               </View>
               {'_count' in profile && profile._count && (
                 <View className="flex-row gap-4 mt-2">
