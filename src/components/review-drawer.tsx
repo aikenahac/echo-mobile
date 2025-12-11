@@ -1,6 +1,7 @@
 import { Review } from "@/lib/types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ScrollView } from "react-native";
 import { ReviewForm } from "./review-form";
 import { Button } from "./ui/button";
 import {
@@ -48,20 +49,25 @@ export function ReviewDrawer({
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle>
-            <Text>
-              {existingReview
-              ? t("bookDetail.editReview")
-              : t("bookDetail.yourReview")}
-            </Text>
-          </DrawerTitle>
-        </DrawerHeader>
-        <ReviewForm
-          bookId={bookId}
-          existingReview={existingReview}
-          onSuccess={handleSuccess}
-        />
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <DrawerHeader>
+            <DrawerTitle>
+              <Text>
+                {existingReview
+                ? t("bookDetail.editReview")
+                : t("bookDetail.yourReview")}
+              </Text>
+            </DrawerTitle>
+          </DrawerHeader>
+          <ReviewForm
+            bookId={bookId}
+            existingReview={existingReview}
+            onSuccess={handleSuccess}
+          />
+        </ScrollView>
       </DrawerContent>
     </Drawer>
   );

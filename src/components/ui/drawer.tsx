@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { Portal } from '@rn-primitives/portal';
 import * as React from 'react';
 import { useEffect } from 'react';
-import { Platform, Pressable, useWindowDimensions, View, type ViewProps } from 'react-native';
+import { Keyboard, Platform, Pressable, useWindowDimensions, View, type ViewProps } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   FadeIn,
@@ -93,9 +93,34 @@ function DrawerContent({ className, portalHost, children, ...props }: DrawerCont
   const { open, onOpenChange, dismissible } = useDrawerContext();
   const { height } = useWindowDimensions();
   const translateY = useSharedValue(0);
+  const keyboardOffset = useSharedValue(0);
 
   const minHeight = height * 0.35; // 40vh
   const maxHeight = height * 0.7; // 70vh
+
+  // Handle keyboard events
+  useEffect(() => {
+    if (!open) return;
+
+    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+
+    const keyboardShowListener = Keyboard.addListener(showEvent, (e) => {
+      const keyboardHeight = e.endCoordinates.height;
+      // Move drawer up by keyboard height
+      keyboardOffset.value = withSpring(-keyboardHeight, { damping: 50 });
+    });
+
+    const keyboardHideListener = Keyboard.addListener(hideEvent, () => {
+      // Reset drawer position
+      keyboardOffset.value = withSpring(0, { damping: 50 });
+    });
+
+    return () => {
+      keyboardShowListener.remove();
+      keyboardHideListener.remove();
+    };
+  }, [open, keyboardOffset]);
 
   const handleClose = React.useCallback(() => {
     onOpenChange(false);
@@ -119,7 +144,7 @@ function DrawerContent({ className, portalHost, children, ...props }: DrawerCont
     });
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value }],
+    transform: [{ translateY: translateY.value + keyboardOffset.value }],
   }));
 
   useEffect(() => {
@@ -129,8 +154,9 @@ function DrawerContent({ className, portalHost, children, ...props }: DrawerCont
     } else {
       // Reset position when closed for next open
       translateY.value = 0;
+      keyboardOffset.value = 0;
     }
-  }, [open, translateY]);
+  }, [open, translateY, keyboardOffset]);
 
   if (!open) {
     return null;

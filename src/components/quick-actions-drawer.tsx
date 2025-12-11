@@ -68,23 +68,25 @@ export function QuickActionsDrawer({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerContent className="pb-8">
-        <Text className="text-lg">{t("library.quickActions.title")}</Text>
-        <View className="w-full gap-4">
-          <Label>{t("library.quickActions.currentPage")}</Label>
-          <NumberSpinner value={currentPage} onChange={setCurrentPage} />
+        <View className="px-4">
+          <Text className="text-lg mb-4">{t("library.quickActions.title")}</Text>
+          <View className="w-full gap-4">
+            <Label>{t("library.quickActions.currentPage")}</Label>
+            <NumberSpinner value={currentPage} onChange={setCurrentPage} />
 
-          <Label>{t("library.quickActions.pageCount")}</Label>
-          <NumberSpinner value={pageCount} onChange={setPageCount} />
+            <Label>{t("library.quickActions.pageCount")}</Label>
+            <NumberSpinner value={pageCount} onChange={setPageCount} />
 
-          <View className="flex flex-row items-center gap-2 my-4">
-            <Button size="icon" variant="destructive-outline" onPress={handleToggleFavorite}>
-              <HeartIcon fill={isFavorite ? "#ff6467" : "none"} className="text-destructive" />
-            </Button>
+            <View className="flex flex-row items-center gap-2 my-4">
+              <Button size="icon" variant="destructive-outline" onPress={handleToggleFavorite}>
+                <HeartIcon fill={isFavorite ? "#ff6467" : "none"} className="text-destructive" />
+              </Button>
 
-            <Button variant="outline">
-              <PlusIcon />
-              <Text>{t("library.quickActions.addToCollection")}</Text>
-            </Button>
+              <Button variant="outline">
+                <PlusIcon />
+                <Text>{t("library.quickActions.addToCollection")}</Text>
+              </Button>
+            </View>
           </View>
         </View>
       </DrawerContent>

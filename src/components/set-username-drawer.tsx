@@ -36,7 +36,7 @@ export function SetUsernameDrawer({ open, setOpen }: Props) {
             <Text>{t("home.setUsername")}</Text>
           </DrawerTitle>
         </DrawerHeader>
-        <View className="w-full gap-12 justify-between">
+        <View className="w-full gap-6">
           <View className="gap-2 w-full">
             <Input
               autoCapitalize="none"
@@ -46,9 +46,9 @@ export function SetUsernameDrawer({ open, setOpen }: Props) {
             <Text className="text-muted-foreground text-sm">{t("home.usernameRules")}</Text>
           </View>
 
-        <Button onPress={handleContinue}>
-          <Text>{t("home.continue")}</Text>
-        </Button>
+          <Button onPress={handleContinue}>
+            <Text>{t("home.continue")}</Text>
+          </Button>
         </View>
       </DrawerContent>
     </Drawer>
