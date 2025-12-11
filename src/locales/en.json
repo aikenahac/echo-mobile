@@ -126,5 +126,27 @@
       "success": "Book added to library!",
       "error": "Failed to add book"
     }
+  },
+  "profile": {
+    "title": "Profile",
+    "edit": "Edit Profile",
+    "stats": {
+      "booksThisYear": "Books This Year",
+      "pagesRead": "Pages Read",
+      "dayStreak": "Day Streak"
+    },
+    "sections": {
+      "favorites": "Favorite Books",
+      "currentlyReading": "Currently Reading",
+      "recentlyFinished": "Recently Finished"
+    },
+    "form": {
+      "username": "Username",
+      "bio": "Bio",
+      "save": "Save Changes",
+      "cancel": "Cancel",
+      "usernameRules": "3-30 characters. Letters, numbers, underscores, and dots only.",
+      "bioPlaceholder": "Tell us about yourself..."
+    }
   }
 }
