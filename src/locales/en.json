@@ -44,5 +44,58 @@
     "openMail": "Open Mail",
     "resendCode": "No code? Send it again",
     "passwordRule": "8 characters or more"
+  },
+  "library": {
+    "title": "Library",
+    "shelves": {
+      "reading": "Reading",
+      "want": "Want",
+      "finished": "Finished",
+      "favourites": "Favourites"
+    },
+    "showGrid": "Show as grid",
+    "showList": "Show as list",
+    "ofPages": "of {{count}} pages",
+    "toGo": "{{count}} to go",
+    "today": "+{{count}} today",
+    "noTotal": "Page count unknown",
+    "nextPage": "Next page",
+    "previousPage": "Previous page",
+    "editPage": "Page {{page}}. Double-tap to type the page",
+    "alsoReading": "Also reading",
+    "collections": "Collections",
+    "collectionMeta": "{{count}} books · {{visibility}}",
+    "public": "public",
+    "private": "private",
+    "booksCount_one": "{{count}} book",
+    "booksCount_other": "{{count}} books",
+    "thisYear": "{{count}} this year",
+    "notRated": "Not rated",
+    "added": "Added {{date}}",
+    "sort": {
+      "recentlyFinished": "Recently finished",
+      "recentlyAdded": "Recently added",
+      "title": "Title",
+      "author": "Author",
+      "rating": "Rating"
+    },
+    "pageSheet": {
+      "title": "Where are you?",
+      "currentPage": "Current page",
+      "pageCount": "Page count",
+      "pageCountHint": "Change it if your edition is longer or shorter.",
+      "save": "Save",
+      "tooHigh": "That's past the last page."
+    },
+    "empty": {
+      "title": "What are you reading?",
+      "body": "Add the book you have open. Echo keeps your page from here on.",
+      "findBook": "Find a book",
+      "friendsLabel": "Friends",
+      "friendsBody": "People you follow show up in Friends when they start or finish a book.",
+      "findReaders": "Find readers",
+      "shelf": "Nothing on this shelf yet."
+    },
+    "error": "Your library didn't load."
   }
 }

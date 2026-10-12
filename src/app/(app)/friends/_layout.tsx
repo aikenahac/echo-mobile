@@ -1,5 +1,7 @@
+import { useStatusBarStyle } from "@/lib/theme";
 import { Stack } from "expo-router";
 
 export default function TabStackLayout() {
-  return <Stack screenOptions={{ headerShown: false }} />;
+  const statusBarStyle = useStatusBarStyle();
+  return <Stack screenOptions={{ headerShown: false, statusBarStyle }} />;
 }

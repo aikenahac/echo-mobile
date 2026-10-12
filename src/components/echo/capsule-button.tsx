@@ -50,7 +50,7 @@ function look(variant: Variant, c: Palette) {
     case "outline":
       return { bg: "transparent", fg: c.ink, border: c.ink, borderWidth: 1.5 };
     case "fieldOutline":
-      return { bg: "transparent", fg: c.onField, border: c.onField, borderWidth: 1.5 };
+      return { bg: "transparent", fg: c.onField, border: c.fieldOutline, borderWidth: 1.5 };
     case "quiet":
       return { bg: "transparent", fg: c.ink, border: c.rule, borderWidth: 1 };
     case "paper":

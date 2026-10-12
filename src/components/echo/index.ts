@@ -1,10 +1,13 @@
 export { Avatar } from "./avatar";
 export { CapsuleButton } from "./capsule-button";
 export { CircleButton } from "./circle-button";
+export { CollectionTile } from "./collection-tile";
 export { Cover } from "./cover";
 export { DisplayText } from "./display-text";
 export { FieldBand } from "./field-band";
 export { Hairline } from "./hairline";
+export { NativeMenu } from "./native-menu";
+export type { MenuItem } from "./native-menu.types";
 export { PlateNumber } from "./plate-number";
 export { ProgressBar } from "./progress-bar";
 export { SFIcon } from "./sf-icon";

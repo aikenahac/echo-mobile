@@ -25,9 +25,13 @@ const light = {
   /** Text fields, the selected segment */
   surface: '#FFFFFF',
   fieldButton: '#170B11',
+  /** The − capsule outline on the field (softer in dark) */
+  fieldOutline: '#170B11',
   onFieldButton: '#FF6BA8',
   /** Glass tint for circular toolbar buttons that sit on the field */
   fieldGlass: 'rgba(255,235,243,0.42)',
+  /** Lift under floating glass controls (system chrome, not content) */
+  glassShadow: '0 6px 16px rgba(70,8,36,0.12)',
   /** The one shadow: covers only */
   coverShadow: '0 1px 1px rgba(23,11,17,0.14), 0 14px 22px -12px rgba(70,8,36,0.5)',
 };
@@ -48,8 +52,10 @@ const dark: typeof light = {
   plate: '#8E2457',
   surface: '#2A1820',
   fieldButton: '#FF8CBF',
+  fieldOutline: 'rgba(255,232,241,0.78)',
   onFieldButton: '#3A0C22',
-  fieldGlass: 'rgba(46,26,36,0.62)',
+  fieldGlass: 'rgba(255,140,191,0.16)',
+  glassShadow: '0 6px 16px rgba(0,0,0,0.35)',
   coverShadow: '0 0 0 0.5px rgba(255,255,255,0.08), 0 14px 22px -12px rgba(0,0,0,0.8)',
 };
 
@@ -60,6 +66,15 @@ export type Palette = typeof light;
 export function useColors(): Palette {
   const { colorScheme } = useTheme();
   return colorScheme === 'dark' ? dark : light;
+}
+
+/**
+ * Status bar text for native stacks. Under the UIScene life cycle iOS only honours
+ * view-controller-based appearance, so each Stack sets `statusBarStyle` itself.
+ */
+export function useStatusBarStyle(): 'light' | 'dark' {
+  const { colorScheme } = useTheme();
+  return colorScheme === 'dark' ? 'light' : 'dark';
 }
 
 /** Spacing scale (pt). `lg` (20) is the screen side margin. */

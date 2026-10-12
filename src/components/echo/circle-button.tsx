@@ -7,7 +7,7 @@ type Props = {
   icon: SFSymbol;
   accessibilityLabel: string;
   onPress?: () => void;
-  /** On the field the button is a light glass wash; on paper it is tint */
+  /** On the field the button is a light glass wash; on paper it is a surface disc */
   onField?: boolean;
   size?: number;
   style?: StyleProp<ViewStyle>;
@@ -29,7 +29,8 @@ export function CircleButton({ icon, accessibilityLabel, onPress, onField, size 
           borderRadius: size / 2,
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: onField ? colors.fieldGlass : colors.tint,
+          backgroundColor: onField ? colors.fieldGlass : colors.surface,
+          boxShadow: colors.glassShadow,
           opacity: pressed ? 0.7 : 1,
         },
         style,
