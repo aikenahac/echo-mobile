@@ -14,6 +14,7 @@ import { useProgressCommitter } from "@/hooks/api/library/use-progress-committer
 import { useRateBook } from "@/hooks/api/library/use-rate-book";
 import { useUpdateProgress } from "@/hooks/api/library/use-update-progress";
 import { useLibraryLayout } from "@/hooks/use-library-layout";
+import { usePremiumGate } from "@/hooks/use-premium-gate";
 import { getErrorMessage } from "@/lib/api/errors";
 import { bookTotal } from "@/lib/books";
 import { heroBook, SHELF_KEY, type Shelf } from "@/lib/library-cache";
@@ -24,7 +25,7 @@ import * as Haptics from "expo-haptics";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, Alert, RefreshControl, ScrollView, Text, useWindowDimensions, View } from "react-native";
+import { ActivityIndicator, Alert, Pressable, RefreshControl, ScrollView, Text, useWindowDimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Sort = "recentlyFinished" | "recentlyAdded" | "title" | "author" | "rating";
@@ -161,7 +162,7 @@ export default function LibraryScreen() {
     setTimeout(() => setFinishing(null), 900);
   };
 
-  // TODO(phase 8): open collection detail
+  const { guard } = usePremiumGate();
   const openBook = (userBook: UserBook) => router.push({ pathname: "/book/[bookId]", params: { bookId: userBook.bookId } });
   const findBook = () => router.navigate({ pathname: "/search", params: { segment: "books" } });
 
@@ -259,13 +260,26 @@ export default function LibraryScreen() {
               </>
             )}
 
-            {(collections.data?.length ?? 0) > 0 && (
+            {collections.isSuccess && (
               <View style={{ marginTop: alsoReading.length || !hero ? 32 : 0 }}>
-                <Text style={{ fontSize: 13, fontWeight: "600", color: colors.ink2, marginBottom: 4 }}>{t("library.collections")}</Text>
+                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+                  <Text style={{ fontSize: 13, fontWeight: "600", color: colors.ink2 }}>{t("library.collections")}</Text>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={t("collections.new")}
+                    hitSlop={12}
+                    onPress={guard(() => router.push("/collection-editor"))}
+                  >
+                    <SFIcon name="plus" size={16} color={colors.ink2} />
+                  </Pressable>
+                </View>
+                {collections.data!.length === 0 && (
+                  <Text style={{ fontSize: 15, lineHeight: 20, color: colors.ink2, paddingVertical: 8 }}>{t("collections.empty")}</Text>
+                )}
                 {collections.data!.map((c, i) => (
                   <View key={c.id}>
                     {i > 0 && <Hairline />}
-                    <CollectionRow collection={c} />
+                    <CollectionRow collection={c} onPress={guard(() => router.push({ pathname: "/collection/[id]", params: { id: c.id } }))} />
                   </View>
                 ))}
               </View>

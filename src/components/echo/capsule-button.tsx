@@ -26,6 +26,8 @@ type Size = "lg" | "md" | "sm";
 type Props = {
   title?: string;
   icon?: SFSymbol;
+  /** Put the icon after the title (an outward arrow) */
+  iconTrailing?: boolean;
   variant?: Variant;
   size?: Size;
   /** Negative text for destructive plain buttons */
@@ -68,6 +70,7 @@ function look(variant: Variant, c: Palette) {
 export function CapsuleButton({
   title,
   icon,
+  iconTrailing,
   variant = "primary",
   size = "lg",
   destructive,
@@ -112,10 +115,11 @@ export function CapsuleButton({
         <ActivityIndicator color={fg} />
       ) : (
         <View style={{ flexDirection: "row", alignItems: "center", gap: s.gap }}>
-          {icon && <SFIcon name={icon} size={s.icon} color={fg} weight="semibold" />}
+          {icon && !iconTrailing && <SFIcon name={icon} size={s.icon} color={fg} weight="semibold" />}
           {title && (
             <Text style={{ color: fg, fontSize: s.font, fontWeight: "600", letterSpacing: size === "lg" ? -0.3 : 0 }}>{title}</Text>
           )}
+          {icon && iconTrailing && <SFIcon name={icon} size={s.icon} color={fg} weight="semibold" />}
         </View>
       )}
     </Pressable>

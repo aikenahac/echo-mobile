@@ -69,8 +69,7 @@ export function useProfileQueriesForSettings() {
       build: Constants.expoConfig?.ios?.buildNumber ?? "1",
     }),
     editProfile: () => router.push("/edit-profile"),
-    // TODO(phase 8): the Premium paywall
-    getPremium: () => open("/subscription"),
+    getPremium: () => router.push("/premium"),
     billing: () => open("/subscription"),
     terms: () => open("/documents/terms-of-service"),
     privacy: () => open("/documents/privacy-policy"),

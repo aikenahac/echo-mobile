@@ -78,6 +78,41 @@ export default function AppLayout() {
           headerShadowVisible: false,
         }}
       />
+      <Stack.Screen name="premium" options={{ presentation: "fullScreenModal", statusBarStyle: "dark" }} />
+      <Stack.Screen
+        name="add-to-collection/[userBookId]"
+        options={{
+          presentation: "formSheet",
+          sheetAllowedDetents: "fitToContents",
+          sheetGrabberVisible: true,
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.paper },
+        }}
+      />
+      <Stack.Screen
+        name="collection/[id]"
+        options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: "",
+          headerBackButtonDisplayMode: "minimal",
+          headerShadowVisible: false,
+          headerTintColor: "#FFFFFF",
+          statusBarStyle: "light",
+        }}
+      />
+      <Stack.Screen
+        name="collection-editor"
+        options={{
+          presentation: "formSheet",
+          sheetAllowedDetents: [1],
+          sheetGrabberVisible: true,
+          headerShown: true,
+          headerTransparent: true,
+          headerShadowVisible: false,
+          contentStyle: { backgroundColor: colors.paper },
+        }}
+      />
     </Stack>
   );
 }

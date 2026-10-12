@@ -8,6 +8,7 @@ import { addBookBody, useAddBook, useRemoveBook, useSetFavorite, useUpdateStatus
 import { useProgressCommitter } from "@/hooks/api/library/use-progress-committer";
 import { useRateBook } from "@/hooks/api/library/use-rate-book";
 import { useUpdateProgress } from "@/hooks/api/library/use-update-progress";
+import { usePremiumGate } from "@/hooks/use-premium-gate";
 import { getErrorMessage, isApiRequestError } from "@/lib/api/errors";
 import { bookTotal } from "@/lib/books";
 import { daysBetween, shortDate } from "@/lib/dates";
@@ -42,6 +43,7 @@ export default function BookDetailScreen() {
   const rateBook = useRateBook();
   const committer = useProgressCommitter();
   const updateProgress = useUpdateProgress();
+  const { guard } = usePremiumGate();
   const [pageSheetOpen, setPageSheetOpen] = useState(false);
   const [dialActive, setDialActive] = useState(false);
 
@@ -126,8 +128,14 @@ export default function BookDetailScreen() {
             }}
           />
         )}
-        {/* TODO(phase 8): Add-to-collection sheet, or the Premium paywall for free users */}
-        {userBook && <Stack.Toolbar.Button icon="folder" tintColor={colors.ink} accessibilityLabel={t("book.addToCollection")} onPress={() => {}} />}
+        {userBook && (
+          <Stack.Toolbar.Button
+            icon="folder"
+            tintColor={colors.ink}
+            accessibilityLabel={t("book.addToCollection")}
+            onPress={guard(() => router.push({ pathname: "/add-to-collection/[userBookId]", params: { userBookId: userBook.id } }))}
+          />
+        )}
         {userBook && (
           <Stack.Toolbar.Menu icon="ellipsis" tintColor={colors.ink} accessibilityLabel={t("book.more")}>
             <Stack.Toolbar.MenuAction icon="trash" destructive onPress={confirmRemove}>
