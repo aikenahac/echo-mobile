@@ -184,5 +184,22 @@
     "followName": "Follow {{name}}",
     "unfollowName": "Unfollow {{name}}",
     "error": "Search didn't work."
+  },
+  "time": {
+    "now": "Now",
+    "minutes": "{{count}} min",
+    "hours": "{{count}} h",
+    "yesterday": "Yesterday"
+  },
+  "friends": {
+    "title": "Friends",
+    "findReaders": "Find readers",
+    "startedReading": "started reading",
+    "finished": "finished",
+    "reviewed": "reviewed",
+    "rated": "Rated {{count}} of 5",
+    "emptyTitle": "Nothing here yet",
+    "emptyBody": "Follow people and their reading shows up here when they start or finish a book, or write a review.",
+    "error": "The feed didn't load."
   }
 }
