@@ -61,7 +61,6 @@
     "noTotal": "Page count unknown",
     "nextPage": "Next page",
     "previousPage": "Previous page",
-    "editPage": "Page {{page}}. Double-tap to type the page",
     "alsoReading": "Also reading",
     "collections": "Collections",
     "collectionMeta": "{{count}} books · {{visibility}}",
@@ -96,6 +95,16 @@
       "findReaders": "Find readers",
       "shelf": "Nothing on this shelf yet."
     },
-    "error": "Your library didn't load."
+    "error": "Your library didn't load.",
+    "pageDial": "Current page",
+    "pageDialHint": "Swipe up or down to change the page, or double-tap to type it.",
+    "finished": {
+      "rate": "Rate {{title}}",
+      "rateLabel": "Your rating",
+      "stars_one": "{{count}} star",
+      "stars_other": "{{count}} stars",
+      "moved": "Moved to Finished",
+      "undo": "Undo"
+    }
   }
 }

@@ -1,25 +1,28 @@
-import { CapsuleButton, Cover, DisplayText, PlateNumber } from "@/components/echo";
+import { CapsuleButton, Cover, DisplayText } from "@/components/echo";
 import { bookTotal } from "@/lib/books";
 import { pagesToday } from "@/lib/daily-pages";
 import type { UserBook } from "@/lib/schemas";
 import { useColors } from "@/lib/theme";
-import * as Haptics from "expo-haptics";
 import { useTranslation } from "react-i18next";
-import { Pressable, Text, useWindowDimensions, View } from "react-native";
+import { Text, useWindowDimensions, View } from "react-native";
+import { PageDial } from "./page-dial";
 
 type Props = {
   userBook: UserBook;
   /** −1 / +1 from the stepper */
   onStep: (delta: number) => void;
+  /** A page settled on the numbering stamp */
+  onSetPage: (page: number) => void;
   /** Tap on the number: the sheet with current page and page count */
   onEditPage: () => void;
+  onDragChange?: (active: boolean) => void;
 };
 
 /**
  * The book you're reading, on the field: cover, the 120pt page number (editable),
  * "of 245 pages / 77 to go · +12 today", title, author, and −/Next page.
  */
-export function ReadingHero({ userBook, onStep, onEditPage }: Props) {
+export function ReadingHero({ userBook, onStep, onSetPage, onEditPage, onDragChange }: Props) {
   const colors = useColors();
   const { t } = useTranslation();
   const { height } = useWindowDimensions();
@@ -38,25 +41,7 @@ export function ReadingHero({ userBook, onStep, onEditPage }: Props) {
       <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 20, marginTop: compact ? 16 : 24 }}>
         <Cover uri={userBook.book.coverUrl} title={userBook.book.title} author={userBook.book.author} width={compact ? 104 : 140} />
         <View style={{ flex: 1, minWidth: 0 }}>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={t("library.editPage", { page })}
-            onPress={() => {
-              Haptics.selectionAsync();
-              onEditPage();
-            }}
-            style={{ alignSelf: "flex-start" }}
-          >
-            <PlateNumber
-              value={page}
-              size={compact ? 96 : 120}
-              color={colors.onField}
-              // Already far above the largest text size; let it grow a little, not 3×
-              maxFontSizeMultiplier={1.2}
-              style={{ marginLeft: -4 }}
-            />
-            <View style={{ height: 2, backgroundColor: colors.onField, marginTop: 12 }} />
-          </Pressable>
+          <PageDial page={page} total={total} size={compact ? 96 : 120} onCommit={onSetPage} onTap={onEditPage} onDragChange={onDragChange} />
           {total ? (
             <Text style={{ fontSize: 17, fontWeight: "600", letterSpacing: -0.3, color: colors.onField, marginTop: 12 }}>
               {t("library.ofPages", { count: total })}
