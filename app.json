@@ -55,7 +55,15 @@
           ]
         }
       ],
-      "expo-font",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./src/lib/assets/fonts/ArchivoCondensed-Black.ttf",
+            "./src/lib/assets/fonts/ArchivoCondensed-ExtraBold.ttf"
+          ]
+        }
+      ],
       [
         "expo-web-browser",
         {
@@ -64,7 +72,8 @@
       ],
       "expo-apple-authentication",
       "expo-image",
-      "expo-status-bar"
+      "expo-status-bar",
+      "./plugins/with-ios-scene-lifecycle"
     ],
     "experiments": {
       "typedRoutes": true,

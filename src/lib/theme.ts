@@ -1,81 +1,137 @@
-import { DarkTheme, DefaultTheme, type Theme } from "expo-router";
+import { useTheme } from '@/lib/theme-context';
+import { DarkTheme, DefaultTheme, type Theme } from 'expo-router';
+import type { TextStyle } from 'react-native';
 
-export const THEME = {
-  light: {
-    background: 'oklch(1 0 0)',
-    foreground: 'oklch(0.145 0 0)',
-    card: 'oklch(1 0 0)',
-    cardForeground: 'oklch(0.145 0 0)',
-    popover: 'oklch(1 0 0)',
-    popoverForeground: 'oklch(0.145 0 0)',
-    primary: 'oklch(0.795 0.184 86.047)',
-    primaryForeground: 'oklch(1 0 0)',
-    secondary: 'oklch(0.511 0.262 276.966)',
-    secondaryForeground: 'oklch(1 0 0)',
-    muted: 'oklch(0.97 0 0)',
-    mutedForeground: 'oklch(0.556 0 0)',
-    accent: 'oklch(0.97 0 0)',
-    accentForeground: 'oklch(0.205 0 0)',
-    destructive: 'oklch(0.577 0.245 27.325)',
-    border: 'oklch(0.922 0 0)',
-    input: 'oklch(0.922 0 0)',
-    ring: 'oklch(0.708 0 0)',
-    radius: '0.5rem',
-    chart1: 'oklch(0.852 0.199 91.936)',
-    chart2: 'oklch(0.673 0.182 276.935)',
-    chart3: 'oklch(0.704 0.191 22.216)',
-    chart4: 'oklch(0.91 0.096 180.426)',
-    chart5: 'oklch(0.74 0.238 322.16)',
-  },
-  dark: {
-    background: 'oklch(0.18 0.0131 276.966)',
-    foreground: 'oklch(0.85 0.0210 276.966)',
-    card: 'oklch(0.23 0.0210 276.966)',
-    cardForeground: 'oklch(0.85 0.0210 276.966)',
-    popover: 'oklch(0.23 0.0210 276.966)',
-    popoverForeground: 'oklch(0.85 0.0210 276.966)',
-    primary: 'oklch(0.795 0.184 86.047)',
-    primaryForeground: 'oklch(0 0 0)',
-    secondary: 'oklch(0.511 0.262 276.966)',
-    secondaryForeground: 'oklch(1 0 0)',
-    muted: 'oklch(0.28 0.0393 276.966)',
-    mutedForeground: 'oklch(0.85 0.0393 276.966)',
-    accent: 'oklch(0.28 0.0393 264.966)',
-    accentForeground: 'oklch(0.85 0.0210 276.966)',
-    destructive: 'oklch(0.3 0.2358 306.966)',
-    border: 'oklch(0.33 0.01572 276.966)',
-    input: 'oklch(0.33 0.01572 276.966)',
-    ring: 'oklch(0.55 0.1048 276.966)',
-    radius: '0.5rem',
-    chart1: 'oklch(0.795 0.184 86.047)',
-    chart2: 'oklch(0.673 0.182 276.935)',
-    chart3: 'oklch(0.704 0.191 22.216)',
-    chart4: 'oklch(0.777 0.152 181.912)',
-    chart5: 'oklch(0.74 0.238 322.16)',
-  },
+/**
+ * Echo design tokens (design/redesign/HANDOFF.md § Tokens).
+ * Same values as the CSS variables in src/global.css. Use the Uniwind classes
+ * (`bg-paper`, `text-ink-2`, …) in layout code; use these where a raw value is
+ * needed (Reanimated, SF Symbols, @expo/ui, navigation theme).
+ */
+const light = {
+  paper: '#FBF7F8',
+  field: '#FF6BA8',
+  ink: '#170B11',
+  ink2: '#6B5560',
+  ink3: '#8C7682',
+  rule: '#EADCE2',
+  tint: '#F3E6EC',
+  pinkInk: '#B3165A',
+  onField: '#170B11',
+  onField2: 'rgba(23,11,17,0.74)',
+  onFieldRule: 'rgba(23,11,17,0.22)',
+  negative: '#C2312B',
+  plate: '#B3165A',
+  /** Text fields, the selected segment */
+  surface: '#FFFFFF',
+  fieldButton: '#170B11',
+  onFieldButton: '#FF6BA8',
+  /** Glass tint for circular toolbar buttons that sit on the field */
+  fieldGlass: 'rgba(255,235,243,0.42)',
+  /** The one shadow: covers only */
+  coverShadow: '0 1px 1px rgba(23,11,17,0.14), 0 14px 22px -12px rgba(70,8,36,0.5)',
 };
- 
+
+const dark: typeof light = {
+  paper: '#130A0E',
+  field: '#5C1738',
+  ink: '#FFE8F1',
+  ink2: '#C9AEBA',
+  ink3: '#A48D98',
+  rule: '#2E1C24',
+  tint: '#2A1820',
+  pinkInk: '#FF8CBF',
+  onField: '#FFE8F1',
+  onField2: 'rgba(255,232,241,0.78)',
+  onFieldRule: 'rgba(255,232,241,0.2)',
+  negative: '#FF6B62',
+  plate: '#8E2457',
+  surface: '#2A1820',
+  fieldButton: '#FF8CBF',
+  onFieldButton: '#3A0C22',
+  fieldGlass: 'rgba(46,26,36,0.62)',
+  coverShadow: '0 0 0 0.5px rgba(255,255,255,0.08), 0 14px 22px -12px rgba(0,0,0,0.8)',
+};
+
+export const palette = { light, dark };
+export type Palette = typeof light;
+
+/** The resolved palette for the current light/dark mode */
+export function useColors(): Palette {
+  const { colorScheme } = useTheme();
+  return colorScheme === 'dark' ? dark : light;
+}
+
+/** Spacing scale (pt). `lg` (20) is the screen side margin. */
+export const spacing = { xs: 4, sm: 8, md: 12, lg: 20, xl: 32, xxl: 48 } as const;
+
+export const radius = {
+  /** Covers: spine side smaller */
+  coverSpine: 1.5,
+  cover: 3,
+  tile: 4,
+  field: 12,
+  full: 9999,
+} as const;
+
+export const fonts = {
+  display: 'ArchivoCondensed-Black',
+  displayXB: 'ArchivoCondensed-ExtraBold',
+} as const;
+
+/**
+ * Type scale (pt): 120 page number · 64 headline · 44 screen title · 28 hero book
+ * title / section head · 22 list book title · 17 body · 15 secondary · 13 metadata
+ * · 11 caption. Display tracking is slightly negative; the word spacing the
+ * design wants is baked into the font's space glyph.
+ */
+export const type = {
+  pageNumber: { fontFamily: fonts.display, fontSize: 120, lineHeight: 104, letterSpacing: -3, fontVariant: ['lining-nums', 'tabular-nums'] },
+  headline: { fontFamily: fonts.display, fontSize: 64, lineHeight: 58, letterSpacing: -0.6 },
+  screenTitle: { fontFamily: fonts.display, fontSize: 44, lineHeight: 46, letterSpacing: -0.4 },
+  heroTitle: { fontFamily: fonts.displayXB, fontSize: 28, lineHeight: 30, letterSpacing: -0.4 },
+  sectionHead: { fontFamily: fonts.displayXB, fontSize: 28, lineHeight: 30, letterSpacing: -0.4 },
+  listTitle: { fontFamily: fonts.displayXB, fontSize: 22, lineHeight: 24, letterSpacing: -0.2 },
+  rowTitle: { fontSize: 17, lineHeight: 22, fontWeight: '600', letterSpacing: -0.4 },
+  body: { fontSize: 17, lineHeight: 24, letterSpacing: -0.3 },
+  secondary: { fontSize: 15, lineHeight: 20 },
+  meta: { fontSize: 13, lineHeight: 18 },
+  caption: { fontSize: 11, lineHeight: 13 },
+} as const satisfies Record<string, TextStyle>;
+
+/** Misregistered riso plate offset under big numerals */
+export const PLATE_OFFSET = 3;
+
+export const motion = {
+  /** .spring(duration: 0.3, bounce: 0.15) */
+  settle: { duration: 300, dampingRatio: 0.85 },
+  stamp: 180,
+  drain: 400,
+} as const;
+
 export const NAV_THEME: Record<'light' | 'dark', Theme> = {
   light: {
     ...DefaultTheme,
     colors: {
-      background: THEME.light.background,
-      border: THEME.light.border,
-      card: THEME.light.card,
-      notification: THEME.light.destructive,
-      primary: THEME.light.primary,
-      text: THEME.light.foreground,
+      ...DefaultTheme.colors,
+      background: light.paper,
+      border: light.rule,
+      card: light.paper,
+      notification: light.negative,
+      primary: light.pinkInk,
+      text: light.ink,
     },
   },
   dark: {
     ...DarkTheme,
     colors: {
-      background: THEME.dark.background,
-      border: THEME.dark.border,
-      card: THEME.dark.card,
-      notification: THEME.dark.destructive,
-      primary: THEME.dark.primary,
-      text: THEME.dark.foreground,
+      ...DarkTheme.colors,
+      background: dark.paper,
+      border: dark.rule,
+      card: dark.paper,
+      notification: dark.negative,
+      primary: dark.pinkInk,
+      text: dark.ink,
     },
   },
 };

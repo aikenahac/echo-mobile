@@ -1,152 +1,48 @@
 {
   "common": {
-    "welcome": "Welcome",
-    "language": "Language",
-    "settings": "Settings"
+    "cancel": "Cancel",
+    "done": "Done",
+    "save": "Save",
+    "delete": "Delete",
+    "continue": "Continue",
+    "retry": "Try again",
+    "loading": "Loading"
   },
-  "home": {
-    "title": "Welcome to Expo Boilerplate",
-    "description": "This is an example of internationalization using i18next",
-    "changeLanguage": "Change Language",
-    "changeTheme": "Change Theme",
-    "setUsername": "Set your username",
-    "usernamePlaceholder": "Choose a username",
-    "usernameRules": "Only letters, numbers, underscores (_), and dots (.) allowed. 3-30 characters.",
-    "continue": "Continue"
+  "tabs": {
+    "library": "Library",
+    "friends": "Friends",
+    "you": "You",
+    "search": "Search"
   },
-  "library": {
-    "title": "My Library",
-    "tabs": {
-      "favorites": "Favorites",
-      "want": "Want to Read",
-      "reading": "Currently Reading",
-      "finished": "Finished"
-    },
-    "noContent": "No books in this category yet.",
-    "noContentSubtext": "Start by searching for books and adding them to your library.",
-    "quickActions": {
-      "title": "Quick Actions",
-      "currentPage": "Current Page",
-      "pageCount": "Page Count",
-      "addToCollection": "Add to collection"
-    }
+  "stamp": {
+    "want": "WANT",
+    "reading": "READING",
+    "finished": "FINISHED",
+    "premium": "PREMIUM",
+    "lifetime": "LIFETIME"
+  },
+  "a11y": {
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   },
   "auth": {
-    "signIn": "Sign In",
-    "withGoogle": "Continue with Google",
-    "noAccount": "Don't have an account?",
-    "signUp": "Sign Up",
-    "registered": "Already have an account?",
+    "signIn": "Sign in",
+    "signUp": "Create an account",
     "email": "Email",
-    "emailPlaceholder": "Enter email",
     "password": "Password",
-    "passwordPlaceholder": "Enter your password",
-    "passwordPlaceholderSet": "Set your password",
-    "confirmPassword": "Confirm Password",
-    "confirmPasswordPlaceholder": "Confirm your chosen password",
-    "signOut": "Sign Out",
-    "verifyEmail": "Verify your email",
-    "enterVerificationCode": "Enter your verification code",
+    "continueWithApple": "Continue with Apple",
+    "continueWithGoogle": "Continue with Google",
+    "noAccount": "New to Echo?",
+    "createAccount": "Create an account",
+    "haveAccount": "Already have an account?",
+    "enterAllDetails": "Enter your email and password.",
+    "invalidEmail": "That doesn't look like an email address.",
+    "checkEmail": "Check your email",
+    "codeSent": "We sent a 6-digit code to {{email}}.",
+    "code": "Code",
     "verify": "Verify",
-    "openMail": "Open Mail app",
-    "passwordsDontMatch": "The passwords do not match",
-    "enterAllDetails": "Please enter all information",
-    "invalidEmail": "The entered email is not valid",
-    "logout": "Logout"
-  },
-  "languageSwitcher": {
-    "selectLanguage": "Select Language",
-    "english": "English",
-    "slovenian": "Slovenian"
-  },
-  "themeSwitcher": {
-    "selectTheme": "Select Theme",
-    "light": "Light",
-    "dark": "Dark",
-    "system": "System"
-  },
-  "bookDetail": {
-    "title": "Book Details",
-    "rateThisBook": "Rate this book",
-    "yourRating": "Your rating: {{rating}} / 5",
-    "noRating": "Tap to rate",
-    "reviews": "Reviews from readers",
-    "noReviews": "No reviews yet. Be the first to share your thoughts!",
-    "yourReview": "Your Review",
-    "addReview": "Add Review",
-    "editReview": "Edit Review",
-    "reviewPlaceholder": "Share your thoughts about this book...",
-    "characterCount": "{{count}} / {{max}}",
-    "privateReview": "Private (only you can see)",
-    "publicReview": "Public (visible to everyone)",
-    "submitReview": "Submit Review",
-    "updateReview": "Update Review",
-    "deleteReview": "Delete Review",
-    "cancel": "Cancel",
-    "confirmDelete": "Are you sure you want to delete this review?",
-    "metadata": {
-      "isbn": "ISBN",
-      "pages": "Pages",
-      "published": "Published",
-      "status": "Status",
-      "progress": "Progress",
-      "started": "Started",
-      "finished": "Finished",
-      "notSet": "N/A"
-    },
-    "status": {
-      "want": "Want to Read",
-      "reading": "Currently Reading",
-      "finished": "Finished"
-    }
-  },
-  "search": {
-    "title": "Search",
-    "placeholder": "Search for books...",
-    "emptyState": "Search for books to add to your library",
-    "noResults": "No books found for '{{query}}'",
-    "loadMore": "Load More",
-    "source": {
-      "internal": "Database",
-      "external": "Open Library"
-    },
-    "addToLibrary": {
-      "title": "Add to Library",
-      "selectStatus": "Select a reading status to add this book:",
-      "currentStatus": "This book is already in your library:",
-      "status": {
-        "want": "Want to Read",
-        "reading": "Reading",
-        "finished": "Finished"
-      },
-      "favorite": "Mark as Favorite",
-      "collection": "Add to Collection",
-      "premium": "Premium",
-      "addButton": "Add to Library",
-      "success": "Book added to library!",
-      "error": "Failed to add book"
-    }
-  },
-  "profile": {
-    "title": "Profile",
-    "edit": "Edit Profile",
-    "stats": {
-      "booksThisYear": "Books This Year",
-      "pagesRead": "Pages Read",
-      "dayStreak": "Day Streak"
-    },
-    "sections": {
-      "favorites": "Favorite Books",
-      "currentlyReading": "Currently Reading",
-      "recentlyFinished": "Recently Finished"
-    },
-    "form": {
-      "username": "Username",
-      "bio": "Bio",
-      "save": "Save Changes",
-      "cancel": "Cancel",
-      "usernameRules": "3-30 characters. Letters, numbers, underscores, and dots only.",
-      "bioPlaceholder": "Tell us about yourself..."
-    }
+    "openMail": "Open Mail",
+    "resendCode": "No code? Send it again",
+    "passwordRule": "8 characters or more"
   }
 }

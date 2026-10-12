@@ -1,80 +1,43 @@
-import { FullScreenLoader } from "@/components/full-screen-loader";
-import { SetUsernameDrawer } from "@/components/set-username-drawer";
-import { useProfile } from "@/hooks/api/user/use-get-me";
+import { useColors } from "@/lib/theme";
 import { useAuth } from "@clerk/clerk-expo";
-import createIconSet from "@expo/vector-icons/createIconSet";
 import { Redirect } from "expo-router";
 import { NativeTabs } from "expo-router/unstable-native-tabs";
-import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-// Lucide icon glyph mappings from info.json
-const glyphMap = {
-  search: 0xe151,
-  library: 0xe100,
-  activity: 0xe038,
-  users: 0xe1a4,
-  user: 0xe19f,
-};
-
-const LucideIcon = createIconSet(
-  glyphMap,
-  "Lucide",
-  require("@/lib/assets/lucide-font/lucide.ttf"),
-);
-
-export default function AppRoutesLayout() {
+/**
+ * Library · Friends · You, plus Search as the separate search-role tab.
+ * The iOS 26 glass tab bar is the system's; tint is pink-ink.
+ */
+export default function AppTabsLayout() {
   const { isSignedIn } = useAuth();
-  const [open, setOpen] = useState(false);
-
-  const { data: profile, isLoading } = useProfile();
-
-  useEffect(() => {
-    if (profile && (!profile.username || profile.username.length === 0)) {
-      setOpen(true);
-    }
-  }, [profile]);
-
-  if (isLoading) {
-    return <FullScreenLoader />;
-  }
+  const { t } = useTranslation();
+  const colors = useColors();
 
   if (!isSignedIn) {
-    return <Redirect href={"/(auth)/sign-in"} />;
+    return <Redirect href="/(auth)/sign-in" />;
   }
 
+  // TODO(phase 9): blocking username onboarding modal when profile.username is null
+
   return (
-    <>
-      <NativeTabs>
-        <NativeTabs.Trigger name="search">
-          <NativeTabs.Trigger.Icon
-            selectedColor={"#fda5d5"}
-            src={<NativeTabs.Trigger.VectorIcon family={LucideIcon} name="search" />}
-          />
-          <NativeTabs.Trigger.Label hidden />
-        </NativeTabs.Trigger>
-        <NativeTabs.Trigger name="library">
-          <NativeTabs.Trigger.Icon
-            selectedColor={"#fda5d5"}
-            src={<NativeTabs.Trigger.VectorIcon family={LucideIcon} name="library" />}
-          />
-          <NativeTabs.Trigger.Label hidden />
-        </NativeTabs.Trigger>
-        <NativeTabs.Trigger name="feed">
-          <NativeTabs.Trigger.Icon
-            selectedColor={"#fda5d5"}
-            src={<NativeTabs.Trigger.VectorIcon family={LucideIcon} name="activity" />}
-          />
-          <NativeTabs.Trigger.Label hidden />
-        </NativeTabs.Trigger>
-        <NativeTabs.Trigger name="profile">
-          <NativeTabs.Trigger.Icon
-            selectedColor={"#fda5d5"}
-            src={<NativeTabs.Trigger.VectorIcon family={LucideIcon} name="user" />}
-          />
-          <NativeTabs.Trigger.Label hidden />
-        </NativeTabs.Trigger>
-      </NativeTabs>
-      <SetUsernameDrawer open={open} setOpen={setOpen} />
-    </>
+    <NativeTabs tintColor={colors.pinkInk}>
+      <NativeTabs.Trigger name="library">
+        <NativeTabs.Trigger.Icon sf="books.vertical" md="library_books" />
+        <NativeTabs.Trigger.Label>{t("tabs.library")}</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="friends">
+        <NativeTabs.Trigger.Icon sf="person.2" md="group" />
+        <NativeTabs.Trigger.Label>{t("tabs.friends")}</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="you">
+        <NativeTabs.Trigger.Icon sf="person" md="person" />
+        <NativeTabs.Trigger.Label>{t("tabs.you")}</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
+      {/* TODO(phase 5): confirm the system separates this into its own glass button once the
+          search screen has a native search bar (r6 shows it apart from the three tabs) */}
+      <NativeTabs.Trigger name="search" role="search">
+        <NativeTabs.Trigger.Label>{t("tabs.search")}</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
+    </NativeTabs>
   );
 }

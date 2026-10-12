@@ -1,3 +1,4 @@
+/** Paths under EXPO_PUBLIC_API_URL (which already ends in /api) */
 export const Endpoints = {
   library: {
     get: "/v1/books",
@@ -11,11 +12,12 @@ export const Endpoints = {
     toggleFavorite: (id: string) => `/v1/books/${id}/favorite`,
   },
 
+  catalog: {
+    get: (bookId: string) => `/v1/catalog/${bookId}`,
+  },
+
   reviews: {
-    getAll: "/v1/reviews",
-    create: "/v1/reviews",
-    getById: (id: string) => `/v1/reviews/${id}`,
-    update: (id: string) => `/v1/reviews/${id}`,
+    save: "/v1/reviews",
     delete: (id: string) => `/v1/reviews/${id}`,
   },
 
@@ -27,16 +29,22 @@ export const Endpoints = {
   profile: {
     get: "/v1/profile",
     update: "/v1/profile",
+    delete: "/v1/profile",
+    stats: "/v1/profile/stats",
+    usernameAvailable: "/v1/profile/username-available",
+    pictureUploadUrl: "/v1/profile/picture-upload-url",
   },
 
   collections: {
     getAll: "/v1/collections",
     create: "/v1/collections",
+    order: "/v1/collections/order",
     getById: (id: string) => `/v1/collections/${id}`,
     update: (id: string) => `/v1/collections/${id}`,
     delete: (id: string) => `/v1/collections/${id}`,
     addBook: (id: string) => `/v1/collections/${id}/books`,
     removeBook: (id: string) => `/v1/collections/${id}/books`,
+    coverUploadUrl: (id: string) => `/v1/collections/${id}/cover-upload-url`,
   },
 
   feed: {
@@ -45,14 +53,12 @@ export const Endpoints = {
 
   subscriptions: {
     get: "/v1/subscriptions",
-    getUsage: "/v1/subscriptions/usage",
   },
 
   users: {
     search: "/v1/users/search",
-  },
-
-  webhooks: {
-    stripe: "/webhooks/stripe",
+    get: (userId: string) => `/v1/users/${userId}`,
+    followers: (userId: string) => `/v1/users/${userId}/followers`,
+    following: (userId: string) => `/v1/users/${userId}/following`,
   },
 };
