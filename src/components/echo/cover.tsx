@@ -4,7 +4,9 @@ import type { ReactNode } from "react";
 import { Text, View, type StyleProp, type ViewStyle } from "react-native";
 
 type Props = {
-  uri: string | null | undefined;
+  uri?: string | null;
+  /** A bundled image (require(...)) instead of a URL */
+  image?: number;
   title: string;
   author?: string;
   /** Width in points; height follows the 2:3 ratio */
@@ -21,7 +23,7 @@ type Props = {
  * along the spine, and the one soft shadow in the app. With no image it becomes
  * the designed fallback: tint ground, a 5pt pink-ink spine, the title in Archivo.
  */
-export function Cover({ uri, title, author, width, flat, children, style }: Props) {
+export function Cover({ uri, image, title, author, width, flat, children, style }: Props) {
   const colors = useColors();
   const height = Math.round((width * 3) / 2);
   const corners = {
@@ -38,9 +40,9 @@ export function Cover({ uri, title, author, width, flat, children, style }: Prop
       style={[{ width, height }, corners, { boxShadow: flat ? "0 1px 2px rgba(23,11,17,0.2)" : colors.coverShadow }, style]}
     >
       <View style={[{ flex: 1, overflow: "hidden" }, corners]}>
-        {uri ? (
+        {uri || image ? (
           <>
-            <Image source={{ uri }} style={{ flex: 1 }} contentFit="cover" transition={150} recyclingKey={uri} />
+            <Image source={image ?? { uri: uri! }} style={{ flex: 1 }} contentFit="cover" transition={150} recyclingKey={uri ?? undefined} />
             <View
               pointerEvents="none"
               style={{

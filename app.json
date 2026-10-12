@@ -37,10 +37,10 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/icons/echo_icon_foreground.png",
-          "imageWidth": 200,
+          "image": "./assets/images/splash-mark.png",
+          "imageWidth": 75,
           "resizeMode": "contain",
-          "backgroundColor": "#1F212D"
+          "backgroundColor": "#FF6BA8"
         }
       ],
       "expo-localization",
@@ -49,10 +49,10 @@
         "expo-asset",
         {
           "assets": [
-            "./assets/images/echo_logo.png",
             "./assets/images/google_icon.png",
-            "./assets/images/apple_icon_light.png",
-            "./assets/images/apple_icon_dark.png"
+            "./assets/images/covers/pachinko.jpg",
+            "./assets/images/covers/piranesi.jpg",
+            "./assets/images/covers/james.jpg"
           ]
         }
       ],

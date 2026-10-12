@@ -1,4 +1,6 @@
 import { useColors, useStatusBarStyle } from "@/lib/theme";
+import { UsernameOnboarding } from "@/components/username-onboarding";
+import { useProfile } from "@/hooks/api/user/use-get-me";
 import { useAuth } from "@clerk/clerk-expo";
 import { Redirect, Stack } from "expo-router";
 
@@ -11,12 +13,16 @@ export default function AppLayout() {
   const { isSignedIn } = useAuth();
   const statusBarStyle = useStatusBarStyle();
   const colors = useColors();
+  const profile = useProfile();
 
   if (!isSignedIn) {
-    return <Redirect href="/(auth)/sign-in" />;
+    return <Redirect href="/welcome" />;
   }
 
-  // TODO(phase 9): blocking username onboarding modal when profile.username is null
+  // A reader without a username can't use the app yet: the onboarding blocks everything
+  if (profile.data && !profile.data.username) {
+    return <UsernameOnboarding />;
+  }
 
   return (
     <Stack screenOptions={{ headerShown: false, statusBarStyle }}>

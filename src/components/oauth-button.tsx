@@ -1,11 +1,13 @@
-import { CapsuleButton } from "@/components/echo";
+import { SFIcon } from "@/components/echo";
+import { authError } from "@/lib/clerk-errors";
+import { useColors } from "@/lib/theme";
 import { useSSO } from "@clerk/clerk-expo";
-import type { OAuthStrategy } from "@clerk/types";
 import * as AuthSession from "expo-auth-session";
-import type { SFSymbol } from "expo-symbols";
+import { Image } from "expo-image";
 import * as WebBrowser from "expo-web-browser";
-import { useCallback, useEffect, useState } from "react";
-import { Platform, type StyleProp, type ViewStyle } from "react-native";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { ActivityIndicator, Platform, Pressable, Text, type StyleProp, type ViewStyle } from "react-native";
 
 export const useWarmUpBrowser = () => {
   useEffect(() => {
@@ -19,43 +21,73 @@ export const useWarmUpBrowser = () => {
 WebBrowser.maybeCompleteAuthSession();
 
 type Props = {
-  strategy: OAuthStrategy;
-  title: string;
-  icon?: SFSymbol;
-  variant?: "primary" | "paper" | "outline";
+  provider: "apple" | "google";
   onError?: (message: string) => void;
   style?: StyleProp<ViewStyle>;
 };
 
-/** Signs in through a Clerk SSO provider (Apple, Google) */
-export default function OAuthButton({ strategy, title, icon, variant = "outline", onError, style }: Props) {
+// Brand rules: Apple's button is black with the white logo; Google's keeps the 4-colour G
+const APPLE_BLACK = "#000000";
+const WHITE = "#FFFFFF";
+
+/** Continue with Apple / Google through Clerk SSO (r6 11) */
+export default function OAuthButton({ provider, onError, style }: Props) {
   useWarmUpBrowser();
+  const { t } = useTranslation();
+  const colors = useColors();
   const { startSSOFlow } = useSSO();
   const [busy, setBusy] = useState(false);
+  const apple = provider === "apple";
 
-  const onPress = useCallback(async () => {
+  const onPress = async () => {
     setBusy(true);
     try {
       const { createdSessionId, setActive } = await startSSOFlow({
-        strategy,
+        strategy: apple ? "oauth_apple" : "oauth_google",
         redirectUrl: AuthSession.makeRedirectUri(),
       });
-      if (createdSessionId) {
-        await setActive!({ session: createdSessionId });
-      }
+      if (createdSessionId) await setActive!({ session: createdSessionId });
     } catch (err) {
-      console.error(JSON.stringify(err, null, 2));
-      onError?.(clerkErrorMessage(err));
+      onError?.(authError(err).message);
     } finally {
       setBusy(false);
     }
-  }, [startSSOFlow, strategy, onError]);
+  };
 
-  return <CapsuleButton title={title} icon={icon} variant={variant} loading={busy} onPress={onPress} style={style} />;
-}
-
-/** The first human-readable message from a Clerk error */
-export function clerkErrorMessage(err: unknown): string {
-  const e = err as { errors?: Array<{ longMessage?: string; message?: string }>; message?: string };
-  return e?.errors?.[0]?.longMessage ?? e?.errors?.[0]?.message ?? e?.message ?? "Something went wrong.";
+  const fg = apple ? WHITE : colors.ink;
+  return (
+    <Pressable
+      accessibilityRole="button"
+      onPress={onPress}
+      disabled={busy}
+      style={({ pressed }) => [
+        {
+          height: 56,
+          borderRadius: 28,
+          backgroundColor: apple ? APPLE_BLACK : colors.paper,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 10,
+          opacity: pressed ? 0.8 : 1,
+        },
+        style,
+      ]}
+    >
+      {busy ? (
+        <ActivityIndicator color={fg} />
+      ) : (
+        <>
+          {apple ? (
+            <SFIcon name="apple.logo" size={20} color={WHITE} weight="medium" />
+          ) : (
+            <Image source={require("../../assets/images/google_icon.png")} style={{ width: 20, height: 20 }} />
+          )}
+          <Text style={{ fontSize: 17, fontWeight: "600", letterSpacing: -0.3, color: fg }}>
+            {apple ? t("auth.continueWithApple") : t("auth.continueWithGoogle")}
+          </Text>
+        </>
+      )}
+    </Pressable>
+  );
 }

@@ -6,7 +6,8 @@
     "delete": "Delete",
     "continue": "Continue",
     "retry": "Try again",
-    "loading": "Loading"
+    "loading": "Loading",
+    "offline": "Couldn't reach Echo. Check your connection and try again."
   },
   "tabs": {
     "library": "Library",
@@ -26,24 +27,55 @@
     "hidePassword": "Hide password"
   },
   "auth": {
-    "signIn": "Sign in",
-    "signUp": "Create an account",
-    "email": "Email",
-    "password": "Password",
+    "brand": "Echo",
+    "welcomeTitle": "Every page, counted.",
+    "welcomeSub": "Log where you stopped, rate what you finish, and see what your friends are reading.",
     "continueWithApple": "Continue with Apple",
     "continueWithGoogle": "Continue with Google",
+    "useEmail": "Use email instead",
+    "legal": "By continuing you agree to the <terms>Terms</terms> and <privacy>Privacy Policy</privacy>.",
+    "signIn": "Sign in",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
     "noAccount": "New to Echo?",
     "createAccount": "Create an account",
+    "createAccountButton": "Create account",
+    "createLead": "Free, with no limit on books. Premium only adds collections.",
     "haveAccount": "Already have an account?",
-    "enterAllDetails": "Enter your email and password.",
-    "invalidEmail": "That doesn't look like an email address.",
+    "passwordRule": "8 characters or more",
     "checkEmail": "Check your email",
-    "codeSent": "We sent a 6-digit code to {{email}}.",
-    "code": "Code",
-    "verify": "Verify",
+    "codeSent": "We sent a 6-digit code to <b>{{email}}</b>. It expires in 10 minutes.",
+    "codeLabel": "6-digit code",
+    "resendIn": "Resend code in {{time}}",
+    "resend": "Send a new code",
     "openMail": "Open Mail",
-    "resendCode": "No code? Send it again",
-    "passwordRule": "8 characters or more"
+    "wrongAddress": "Wrong address?",
+    "changeEmail": "Change email",
+    "verify": "Verify",
+    "resetTitle": "Reset password",
+    "resetLead": "Enter your email and we'll send you a code to set a new one.",
+    "sendCode": "Send code",
+    "newPasswordTitle": "Set a new password",
+    "newPasswordLead": "Enter the code we sent to <b>{{email}}</b>, then choose a new password.",
+    "newPassword": "New password",
+    "saveAndSignIn": "Save and sign in",
+    "noCode": "No code?",
+    "sendAgain": "Send it again",
+    "errors": {
+      "enterEmail": "Enter your email.",
+      "invalidEmail": "That doesn't look like an email address.",
+      "enterPassword": "Enter your password.",
+      "wrongPassword": "That password doesn't match this email.",
+      "noAccount": "There's no Echo account with this email.",
+      "emailTaken": "There's already an account with this email. Sign in instead.",
+      "passwordShort": "Use 8 characters or more.",
+      "passwordPwned": "This password has appeared in a data breach. Choose another one.",
+      "wrongCode": "That code isn't right. Check the email and try again.",
+      "codeExpired": "That code has expired. Send a new one.",
+      "tooMany": "Too many tries. Wait a moment and try again.",
+      "generic": "Something went wrong. Try again."
+    }
   },
   "library": {
     "title": "Library",
@@ -331,5 +363,15 @@
       "mustard": "Mustard",
       "teal": "Teal"
     }
+  },
+  "username": {
+    "brand": "Echo",
+    "title": "What should other readers call you?",
+    "placeholder": "username",
+    "available": "Available",
+    "rule": "3 to 30 letters, numbers, underscores or dots. It shows next to your reviews and on your profile.",
+    "previewStarted": "started reading",
+    "previewWhen": "Piranesi · just now",
+    "continue": "Continue"
   }
 }

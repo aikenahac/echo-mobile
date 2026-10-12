@@ -1,134 +1,95 @@
-import { CapsuleButton, DisplayText, TextField } from "@/components/echo";
-import OAuthButton, { clerkErrorMessage } from "@/components/oauth-button";
-import { spacing } from "@/lib/theme";
+import { AuthScreen, FooterLink } from "@/components/auth/auth-screen";
+import { CapsuleButton, TextField } from "@/components/echo";
+import { authError, type AuthError } from "@/lib/clerk-errors";
+import { spacing, useColors } from "@/lib/theme";
 import { isValidEmail } from "@/lib/utils";
 import { useSignIn } from "@clerk/clerk-expo";
-import { Link, useRouter } from "expo-router";
-import { useState } from "react";
+import { useRouter } from "expo-router";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { KeyboardAvoidingView, ScrollView, Text, View } from "react-native";
+import { Pressable, Text, type TextInput, View } from "react-native";
 
-// TODO(phase 9): replaced by the designed Welcome / Sign in screens (r6 11, 12)
+/** Sign in with email (r6 12). Errors sit under their field, never in a toast. */
 export default function SignInScreen() {
   const { t } = useTranslation();
-  const { signIn, setActive, isLoaded } = useSignIn();
+  const colors = useColors();
   const router = useRouter();
+  const { signIn, setActive, isLoaded } = useSignIn();
+  const passwordRef = useRef<TextInput>(null);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [code, setCode] = useState("");
-  const [pendingSecondFactor, setPendingSecondFactor] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<AuthError | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const onSignIn = async () => {
-    if (!isLoaded) return;
-    setError(null);
-    if (!email || !password) return setError(t("auth.enterAllDetails"));
-    if (!isValidEmail(email)) return setError(t("auth.invalidEmail"));
-
-    setBusy(true);
-    try {
-      const attempt = await signIn.create({ identifier: email, password });
-      if (attempt.status === "needs_second_factor") {
-        await attempt.prepareSecondFactor({ strategy: "email_code" });
-        setPendingSecondFactor(true);
-      } else if (attempt.status === "complete") {
-        await setActive({ session: attempt.createdSessionId });
-        router.replace("/");
-      }
-    } catch (err) {
-      setError(clerkErrorMessage(err));
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const onResend = async () => {
-    if (!isLoaded) return;
-    setError(null);
-    try {
-      await signIn.prepareSecondFactor({ strategy: "email_code" });
-    } catch (err) {
-      setError(clerkErrorMessage(err));
-    }
-  };
-
-  const onVerify = async () => {
-    if (!isLoaded) return;
+  const submit = async () => {
+    if (!isLoaded || busy) return;
+    if (!email.trim()) return setError({ field: "email", message: t("auth.errors.enterEmail") });
+    if (!isValidEmail(email)) return setError({ field: "email", message: t("auth.errors.invalidEmail") });
+    if (!password) return setError({ field: "password", message: t("auth.errors.enterPassword") });
     setError(null);
     setBusy(true);
     try {
-      const attempt = await signIn.attemptSecondFactor({ code, strategy: "email_code" });
+      const attempt = await signIn.create({ identifier: email.trim(), password });
       if (attempt.status === "complete") {
         await setActive({ session: attempt.createdSessionId });
         router.replace("/");
+      } else if (attempt.status === "needs_second_factor") {
+        await attempt.prepareSecondFactor({ strategy: "email_code" });
+        router.push({ pathname: "/verify", params: { mode: "signin", email: email.trim() } });
       }
     } catch (err) {
-      setError(clerkErrorMessage(err));
+      setError(authError(err));
     } finally {
       setBusy(false);
     }
   };
 
   return (
-    <KeyboardAvoidingView behavior="padding" className="flex-1 bg-paper">
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ padding: spacing.lg, paddingTop: 96, gap: spacing.lg }}
-      >
-        {pendingSecondFactor ? (
-          <>
-            <DisplayText className="text-ink">{t("auth.checkEmail")}</DisplayText>
-            <Text className="text-ink-2 text-[15px]">{t("auth.codeSent", { email })}</Text>
-            <TextField
-              label={t("auth.code")}
-              value={code}
-              onChangeText={setCode}
-              keyboardType="number-pad"
-              textContentType="oneTimeCode"
-              autoComplete="one-time-code"
-              error={error}
-            />
-            <CapsuleButton title={t("auth.verify")} loading={busy} onPress={onVerify} />
-            <CapsuleButton title={t("auth.resendCode")} variant="plain" size="md" onPress={onResend} />
-          </>
-        ) : (
-          <>
-            <DisplayText className="text-ink">{t("auth.signIn")}</DisplayText>
-            <TextField
-              label={t("auth.email")}
-              value={email}
-              onChangeText={setEmail}
-              autoCapitalize="none"
-              autoComplete="email"
-              keyboardType="email-address"
-              textContentType="emailAddress"
-            />
-            <TextField
-              label={t("auth.password")}
-              value={password}
-              onChangeText={setPassword}
-              password
-              autoComplete="current-password"
-              textContentType="password"
-              error={error}
-            />
-            <CapsuleButton title={t("auth.signIn")} loading={busy} onPress={onSignIn} />
-            <View style={{ gap: spacing.sm }}>
-              <OAuthButton strategy="oauth_apple" title={t("auth.continueWithApple")} icon="apple.logo" variant="primary" onError={setError} />
-              <OAuthButton strategy="oauth_google" title={t("auth.continueWithGoogle")} onError={setError} />
-            </View>
-            <View className="flex-row justify-center gap-1">
-              <Text className="text-ink-2 text-[15px]">{t("auth.noAccount")}</Text>
-              <Link href="/(auth)/sign-up" className="text-pink-ink text-[15px] font-semibold">
-                {t("auth.createAccount")}
-              </Link>
-            </View>
-          </>
-        )}
-      </ScrollView>
-    </KeyboardAvoidingView>
+    <AuthScreen
+      title={t("auth.signIn")}
+      action={<CapsuleButton title={t("auth.signIn")} loading={busy} onPress={submit} style={{ minHeight: 56 }} />}
+      footer={<FooterLink text={t("auth.noAccount")} link={t("auth.createAccount")} onPress={() => router.replace("/sign-up")} />}
+    >
+      <View style={{ gap: spacing.lg, marginTop: 28 }}>
+        <TextField
+          label={t("auth.email")}
+          value={email}
+          onChangeText={(v) => {
+            setEmail(v);
+            if (error?.field === "email") setError(null);
+          }}
+          autoCapitalize="none"
+          autoCorrect={false}
+          autoComplete="email"
+          keyboardType="email-address"
+          textContentType="username"
+          returnKeyType="next"
+          onSubmitEditing={() => passwordRef.current?.focus()}
+          error={error?.field === "email" ? error.message : null}
+        />
+        <View>
+          <TextField
+            ref={passwordRef}
+            label={t("auth.password")}
+            value={password}
+            onChangeText={(v) => {
+              setPassword(v);
+              if (error?.field === "password") setError(null);
+            }}
+            password
+            autoComplete="current-password"
+            textContentType="password"
+            returnKeyType="go"
+            onSubmitEditing={submit}
+            error={error?.field === "password" ? error.message : null}
+          />
+          <Pressable accessibilityRole="link" hitSlop={8} onPress={() => router.push({ pathname: "/forgot-password", params: { email } })} style={{ alignSelf: "flex-start", marginTop: 14 }}>
+            <Text style={{ fontSize: 15, fontWeight: "600", color: colors.pinkInk }}>{t("auth.forgotPassword")}</Text>
+          </Pressable>
+        </View>
+        {(error?.field === "form" || error?.field === "code") && <Text style={{ fontSize: 13, color: colors.negative }}>{error.message}</Text>}
+      </View>
+    </AuthScreen>
   );
 }
