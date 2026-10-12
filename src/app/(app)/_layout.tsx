@@ -4,12 +4,7 @@ import { useProfile } from "@/hooks/api/user/use-get-me";
 import { useAuth } from "@clerk/clerk-expo";
 import createIconSet from "@expo/vector-icons/createIconSet";
 import { Redirect } from "expo-router";
-import {
-  Icon,
-  Label,
-  NativeTabs,
-  VectorIcon,
-} from "expo-router/unstable-native-tabs";
+import { NativeTabs } from "expo-router/unstable-native-tabs";
 import { useEffect, useState } from "react";
 
 // Lucide icon glyph mappings from info.json
@@ -51,32 +46,32 @@ export default function AppRoutesLayout() {
     <>
       <NativeTabs>
         <NativeTabs.Trigger name="search">
-          <Icon
+          <NativeTabs.Trigger.Icon
             selectedColor={"#fda5d5"}
-            src={<VectorIcon family={LucideIcon} name="search" />}
+            src={<NativeTabs.Trigger.VectorIcon family={LucideIcon} name="search" />}
           />
-          <Label hidden />
+          <NativeTabs.Trigger.Label hidden />
         </NativeTabs.Trigger>
         <NativeTabs.Trigger name="library">
-          <Icon
+          <NativeTabs.Trigger.Icon
             selectedColor={"#fda5d5"}
-            src={<VectorIcon family={LucideIcon} name="library" />}
+            src={<NativeTabs.Trigger.VectorIcon family={LucideIcon} name="library" />}
           />
-          <Label hidden />
+          <NativeTabs.Trigger.Label hidden />
         </NativeTabs.Trigger>
         <NativeTabs.Trigger name="feed">
-          <Icon
+          <NativeTabs.Trigger.Icon
             selectedColor={"#fda5d5"}
-            src={<VectorIcon family={LucideIcon} name="activity" />}
+            src={<NativeTabs.Trigger.VectorIcon family={LucideIcon} name="activity" />}
           />
-          <Label hidden />
+          <NativeTabs.Trigger.Label hidden />
         </NativeTabs.Trigger>
         <NativeTabs.Trigger name="profile">
-          <Icon
+          <NativeTabs.Trigger.Icon
             selectedColor={"#fda5d5"}
-            src={<VectorIcon family={LucideIcon} name="user" />}
+            src={<NativeTabs.Trigger.VectorIcon family={LucideIcon} name="user" />}
           />
-          <Label hidden />
+          <NativeTabs.Trigger.Label hidden />
         </NativeTabs.Trigger>
       </NativeTabs>
       <SetUsernameDrawer open={open} setOpen={setOpen} />

@@ -30,7 +30,7 @@ interface DrawerContextValue {
 const DrawerContext = React.createContext<DrawerContextValue | undefined>(undefined);
 
 function useDrawerContext() {
-  const context = React.useContext(DrawerContext);
+  const context = React.use(DrawerContext);
   if (!context) {
     throw new Error('Drawer components must be used within a Drawer');
   }
@@ -60,9 +60,9 @@ function Drawer({ open: controlledOpen, onOpenChange, dismissible = true, childr
   );
 
   return (
-    <DrawerContext.Provider value={{ open, onOpenChange: handleOpenChange, dismissible }}>
+    <DrawerContext value={{ open, onOpenChange: handleOpenChange, dismissible }}>
       {children}
-    </DrawerContext.Provider>
+    </DrawerContext>
   );
 }
 
@@ -222,9 +222,9 @@ interface DrawerHeaderProps extends ViewProps {
 
 function DrawerHeader({ className, ...props }: DrawerHeaderProps) {
   return (
-    <TextClassContext.Provider value="text-left">
+    <TextClassContext value="text-left">
       <View className={cn('flex flex-col gap-2', className)} {...props} />
-    </TextClassContext.Provider>
+    </TextClassContext>
   );
 }
 
@@ -245,9 +245,9 @@ interface DrawerTitleProps {
 
 function DrawerTitle({ className, children }: DrawerTitleProps) {
   return (
-    <TextClassContext.Provider value={cn('text-foreground text-xl font-semibold font-body', className)}>
+    <TextClassContext value={cn('text-foreground text-xl font-semibold font-body', className)}>
       {children}
-    </TextClassContext.Provider>
+    </TextClassContext>
   );
 }
 
@@ -258,9 +258,9 @@ interface DrawerDescriptionProps {
 
 function DrawerDescription({ className, children }: DrawerDescriptionProps) {
   return (
-    <TextClassContext.Provider value={cn('text-muted-foreground text-sm font-body', className)}>
+    <TextClassContext value={cn('text-muted-foreground text-sm font-body', className)}>
       {children}
-    </TextClassContext.Provider>
+    </TextClassContext>
   );
 }
 

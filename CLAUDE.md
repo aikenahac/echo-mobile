@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Echo is a mobile reading tracker application built with React Native and Expo. It allows users to track their reading progress, manage their book library, and connect with other readers. The app uses Clerk for authentication and connects to a backend API for data persistence.
+Echo is a mobile reading tracker application built with React Native and Expo (SDK 57). It allows users to track their reading progress, manage their book library, and connect with other readers. The app uses Clerk for authentication and connects to a backend API for data persistence.
 
 ## Common Commands
 
@@ -71,12 +71,14 @@ Echo is a mobile reading tracker application built with React Native and Expo. I
   - Storage keys defined in `STORAGE_KEYS` constant
 
 ### Styling & Theming
-- **NativeWind** (Tailwind CSS for React Native)
-- CSS variables-based theming in `src/global.css`
-- Dark mode support via `.dark` class
+- **Uniwind** (Tailwind CSS v4 for React Native) — configured via `withUniwindConfig` in `metro.config.js`; there is no `tailwind.config.js` or Babel preset
+- CSS-first theming in `src/global.css`: light/dark values live in `@layer theme { :root { @variant light/dark { ... } } }` and are exposed as utilities via `@theme inline` (`--color-*`, `--radius-*`, `--font-*`)
+- Dark mode is driven by `Uniwind.setTheme()` (called from `ThemeProvider`); `dark:` variants work without a class on the root view
+- Wrap third-party components that need className → prop mapping with `withUniwind` (see `src/components/ui/icon.tsx`, `src/lib/icons/`)
+- `TextInput` placeholder color: `placeholderTextColorClassName="accent-..."`
 - Theme state managed by `ThemeProvider` in `src/lib/theme-context.tsx`
 - Custom hook: `useColorScheme()` returns current theme
-- Navigation theme in `src/lib/theme.ts`
+- Navigation theme in `src/lib/theme.ts` (`DarkTheme`/`DefaultTheme`/`ThemeProvider` imported from `expo-router`, never `@react-navigation/*`)
 - Custom font: EB Garamond (loaded in root layout)
 
 ### UI Components
@@ -84,7 +86,7 @@ Echo is a mobile reading tracker application built with React Native and Expo. I
 - Components in `src/components/ui/`
 - Built on `@rn-primitives` for accessibility
 - Add new components: `npx @react-native-reusables/cli@latest add [component]`
-- Custom components follow same styling patterns (NativeWind classes)
+- Custom components follow same styling patterns (Uniwind/Tailwind classes)
 
 ### Internationalization
 - **react-i18next** for translations

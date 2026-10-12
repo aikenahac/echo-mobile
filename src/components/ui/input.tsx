@@ -3,7 +3,7 @@ import { Platform, TextInput, type TextInputProps } from 'react-native';
 
 function Input({
   className,
-  placeholderClassName,
+  placeholderTextColorClassName,
   ...props
 }: TextInputProps & React.RefAttributes<TextInput>) {
   return (
@@ -21,10 +21,10 @@ function Input({
             'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
             'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive'
           ),
-          native: 'placeholder:text-muted-foreground',
         }),
         className
       )}
+      placeholderTextColorClassName={cn('accent-muted-foreground', placeholderTextColorClassName)}
       style={[{ fontFamily: 'EBGaramond_400Regular' }]}
       {...props}
     />

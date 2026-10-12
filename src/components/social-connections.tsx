@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { useColorScheme } from 'nativewind';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Image, Platform, View } from 'react-native';
 
 const SOCIAL_CONNECTION_STRATEGIES = [

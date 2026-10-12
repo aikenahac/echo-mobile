@@ -7,7 +7,6 @@
     "icon": "./assets/images/icons/echo_icon.png",
     "scheme": "echo",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "club.echobook.app",
@@ -25,7 +24,6 @@
         "monochromeImage": "./assets/images/icons/echo_icon_foreground.png"
       },
       "package": "club.echobook.app",
-      "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
     "plugins": [
@@ -64,7 +62,9 @@
           "experimentalLauncherActivity": true
         }
       ],
-      "expo-apple-authentication"
+      "expo-apple-authentication",
+      "expo-image",
+      "expo-status-bar"
     ],
     "experiments": {
       "typedRoutes": true,

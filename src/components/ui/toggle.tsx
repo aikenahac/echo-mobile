@@ -46,7 +46,7 @@ function Toggle({
   VariantProps<typeof toggleVariants> &
   React.RefAttributes<TogglePrimitive.RootRef>) {
   return (
-    <TextClassContext.Provider
+    <TextClassContext
       value={cn(
         'text-sm text-foreground font-medium font-body',
         props.pressed
@@ -63,12 +63,12 @@ function Toggle({
         )}
         {...props}
       />
-    </TextClassContext.Provider>
+    </TextClassContext>
   );
 }
 
 function ToggleIcon({ className, ...props }: React.ComponentProps<typeof Icon>) {
-  const textClass = React.useContext(TextClassContext);
+  const textClass = React.use(TextClassContext);
   return <Icon className={cn('size-4 shrink-0', textClass, className)} {...props} />;
 }
 

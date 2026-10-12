@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import type { LucideIcon, LucideProps } from 'lucide-react-native';
-import { cssInterop } from 'nativewind';
+import { withUniwind } from 'uniwind';
 
 type IconProps = LucideProps & {
   as: LucideIcon;
@@ -11,17 +11,16 @@ function IconImplBase({ as: IconComponent, ...props }: IconProps) {
   return <IconComponent {...props} />;
 }
 
-cssInterop(IconImplBase, {
-  className: {
-    target: 'style',
-    nativeStyleToProp: {
-      color: true,
-      opacity: true,
-    },
+const IconImpl = withUniwind(IconImplBase, {
+  color: {
+    fromClassName: 'className',
+    styleProperty: 'color',
+  },
+  opacity: {
+    fromClassName: 'className',
+    styleProperty: 'opacity',
   },
 });
-
-const IconImpl = IconImplBase;
 
 /**
  * A wrapper component for Lucide icons with Uniwind `className` support via `withUniwind`.
@@ -39,7 +38,7 @@ const IconImpl = IconImplBase;
  * ```
  *
  * @param {LucideIcon} as - The Lucide icon component to render.
- * @param {string} className - Utility classes to style the icon using Nativewind.
+ * @param {string} className - Utility classes to style the icon using Uniwind.
  * @param {number} size - Icon size (defaults to 14).
  * @param {...LucideProps} ...props - Additional Lucide icon props passed to the "as" icon.
  */

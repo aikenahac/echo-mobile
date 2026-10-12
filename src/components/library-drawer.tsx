@@ -7,8 +7,8 @@ import {
 } from "@/lib/icons";
 import { LibraryTabs } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { LucideIcon } from "lucide-react-native";
-import { useState } from "react";
+import type { LucideProps } from "lucide-react-native";
+import { useState, type ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 import { TouchableOpacity, View } from "react-native";
 import { Button } from "./ui/button";
@@ -22,7 +22,7 @@ type Props = {
 
 type Tab = {
   tab: LibraryTabs;
-  Icon: LucideIcon;
+  Icon: ComponentType<LucideProps & { className?: string }>;
 };
 
 export function LibraryDrawer({ activeTab, changeActiveTab }: Props) {

@@ -12,9 +12,8 @@ import {
   useFonts,
 } from "@expo-google-fonts/eb-garamond";
 import { Roboto_500Medium } from "@expo-google-fonts/roboto";
-import { ThemeProvider as NavThemeProvider } from "@react-navigation/native";
 import { PortalHost } from "@rn-primitives/portal";
-import { Stack } from "expo-router";
+import { ThemeProvider as NavThemeProvider, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
@@ -79,24 +78,13 @@ function RootLayoutContent() {
       <NavThemeProvider value={NAV_THEME[effectiveColorScheme]}>
         <QueryClientProvider client={queryClient}>
           <GestureHandlerRootView style={{ flex: 1 }}>
-            <View
-              style={{ flex: 1 }}
-              className={
-                effectiveColorScheme === "dark"
-                  ? "dark bg-background"
-                  : "bg-background"
-              }
-            >
+            <View style={{ flex: 1 }} className="bg-background">
               <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="(app)" />
                 <Stack.Screen name="(auth)" />
                 <Stack.Screen name="index" />
               </Stack>
-              <StatusBar
-                style={effectiveColorScheme === "dark" ? "light" : "dark"}
-                translucent
-                backgroundColor="transparent"
-              />
+              <StatusBar style={effectiveColorScheme === "dark" ? "light" : "dark"} />
               <PortalHost />
               <Toaster position="bottom-center" />
             </View>

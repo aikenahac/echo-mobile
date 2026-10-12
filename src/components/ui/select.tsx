@@ -84,7 +84,7 @@ function SelectContent({
     <SelectPrimitive.Portal hostName={portalHost}>
       <FullWindowOverlay>
         <SelectPrimitive.Overlay style={Platform.select({ native: StyleSheet.absoluteFill })}>
-          <TextClassContext.Provider value="text-popover-foreground">
+          <TextClassContext value="text-popover-foreground">
             <NativeOnlyAnimatedView className="z-50" entering={FadeIn} exiting={FadeOut}>
               <SelectPrimitive.Content
                 className={cn(
@@ -125,7 +125,7 @@ function SelectContent({
                 <SelectScrollDownButton />
               </SelectPrimitive.Content>
             </NativeOnlyAnimatedView>
-          </TextClassContext.Provider>
+          </TextClassContext>
         </SelectPrimitive.Overlay>
       </FullWindowOverlay>
     </SelectPrimitive.Portal>

@@ -3,8 +3,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Circle } from '@shopify/react-native-skia';
 import React, { useState } from 'react';
 import { StyleSheet, View, type ViewProps } from 'react-native';
-import { useSharedValue } from 'react-native-reanimated';
-import { Area, Bar, CartesianChart, Line } from 'victory-native';
+import { Area, Bar, CartesianChart, Line, useChartPressState as useVictoryChartPressState } from 'victory-native';
 
 // Types
 export interface ChartDataPoint {
@@ -280,13 +279,7 @@ export function ChartArea({
 
 // Helper hook for chart press state
 function useChartPressState() {
-  const [isActive, setIsActive] = useState(false);
-  const state = {
-    x: { position: useSharedValue(0), value: useSharedValue(0) },
-    y: { y: { position: useSharedValue(0), value: useSharedValue(0) } },
-  };
-
-  return { state, isActive };
+  return useVictoryChartPressState({ x: 0, y: { y: 0 } });
 }
 
 const styles = StyleSheet.create({
