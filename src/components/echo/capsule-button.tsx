@@ -17,7 +17,9 @@ type Variant =
   /** Paper fill on the field (Continue with Google) */
   | "paper"
   /** Text only */
-  | "plain";
+  | "plain"
+  /** Text only, in the accent (links such as Add photo) */
+  | "link";
 
 type Size = "lg" | "md" | "sm";
 
@@ -57,6 +59,8 @@ function look(variant: Variant, c: Palette) {
       return { bg: c.paper, fg: c.ink, border: undefined, borderWidth: 0 };
     case "plain":
       return { bg: "transparent", fg: c.ink, border: undefined, borderWidth: 0 };
+    case "link":
+      return { bg: "transparent", fg: c.pinkInk, border: undefined, borderWidth: 0 };
   }
 }
 

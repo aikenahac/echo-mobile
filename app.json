@@ -74,7 +74,15 @@
       "expo-apple-authentication",
       "expo-image",
       "expo-status-bar",
-      "./plugins/with-ios-scene-lifecycle"
+      "./plugins/with-ios-scene-lifecycle",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Echo uses your photos to set your profile picture and collection covers.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

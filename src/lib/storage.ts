@@ -13,7 +13,7 @@ export const STORAGE_KEYS = {
   DAILY_PAGE_SNAPSHOT: "daily_page_snapshot",
 } as const
 
-const storage = createMMKV({
+export const storage = createMMKV({
   id: "default",
 });
 

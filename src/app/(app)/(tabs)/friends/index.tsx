@@ -88,6 +88,9 @@ export default function FriendsScreen() {
             onOpenBook={(bookId) =>
               router.push({ pathname: "/book/[bookId]", params: { bookId } })
             }
+            onOpenUser={(userId) =>
+              router.push({ pathname: "/user/[userId]", params: { userId } })
+            }
           />
         )}
         // Hairlines between paper items only; a field band carries its own edges

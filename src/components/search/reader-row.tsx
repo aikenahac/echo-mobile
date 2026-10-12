@@ -2,20 +2,24 @@ import { Avatar, CapsuleButton } from "@/components/echo";
 import type { Reader } from "@/lib/schemas";
 import { useColors } from "@/lib/theme";
 import { useTranslation } from "react-i18next";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 /**
  * A reader (r6 21): square tile, name, @username, a 2-line bio, and Follow (ink) /
- * Following (outline). Rows aren't tappable until public profiles exist.
+ * Following (outline). The row opens their profile.
  */
-export function ReaderRow({ reader, onToggle }: { reader: Reader; onToggle: () => void }) {
+export function ReaderRow({ reader, onToggle, onOpen }: { reader: Reader; onToggle: () => void; onOpen: () => void }) {
   const colors = useColors();
   const { t } = useTranslation();
   const name = reader.displayName || reader.username || "";
   const handle = reader.displayName && reader.username ? `@${reader.username}` : null;
 
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 14 }}>
+    <Pressable
+      accessibilityRole="button"
+      onPress={onOpen}
+      style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 14, opacity: pressed ? 0.7 : 1 })}
+    >
       <Avatar user={reader} size={44} />
       <View style={{ flex: 1, minWidth: 0 }}>
         <Text numberOfLines={1} style={{ fontSize: 17, fontWeight: "600", letterSpacing: -0.4, color: colors.ink }}>
@@ -36,6 +40,6 @@ export function ReaderRow({ reader, onToggle }: { reader: Reader; onToggle: () =
         onPress={onToggle}
         style={{ minHeight: 34, paddingHorizontal: 14 }}
       />
-    </View>
+    </Pressable>
   );
 }

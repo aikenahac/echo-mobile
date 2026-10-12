@@ -4,7 +4,8 @@ import { Redirect, Stack } from "expo-router";
 
 /**
  * Signed-in app: the tabs, plus screens that cover them —
- * Book detail (pushed, no tab bar) and the review editor (large-detent sheet).
+ * Book detail, Settings and other readers' profiles (pushed, no tab bar), and the
+ * review editor and Edit profile (large-detent sheets).
  */
 export default function AppLayout() {
   const { isSignedIn } = useAuth();
@@ -43,6 +44,38 @@ export default function AppLayout() {
           headerShadowVisible: false,
           // The sheet is paper, like every other ground in the app
           contentStyle: { backgroundColor: colors.paper },
+        }}
+      />
+      <Stack.Screen
+        name="settings"
+        options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: "",
+          headerBackButtonDisplayMode: "minimal",
+          headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="edit-profile"
+        options={{
+          presentation: "formSheet",
+          sheetAllowedDetents: [1],
+          sheetGrabberVisible: true,
+          headerShown: true,
+          headerTransparent: true,
+          headerShadowVisible: false,
+          contentStyle: { backgroundColor: colors.paper },
+        }}
+      />
+      <Stack.Screen
+        name="user/[userId]"
+        options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: "",
+          headerBackButtonDisplayMode: "minimal",
+          headerShadowVisible: false,
         }}
       />
     </Stack>

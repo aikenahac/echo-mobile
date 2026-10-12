@@ -154,6 +154,7 @@ export default function SearchScreen() {
             <View style={{ paddingHorizontal: spacing.lg }}>
               <ReaderRow
                 reader={item}
+                onOpen={() => router.push({ pathname: "/user/[userId]", params: { userId: item.id } })}
                 onToggle={() => {
                   Haptics.selectionAsync();
                   toggleFollow.mutate({ userId: item.id, following: !item.isFollowing }, { onError: (e) => Alert.alert(getErrorMessage(e)) });

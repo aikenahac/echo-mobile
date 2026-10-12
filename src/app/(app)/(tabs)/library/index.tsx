@@ -13,6 +13,7 @@ import { useLibrary } from "@/hooks/api/library/use-library";
 import { useProgressCommitter } from "@/hooks/api/library/use-progress-committer";
 import { useRateBook } from "@/hooks/api/library/use-rate-book";
 import { useUpdateProgress } from "@/hooks/api/library/use-update-progress";
+import { useLibraryLayout } from "@/hooks/use-library-layout";
 import { getErrorMessage } from "@/lib/api/errors";
 import { bookTotal } from "@/lib/books";
 import { heroBook, SHELF_KEY, type Shelf } from "@/lib/library-cache";
@@ -20,13 +21,12 @@ import type { UserBook } from "@/lib/schemas";
 import { getFromLocalStorage, setInLocalStorage, STORAGE_KEYS } from "@/lib/storage";
 import { spacing, useColors } from "@/lib/theme";
 import * as Haptics from "expo-haptics";
-import { useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Alert, RefreshControl, ScrollView, Text, useWindowDimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-type View_ = "grid" | "list";
 type Sort = "recentlyFinished" | "recentlyAdded" | "title" | "author" | "rating";
 
 const DEFAULT_SORT: Record<Exclude<Shelf, "reading">, Sort> = {
@@ -69,7 +69,7 @@ export default function LibraryScreen() {
   useFocusEffect(useCallback(() => () => setFinishing(null), []));
 
   const [shelf, setShelfState] = useState<Shelf>(() => getFromLocalStorage<Shelf>(STORAGE_KEYS.LIBRARY_TAB) ?? "reading");
-  const [view, setViewState] = useState<View_>(() => getFromLocalStorage<View_>(STORAGE_KEYS.LIBRARY_VIEW) ?? "grid");
+  const [view, setView] = useLibraryLayout();
   const [sorts, setSorts] = useState<Partial<Record<Shelf, Sort>>>(
     () => getFromLocalStorage<Partial<Record<Shelf, Sort>>>(STORAGE_KEYS.LIBRARY_SORT) ?? {},
   );
@@ -77,15 +77,21 @@ export default function LibraryScreen() {
   /** The page number is being dragged: hold the scroll view still */
   const [dialActive, setDialActive] = useState(false);
 
+  // Arriving with ?shelf= (Profile "See all") switches to it
+  const params = useLocalSearchParams<{ shelf?: Shelf }>();
+  const [lastShelfParam, setLastShelfParam] = useState(params.shelf);
+  if (params.shelf !== lastShelfParam) {
+    setLastShelfParam(params.shelf);
+    if (params.shelf && SHELF_KEY[params.shelf]) setShelfState(params.shelf);
+  }
+
   const setShelf = (next: Shelf) => {
     setFinishing(null);
     setShelfState(next);
     setInLocalStorage(STORAGE_KEYS.LIBRARY_TAB, next);
   };
   const toggleView = () => {
-    const next = view === "grid" ? "list" : "grid";
-    setViewState(next);
-    setInLocalStorage(STORAGE_KEYS.LIBRARY_VIEW, next);
+    setView(view === "grid" ? "list" : "grid");
     Haptics.selectionAsync();
   };
 
