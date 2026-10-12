@@ -11,6 +11,7 @@ export const queryKeys = {
   collections: ["collections"] as const,
   collection: (id: string) => ["collections", id] as const,
   feed: ["feed"] as const,
+  search: ["search"] as const,
   searchBooks: (q: string) => ["search", "books", q] as const,
   searchUsers: (q: string) => ["users", "search", q] as const,
   users: ["users"] as const,

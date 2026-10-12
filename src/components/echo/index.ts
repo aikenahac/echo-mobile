@@ -7,6 +7,7 @@ export { DisplayText } from "./display-text";
 export { FieldBand } from "./field-band";
 export { Hairline } from "./hairline";
 export { NativeMenu } from "./native-menu";
+export { NativeSwitch } from "./native-switch";
 export type { MenuItem } from "./native-menu.types";
 export { PlateNumber } from "./plate-number";
 export { ProgressBar } from "./progress-bar";

@@ -1,16 +1,14 @@
-import { useColors } from "@/lib/theme";
+import { useColors, useStatusBarStyle } from "@/lib/theme";
 import { useAuth } from "@clerk/clerk-expo";
-import { Redirect } from "expo-router";
-import { NativeTabs } from "expo-router/unstable-native-tabs";
-import { useTranslation } from "react-i18next";
+import { Redirect, Stack } from "expo-router";
 
 /**
- * Library · Friends · You, plus Search as the separate search-role tab.
- * The iOS 26 glass tab bar is the system's; tint is pink-ink.
+ * Signed-in app: the tabs, plus screens that cover them —
+ * Book detail (pushed, no tab bar) and the review editor (large-detent sheet).
  */
-export default function AppTabsLayout() {
+export default function AppLayout() {
   const { isSignedIn } = useAuth();
-  const { t } = useTranslation();
+  const statusBarStyle = useStatusBarStyle();
   const colors = useColors();
 
   if (!isSignedIn) {
@@ -20,24 +18,33 @@ export default function AppTabsLayout() {
   // TODO(phase 9): blocking username onboarding modal when profile.username is null
 
   return (
-    <NativeTabs tintColor={colors.pinkInk}>
-      <NativeTabs.Trigger name="library">
-        <NativeTabs.Trigger.Icon sf="books.vertical" md="library_books" />
-        <NativeTabs.Trigger.Label>{t("tabs.library")}</NativeTabs.Trigger.Label>
-      </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="friends">
-        <NativeTabs.Trigger.Icon sf="person.2" md="group" />
-        <NativeTabs.Trigger.Label>{t("tabs.friends")}</NativeTabs.Trigger.Label>
-      </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="you">
-        <NativeTabs.Trigger.Icon sf="person" md="person" />
-        <NativeTabs.Trigger.Label>{t("tabs.you")}</NativeTabs.Trigger.Label>
-      </NativeTabs.Trigger>
-      {/* TODO(phase 5): confirm the system separates this into its own glass button once the
-          search screen has a native search bar (r6 shows it apart from the three tabs) */}
-      <NativeTabs.Trigger name="search" role="search">
-        <NativeTabs.Trigger.Label>{t("tabs.search")}</NativeTabs.Trigger.Label>
-      </NativeTabs.Trigger>
-    </NativeTabs>
+    <Stack screenOptions={{ headerShown: false, statusBarStyle }}>
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen
+        name="book/[bookId]"
+        options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: "",
+          headerBackButtonDisplayMode: "minimal",
+          headerShadowVisible: false,
+          // Stays live under the review sheet so saved changes show when it closes
+          freezeOnBlur: false,
+        }}
+      />
+      <Stack.Screen
+        name="review/[bookId]"
+        options={{
+          presentation: "formSheet",
+          sheetAllowedDetents: [1],
+          sheetGrabberVisible: true,
+          headerShown: true,
+          headerTransparent: true,
+          headerShadowVisible: false,
+          // The sheet is paper, like every other ground in the app
+          contentStyle: { backgroundColor: colors.paper },
+        }}
+      />
+    </Stack>
   );
 }

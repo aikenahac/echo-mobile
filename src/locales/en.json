@@ -106,5 +106,55 @@
       "moved": "Moved to Finished",
       "undo": "Undo"
     }
+  },
+  "book": {
+    "pages": "{{count}} pages",
+    "yourRating": "Your rating",
+    "notRatedYet": "Not rated yet",
+    "readIn_one": "Read in {{count}} day",
+    "readIn_other": "Read in {{count}} days",
+    "dateRange": "{{from}} to {{to}}",
+    "started": "Started {{date}}",
+    "statusMenu": "Status: {{status}}. Double-tap to change.",
+    "status": {
+      "want": "Want to read",
+      "reading": "Reading",
+      "finished": "Finished"
+    },
+    "addToLibrary": "Add to library",
+    "favourite": "Favourite",
+    "unfavourite": "Remove from Favourites",
+    "addToCollection": "Add to collection",
+    "more": "More",
+    "remove": "Remove from library",
+    "removeConfirmTitle": "Remove {{title}}?",
+    "removeConfirmBody": "Your page, rating and collection entries for this book go. Your review stays.",
+    "yourReview": "Your review",
+    "edit": "Edit",
+    "write": "Write",
+    "noReview": "You haven't written about this one yet.",
+    "public": "Public",
+    "private": "Private",
+    "fromFollowing": "From people you follow",
+    "notFound": "This book isn't available.",
+    "error": "This book didn't load."
+  },
+  "review": {
+    "title": "Your review",
+    "close": "Close",
+    "save": "Save review",
+    "finishedOn": "finished {{date}}",
+    "placeholder": "What stayed with you?",
+    "counter": "{{n}} / {{max}}",
+    "private": "Private",
+    "privateOn": "Only you can see a private review.",
+    "privateOff": "Public reviews show on the book and in your followers' Friends feed.",
+    "delete": "Delete review",
+    "deleteConfirmTitle": "Delete your review?",
+    "deleteConfirmBody": "This can't be undone.",
+    "discardTitle": "Discard changes?",
+    "discard": "Discard",
+    "keepEditing": "Keep editing",
+    "empty": "Write something first."
   }
 }

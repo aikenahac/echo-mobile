@@ -4,7 +4,7 @@ import { pagesToday } from "@/lib/daily-pages";
 import type { UserBook } from "@/lib/schemas";
 import { useColors } from "@/lib/theme";
 import { useTranslation } from "react-i18next";
-import { Text, useWindowDimensions, View } from "react-native";
+import { Pressable, Text, useWindowDimensions, View } from "react-native";
 import { PageDial } from "./page-dial";
 
 type Props = {
@@ -16,13 +16,15 @@ type Props = {
   /** Tap on the number: the sheet with current page and page count */
   onEditPage: () => void;
   onDragChange?: (active: boolean) => void;
+  /** Tap on the cover (book detail) */
+  onOpen?: () => void;
 };
 
 /**
  * The book you're reading, on the field: cover, the 120pt page number (editable),
  * "of 245 pages / 77 to go · +12 today", title, author, and −/Next page.
  */
-export function ReadingHero({ userBook, onStep, onSetPage, onEditPage, onDragChange }: Props) {
+export function ReadingHero({ userBook, onStep, onSetPage, onEditPage, onDragChange, onOpen }: Props) {
   const colors = useColors();
   const { t } = useTranslation();
   const { height } = useWindowDimensions();
@@ -39,7 +41,9 @@ export function ReadingHero({ userBook, onStep, onSetPage, onEditPage, onDragCha
   return (
     <View>
       <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 20, marginTop: compact ? 16 : 24 }}>
-        <Cover uri={userBook.book.coverUrl} title={userBook.book.title} author={userBook.book.author} width={compact ? 104 : 140} />
+        <Pressable accessibilityRole="button" disabled={!onOpen} onPress={onOpen}>
+          <Cover uri={userBook.book.coverUrl} title={userBook.book.title} author={userBook.book.author} width={compact ? 104 : 140} />
+        </Pressable>
         <View style={{ flex: 1, minWidth: 0 }}>
           <PageDial page={page} total={total} size={compact ? 96 : 120} onCommit={onSetPage} onTap={onEditPage} onDragChange={onDragChange} />
           {total ? (

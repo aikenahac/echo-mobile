@@ -155,9 +155,9 @@ export default function LibraryScreen() {
     setTimeout(() => setFinishing(null), 900);
   };
 
-  // TODO(phase 4): open book detail; TODO(phase 8): open collection detail
-  const openBook = (_userBook: UserBook) => {};
-  const findBook = () => router.navigate("/(app)/search");
+  // TODO(phase 8): open collection detail
+  const openBook = (userBook: UserBook) => router.push({ pathname: "/book/[bookId]", params: { bookId: userBook.bookId } });
+  const findBook = () => router.navigate("/search");
 
   const refresh = () => {
     library.refetch();
@@ -201,6 +201,7 @@ export default function LibraryScreen() {
                 onSetPage={setPage}
                 onEditPage={() => setPageSheetOpen(true)}
                 onDragChange={setDialActive}
+                onOpen={() => openBook(hero)}
               />
             ) : (
               <EmptyReading onFindBook={findBook} />
@@ -238,7 +239,7 @@ export default function LibraryScreen() {
 
         {library.isSuccess && onField && (
           <View style={{ paddingHorizontal: spacing.lg, paddingTop: 28 }}>
-            {!hero && <FindReadersNote onFindReaders={() => router.navigate("/(app)/search")} />}
+            {!hero && <FindReadersNote onFindReaders={() => router.navigate("/search")} />}
 
             {alsoReading.length > 0 && (
               <>

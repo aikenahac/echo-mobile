@@ -1,13 +1,9 @@
 import { Cover, Stars } from "@/components/echo";
+import { shortDate } from "@/lib/dates";
 import type { UserBook } from "@/lib/schemas";
 import { useColors } from "@/lib/theme";
 import { useTranslation } from "react-i18next";
 import { Pressable, Text, View } from "react-native";
-
-export function shortDate(iso: string | null | undefined) {
-  if (!iso) return "";
-  return new Intl.DateTimeFormat(undefined, { day: "numeric", month: "short" }).format(new Date(iso));
-}
 
 /** List layout (r6 17): 44pt cover, title, author; ink stars and the finish date on the right */
 export function ShelfListRow({ userBook, onPress }: { userBook: UserBook; onPress?: () => void }) {

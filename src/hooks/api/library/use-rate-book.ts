@@ -1,7 +1,7 @@
 import { invalidateLibrary, queryKeys } from "@/hooks/query-keys";
 import { useLibraryApi } from "@/lib/api/library";
 import { findUserBook } from "@/lib/library-cache";
-import type { LibraryResponse } from "@/lib/schemas";
+import type { CatalogBookResponse, LibraryResponse } from "@/lib/schemas";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 /** PUT /books/{id}/rating, optimistic on the library cache */
@@ -10,8 +10,12 @@ export const useRateBook = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ userBookId, rating }: { userBookId: string; rating: number }) => rate(userBookId, rating),
-    onMutate: async ({ userBookId, rating }) => {
+    mutationFn: ({ userBookId, rating }: { userBookId: string; rating: number; bookId?: string }) => rate(userBookId, rating),
+    onMutate: async ({ userBookId, rating, bookId }) => {
+      if (bookId) {
+        const detail = queryClient.getQueryData<CatalogBookResponse>(queryKeys.catalog(bookId));
+        if (detail?.userBook) queryClient.setQueryData(queryKeys.catalog(bookId), { ...detail, userBook: { ...detail.userBook, rating } });
+      }
       await queryClient.cancelQueries({ queryKey: queryKeys.library });
       const previous = queryClient.getQueryData<LibraryResponse>(queryKeys.library);
       if (previous) {
@@ -28,6 +32,6 @@ export const useRateBook = () => {
     onError: (_e, _v, context) => {
       if (context?.previous) queryClient.setQueryData(queryKeys.library, context.previous);
     },
-    onSettled: (_d, _e, { userBookId }, context) => invalidateLibrary(queryClient, { userBookId, bookId: context?.bookId }),
+    onSettled: (_d, _e, { userBookId, bookId }, context) => invalidateLibrary(queryClient, { userBookId, bookId: bookId ?? context?.bookId }),
   });
 };
