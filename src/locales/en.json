@@ -156,5 +156,33 @@
     "discard": "Discard",
     "keepEditing": "Keep editing",
     "empty": "Write something first."
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Books, authors, readers",
+    "books": "Books",
+    "readers": "Readers",
+    "fromCatalog": "From Echo's catalog",
+    "fromOpenLibrary": "From Open Library",
+    "openLibrary": "Open Library",
+    "add": {
+      "want": "Want",
+      "reading": "Reading",
+      "finished": "Finished"
+    },
+    "addAs": "Add {{title}} as {{status}}",
+    "ownedRated": "{{status}} · rated {{rating}}",
+    "noBooks": "No books match \"{{q}}\".",
+    "booksHint": "Search by title, author or ISBN.",
+    "readersHint": "Type at least two letters of a name or username.",
+    "readersMatch_one": "{{count}} reader matches \"{{q}}\"",
+    "readersMatch_other": "{{count}} readers match \"{{q}}\"",
+    "noReaders": "No readers match \"{{q}}\".",
+    "showMore": "Show more",
+    "follow": "Follow",
+    "following": "Following",
+    "followName": "Follow {{name}}",
+    "unfollowName": "Unfollow {{name}}",
+    "error": "Search didn't work."
   }
 }

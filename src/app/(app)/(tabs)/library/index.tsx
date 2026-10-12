@@ -157,7 +157,7 @@ export default function LibraryScreen() {
 
   // TODO(phase 8): open collection detail
   const openBook = (userBook: UserBook) => router.push({ pathname: "/book/[bookId]", params: { bookId: userBook.bookId } });
-  const findBook = () => router.navigate("/search");
+  const findBook = () => router.navigate({ pathname: "/search", params: { segment: "books" } });
 
   const refresh = () => {
     library.refetch();
@@ -239,7 +239,7 @@ export default function LibraryScreen() {
 
         {library.isSuccess && onField && (
           <View style={{ paddingHorizontal: spacing.lg, paddingTop: 28 }}>
-            {!hero && <FindReadersNote onFindReaders={() => router.navigate("/search")} />}
+            {!hero && <FindReadersNote onFindReaders={() => router.navigate({ pathname: "/search", params: { segment: "readers" } })} />}
 
             {alsoReading.length > 0 && (
               <>

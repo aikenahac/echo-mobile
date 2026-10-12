@@ -70,10 +70,8 @@ export const useAddBook = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (body: AddBookRequest) => add(body),
-    onSettled: (data) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.search });
-      return invalidateLibrary(queryClient, { bookId: data?.userBook.bookId });
-    },
+    // Search rows read "owned" from the library cache, so the results needn't refetch (and reorder)
+    onSettled: (data) => invalidateLibrary(queryClient, { bookId: data?.userBook.bookId }),
   });
 };
 

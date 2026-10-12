@@ -1,8 +1,8 @@
-import { CapsuleButton, NativeMenu, SFIcon, Stamp } from "@/components/echo";
+import { NativeMenu, SFIcon, Stamp } from "@/components/echo";
 import type { ReadingStatus } from "@/lib/schemas";
 import { useColors } from "@/lib/theme";
 import { useTranslation } from "react-i18next";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 const STATUSES: Array<ReadingStatus> = ["want", "reading", "finished"];
 const ICONS = { want: "bookmark", reading: "book", finished: "checkmark.seal" } as const;
@@ -37,8 +37,20 @@ export function StatusStampMenu({ status, onChange }: Props) {
           <Stamp label={t(`stamp.${status}`)} size={22} rotate={-6} trailing={<SFIcon name="chevron.down" size={12} weight="bold" color={colors.ink} />} />
         </View>
       ) : (
-        <View pointerEvents="none">
-          <CapsuleButton title={t("book.addToLibrary")} icon="plus" variant="primary" size="md" />
+        // Drawn, not a Pressable: the native menu owns the tap
+        <View
+          style={{
+            height: 44,
+            paddingHorizontal: 16,
+            borderRadius: 22,
+            backgroundColor: colors.ink,
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 6,
+          }}
+        >
+          <SFIcon name="plus" size={15} color={colors.paper} weight="semibold" />
+          <Text style={{ fontSize: 15, fontWeight: "600", color: colors.paper }}>{t("book.addToLibrary")}</Text>
         </View>
       )}
     </NativeMenu>
