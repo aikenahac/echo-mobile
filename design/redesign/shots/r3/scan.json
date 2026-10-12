@@ -1,0 +1,295 @@
+[
+  {
+    "name": "library",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 17
+      },
+      "sizes": [
+        120,
+        44,
+        28,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "detail-james",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 6,
+        "SF Pro": 13
+      },
+      "sizes": [
+        44,
+        28,
+        22,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "friends",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 10,
+        "SF Pro": 18
+      },
+      "sizes": [
+        44,
+        28,
+        22,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 5,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "search",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 8,
+        "SF Pro": 17
+      },
+      "sizes": [
+        44,
+        22,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "signature-stamp",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 1,
+        "SF Pro": 5
+      },
+      "sizes": [
+        28,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 1,
+      "accentHues": [],
+      "cards": 0
+    }
+  },
+  {
+    "name": "add-to-collection",
+    "fails": [],
+    "warns": [
+      "4 icon-in-tinted-square chips. If every row has one, none of them mean anything."
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 2,
+        "SF Pro": 9
+      },
+      "sizes": [
+        44,
+        28,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336,
+        192
+      ],
+      "cards": 1
+    }
+  },
+  {
+    "name": "premium",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 9
+      },
+      "sizes": [
+        64,
+        22,
+        17,
+        15
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "library-dark",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 17
+      },
+      "sizes": [
+        120,
+        44,
+        28,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "profile",
+    "fails": [],
+    "warns": [
+      "12 elements cast shadows. Depth should come from one or two layers, not every tile."
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 4,
+        "SF Pro": 10
+      },
+      "sizes": [
+        120,
+        28,
+        22,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "first-run-username",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 8
+      },
+      "sizes": [
+        64,
+        22,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336
+      ],
+      "cards": 1
+    }
+  }
+]

@@ -1,0 +1,668 @@
+[
+  {
+    "name": "library",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 17
+      },
+      "sizes": [
+        120,
+        44,
+        28,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "detail-james",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 6,
+        "SF Pro": 13
+      },
+      "sizes": [
+        44,
+        28,
+        22,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "friends",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 10,
+        "SF Pro": 18
+      },
+      "sizes": [
+        44,
+        28,
+        22,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 5,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "search",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 8,
+        "SF Pro": 17
+      },
+      "sizes": [
+        44,
+        22,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "signature-stamp",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 1,
+        "SF Pro": 5
+      },
+      "sizes": [
+        28,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 1,
+      "accentHues": [],
+      "cards": 0
+    }
+  },
+  {
+    "name": "add-to-collection",
+    "fails": [],
+    "warns": [
+      "4 icon-in-tinted-square chips. If every row has one, none of them mean anything."
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 2,
+        "SF Pro": 9
+      },
+      "sizes": [
+        44,
+        28,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336,
+        192
+      ],
+      "cards": 1
+    }
+  },
+  {
+    "name": "premium",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 9
+      },
+      "sizes": [
+        64,
+        22,
+        17,
+        15
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "library-dark",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 17
+      },
+      "sizes": [
+        120,
+        44,
+        28,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "profile",
+    "fails": [],
+    "warns": [
+      "12 elements cast shadows. Depth should come from one or two layers, not every tile."
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 4,
+        "SF Pro": 10
+      },
+      "sizes": [
+        120,
+        28,
+        22,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "launch",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {},
+      "sizes": [],
+      "weights": [],
+      "leftEdges": 0,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "welcome",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 6
+      },
+      "sizes": [
+        64,
+        22,
+        17,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 1,
+      "accentHues": [],
+      "cards": 0
+    }
+  },
+  {
+    "name": "sign-in",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 1,
+        "SF Pro": 9
+      },
+      "sizes": [
+        44,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        0,
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "create-account",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 1,
+        "SF Pro": 9
+      },
+      "sizes": [
+        44,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "verify-email",
+    "fails": [],
+    "warns": [
+      "Only 3 text sizes across 11 text elements. Hierarchy is flat."
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 5,
+        "SF Pro": 6
+      },
+      "sizes": [
+        44,
+        17,
+        15
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "first-run-username",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 8
+      },
+      "sizes": [
+        64,
+        22,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336
+      ],
+      "cards": 1
+    }
+  },
+  {
+    "name": "library-empty",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 2,
+        "SF Pro": 13
+      },
+      "sizes": [
+        44,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "library-list-finished",
+    "fails": [],
+    "warns": [
+      "8 elements cast shadows. Depth should come from one or two layers, not every tile."
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 1,
+        "SF Pro": 32
+      },
+      "sizes": [
+        44,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 3,
+      "accentHues": [],
+      "cards": 0
+    }
+  },
+  {
+    "name": "collection-detail",
+    "fails": [],
+    "warns": [
+      "Only 3 text sizes across 11 text elements. Hierarchy is flat.",
+      "Text inside the system's safe areas: \"Kazuo Ishiguro\" (home indicator)"
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 1,
+        "SF Pro": 10
+      },
+      "sizes": [
+        44,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 1,
+      "accentHues": [
+        192
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "collection-editor",
+    "fails": [],
+    "warns": [
+      "Only 3 text sizes across 13 text elements. Hierarchy is flat.",
+      "5 icon-in-tinted-square chips. If every row has one, none of them mean anything."
+    ],
+    "facts": {
+      "fonts": {
+        "SF Pro": 13
+      },
+      "sizes": [
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336,
+        192
+      ],
+      "cards": 2
+    }
+  },
+  {
+    "name": "review-editor",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 7,
+        "Archivo": 1
+      },
+      "sizes": [
+        22,
+        17,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336,
+        0
+      ],
+      "cards": 2
+    }
+  },
+  {
+    "name": "find-readers",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 6,
+        "SF Pro": 19
+      },
+      "sizes": [
+        44,
+        22,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 2,
+      "accentHues": [],
+      "cards": 0
+    }
+  },
+  {
+    "name": "settings",
+    "fails": [],
+    "warns": [
+      "Text inside the system's safe areas: \"Sign out\" (home indicator)"
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 17
+      },
+      "sizes": [
+        44,
+        22,
+        17,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336
+      ],
+      "cards": 5
+    }
+  },
+  {
+    "name": "edit-profile",
+    "fails": [],
+    "warns": [
+      "Only 3 text sizes across 12 text elements. Hierarchy is flat."
+    ],
+    "facts": {
+      "fonts": {
+        "SF Pro": 11,
+        "Archivo": 1
+      },
+      "sizes": [
+        44,
+        17,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336
+      ],
+      "cards": 2
+    }
+  },
+  {
+    "name": "reset-password",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 7,
+        "SF Pro": 8
+      },
+      "sizes": [
+        44,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  }
+]

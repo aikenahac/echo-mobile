@@ -1,0 +1,244 @@
+[
+  {
+    "name": "library",
+    "fails": [],
+    "warns": [
+      "Text within 12pt of the screen edge: 2px \"Tomorrow, and Tomorrow, and Tomorrow\""
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 17
+      },
+      "sizes": [
+        120,
+        44,
+        28,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "detail-james",
+    "fails": [],
+    "warns": [
+      "Text inside the system's safe areas: \"A\" (home indicator); \"Ana Zupan · 9 Oct\" (home indicator); \"Ana Zupan\" (home indicator)"
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 5,
+        "SF Pro": 13
+      },
+      "sizes": [
+        44,
+        28,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "friends",
+    "fails": [
+      "Contrast below WCAG on solid ground: 3.93:1 13px \"2 h\"; 3.93:1 13px \"Yesterday\"; 3.93:1 13px \"Yesterday\"; 3.93:1 13px \"Sat\""
+    ],
+    "warns": [
+      "Lines of text touching vertically (ink under 2pt apart): \"Four generations and not one w\" / \"Pachinko · Min Jin Lee\"; \"Four generations and not one w\" / \"Pachinko\""
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 8,
+        "SF Pro": 18
+      },
+      "sizes": [
+        44,
+        22,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "search",
+    "fails": [
+      "Text clipped: \"Ishiguro\" cut by its container"
+    ],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 22
+      },
+      "sizes": [
+        44,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "signature-stamp",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 1,
+        "SF Pro": 5
+      },
+      "sizes": [
+        28,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 1,
+      "accentHues": [],
+      "cards": 0
+    }
+  },
+  {
+    "name": "library-dark",
+    "fails": [],
+    "warns": [
+      "Text within 12pt of the screen edge: 2px \"Tomorrow, and Tomorrow, and Tomorrow\""
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 17
+      },
+      "sizes": [
+        120,
+        44,
+        28,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "profile",
+    "fails": [],
+    "warns": [
+      "9 elements cast shadows. Depth should come from one or two layers, not every tile."
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 9
+      },
+      "sizes": [
+        120,
+        34,
+        30,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "first-run-username",
+    "fails": [
+      "Contrast below WCAG on solid ground: 3.93:1 17px \"@\""
+    ],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 2,
+        "SF Pro": 5
+      },
+      "sizes": [
+        56,
+        22,
+        17,
+        15
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 1,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  }
+]

@@ -1,0 +1,179 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<title>Echo — exploration</title>
+<link rel="stylesheet" href="kit/device.css">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&display=swap" rel="stylesheet">
+<style>
+  svg.i { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; display: block; }
+  .tabbar { position: absolute; left: 20px; right: 92px; bottom: 21px; height: 62px; border-radius: 31px; display: flex; align-items: center; justify-content: space-around; padding: 0 6px; z-index: 50; }
+  .tab { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10px; font-weight: 600; padding: 6px 14px; border-radius: 24px; }
+  .searchbtn { position: absolute; right: 20px; bottom: 21px; width: 62px; height: 62px; border-radius: 31px; display: grid; place-items: center; z-index: 50; }
+  .cover { display: block; object-fit: cover; aspect-ratio: 2/3; }
+
+  /* ---------- A: The hardback (ribbon) ---------- */
+  .A { --ground:#FBF8F9; --ink:#1D1418; --ink2:#6C5A62; --rule:#EADFE3; --accent:#E23E7E; --accent-ink:#B8215C; background: var(--ground); color: var(--ink); }
+  .A .body { position:absolute; inset: var(--safe-top) 0 0; display:flex; flex-direction:column; padding: 0 20px; }
+  .A h1 { font-family: var(--ny); font-weight: 700; font-size: 34px; letter-spacing: -0.6px; margin: 44px 0 14px; }
+  .A .seg { display:flex; gap: 20px; font-size: 15px; color: var(--ink2); border-bottom: .5px solid var(--rule); padding-bottom: 10px; }
+  .A .seg b { color: var(--ink); font-weight: 600; position: relative; }
+  .A .seg b::after { content:""; position:absolute; left:0; right:0; bottom:-11px; height:2px; background: var(--ink); }
+  .A .seg span i { font-style: normal; font-size: 13px; opacity: .8; }
+  .A .hero { display:flex; gap: 22px; margin-top: 32px; align-items: flex-end; }
+  .A .book { position: relative; width: 168px; flex: none; }
+  .A .book img { width: 168px; border-radius: 2px 5px 5px 2px; box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 14px 26px -10px rgba(60,10,30,.45); }
+  .A .ribbon { position:absolute; left: 118px; top: -6px; width: 14px; height: 74%; background: var(--accent); clip-path: polygon(0 0,100% 0,100% 100%,50% 92%,0 100%); box-shadow: 0 2px 4px rgba(0,0,0,.2); }
+  .A .pg { font-family: var(--ny); font-weight: 600; font-size: 72px; line-height: .9; letter-spacing: -2px; font-variant-numeric: lining-nums tabular-nums; }
+  .A .of { font-size: 15px; color: var(--ink2); margin-top: 8px; }
+  .A .title { font-family: var(--ny); font-size: 22px; font-weight: 600; margin-top: 22px; letter-spacing: -.3px; }
+  .A .auth { font-size: 15px; color: var(--ink2); margin-top: 2px; }
+  .A .step { display:flex; gap: 10px; margin-top: 18px; }
+  .A .step div { height: 44px; border-radius: 22px; display:grid; place-items:center; font-size: 15px; font-weight: 600; }
+  .A .step .m { width: 44px; border: 1px solid var(--rule); }
+  .A .step .p { flex: 1; background: var(--accent); color: #fff; padding: 0 18px; }
+  .A .more { margin-top: 40px; display:flex; flex-direction:column; }
+  .A .row { display:flex; gap: 14px; align-items:center; padding: 12px 0; border-top: .5px solid var(--rule); }
+  .A .row img { width: 44px; border-radius: 1px 3px 3px 1px; }
+  .A .row .t { font-size: 17px; font-weight: 600; letter-spacing: -.4px; }
+  .A .row .s { font-size: 13px; color: var(--ink2); margin-top: 2px; }
+  .A .row .bar { margin-top: 8px; height: 3px; background: var(--rule); border-radius: 2px; width: 100%; }
+  .A .row .bar i { display:block; height: 100%; background: var(--accent); border-radius: 2px; }
+  .A .tab.on { color: var(--accent-ink); background: rgba(226,62,126,.10); }
+
+  /* ---------- B: The riso zine (pink colour field) ---------- */
+  .B { --ground:#FF5FA2; --ink:#160A10; --paper:#FFE6F0; background: var(--ground); color: var(--ink); font-family: "Archivo", var(--sf); --glass: rgba(255,230,240,.45); }
+  .B .body { position:absolute; inset: var(--safe-top) 0 0; display:flex; flex-direction:column; padding: 0 18px; }
+  .B .mast { display:flex; justify-content: space-between; align-items: baseline; margin-top: 18px; font-size: 13px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase; border-bottom: 2px solid var(--ink); padding-bottom: 6px; }
+  .B h1 { font-stretch: 62%; font-weight: 900; font-size: 64px; line-height: .86; margin: 14px 0 0; letter-spacing: -1px; text-transform: uppercase; }
+  .B .hero { display:flex; gap: 14px; margin-top: 20px; }
+  .B .duo { position: relative; width: 150px; flex:none; background: var(--ground); }
+  .B .duo img { width: 150px; filter: grayscale(1) contrast(1.35) brightness(1.05); mix-blend-mode: multiply; }
+  .B .num { font-stretch: 62%; font-weight: 900; font-size: 128px; line-height: .78; letter-spacing: -3px; font-variant-numeric: tabular-nums; }
+  .B .num small { font-size: 36px; letter-spacing: 0; }
+  .B .meta { font-size: 15px; font-weight: 500; margin-top: 10px; line-height: 1.3; }
+  .B .meta b { font-weight: 800; }
+  .B .btns { display:flex; gap: 8px; margin-top: 18px; }
+  .B .btns div { height: 48px; display:grid; place-items:center; font-weight: 800; font-size: 15px; border: 2px solid var(--ink); }
+  .B .btns .m { width: 48px; }
+  .B .btns .p { flex: 1; background: var(--ink); color: var(--ground); }
+  .B .list { margin-top: 30px; border-top: 2px solid var(--ink); }
+  .B .li { display:flex; align-items: baseline; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(22,10,16,.5); font-size: 17px; }
+  .B .li .t { font-weight: 800; text-transform: uppercase; font-stretch: 75%; font-size: 22px; flex: 1; }
+  .B .li .p { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 15px; }
+  .B .tab { color: var(--ink); }
+  .B .tab.on { background: var(--ink); color: var(--ground); }
+
+  /* ---------- C: The night window (cinematic, dark) ---------- */
+  .C { --ground:#120B0F; --ink:#F7EEF2; --ink2:#BBA9B1; --accent:#FF6FA8; background: var(--ground); color: var(--ink); --glass-dark: rgba(40,24,32,.55); }
+  .C .bg { position:absolute; inset:0; overflow: hidden; }
+  .C .bg img { position:absolute; inset: -40px; width: calc(100% + 80px); height: 70%; object-fit: cover; filter: blur(34px) saturate(1.2) brightness(.55); }
+  .C .bg::after { content:""; position:absolute; inset:0; background: linear-gradient(to bottom, rgba(18,11,15,0) 0%, rgba(18,11,15,.4) 35%, var(--ground) 62%); }
+  .C .body { position:absolute; inset: var(--safe-top) 0 0; display:flex; flex-direction:column; padding: 0 20px; }
+  .C .top { display:flex; justify-content: space-between; align-items:center; margin-top: 10px; }
+  .C .top h1 { font-size: 15px; font-weight: 600; font-stretch: 125%; letter-spacing: 1.2px; text-transform: uppercase; margin: 0; }
+  .C .circ { width: 44px; height: 44px; border-radius: 22px; display:grid; place-items:center; }
+  .C .cv { align-self: center; margin-top: 26px; width: 196px; border-radius: 3px; box-shadow: 0 30px 50px -20px rgba(0,0,0,.8); }
+  .C .t { font-stretch: 125%; font-weight: 800; font-size: 30px; letter-spacing: -.6px; text-align:center; margin-top: 22px; }
+  .C .a { text-align:center; color: var(--ink2); font-size: 15px; margin-top: 4px; }
+  .C .scrub { margin-top: 28px; display:flex; align-items:center; gap: 14px; }
+  .C .scrub .m { font-variant-numeric: tabular-nums; font-size: 13px; color: var(--ink2); width: 30px; }
+  .C .track { flex:1; height: 6px; border-radius: 3px; background: rgba(255,255,255,.14); position: relative; }
+  .C .track i { position:absolute; left:0; top:0; bottom:0; width: 68.6%; background: var(--accent); border-radius: 3px; }
+  .C .track b { position:absolute; left: 68.6%; top: 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 11px; background: #fff; }
+  .C .big { display:flex; align-items: baseline; justify-content: center; gap: 8px; margin-top: 22px; }
+  .C .big span { font-stretch: 125%; font-weight: 700; font-size: 56px; letter-spacing: -1.5px; font-variant-numeric: tabular-nums; }
+  .C .big em { font-style: normal; color: var(--ink2); font-size: 15px; }
+  .C .others { display:flex; gap: 12px; margin-top: auto; margin-bottom: 104px; align-items: flex-end; }
+  .C .others img { width: 58px; border-radius: 2px; opacity: .9; }
+  .C .others .cap { font-size: 13px; color: var(--ink2); margin-left: 4px; }
+  .C .tab.on { color: var(--accent); background: rgba(255,255,255,.08); }
+  .C .tab { color: var(--ink2); }
+
+  .label { width: 402px; font: 600 15px/1.35 var(--sf); color:#222; }
+  .label p { font-weight: 400; margin: 4px 0 0; color:#444; }
+  .col { display:flex; flex-direction:column; gap: 14px; }
+</style></head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="books" viewBox="0 0 24 24"><path d="M4 4.5h4v15H4zM10 4.5h4v15h-4zM15.6 5.3l3.8-1 3.6 14.4-3.8 1z"/></symbol>
+  <symbol id="feed" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c.6-3.2 3-5 6-5s5.4 1.8 6 5"/><circle cx="17" cy="9" r="2.4"/><path d="M16.5 13.6c2.6 0 4.3 1.6 4.8 4"/></symbol>
+  <symbol id="me" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c.8-3.8 3.7-6 7.5-6s6.7 2.2 7.5 6"/></symbol>
+  <symbol id="search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></symbol>
+  <symbol id="minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+  <symbol id="more" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="18" cy="12" r="1.2" fill="currentColor"/></symbol>
+</svg>
+
+<!-- A -->
+<div class="col">
+<div class="label">A · Echo is a hardback with a ribbon marker <p>Object. Light rose-white paper, New York serif, covers as physical books. Pink is the ribbon: the place you stopped.</p></div>
+<section class="screen A" data-name="a-hardback" data-time="8:12">
+  <div class="body">
+    <h1>Library</h1>
+    <div class="seg"><b>Reading</b><span>Want <i>7</i></span><span>Finished <i>23</i></span><span>Favourites</span></div>
+    <div class="hero">
+      <div class="book"><img class="cover" src="../covers/9781635575637.jpg"><div class="ribbon"></div></div>
+      <div>
+        <div class="pg">168</div>
+        <div class="of">of 245 · 77 to go</div>
+      </div>
+    </div>
+    <div class="title">Piranesi</div>
+    <div class="auth">Susanna Clarke</div>
+    <div class="step"><div class="m"><svg class="i"><use href="#minus"/></svg></div><div class="p">Read to page 180</div></div>
+    <div class="more" data-scrolls>
+      <div class="row"><img class="cover" src="../covers/9780802161543.jpg"><div style="flex:1"><div class="t">Orbital</div><div class="s">Samantha Harvey · p. 41 of 136</div><div class="bar"><i style="width:30%"></i></div></div></div>
+      <div class="row"><img class="cover" src="../covers/9780593321201.jpg"><div style="flex:1"><div class="t">Tomorrow, and Tomorrow, and Tomorrow</div><div class="s">Gabrielle Zevin · p. 212 of 401</div><div class="bar"><i style="width:53%"></i></div></div></div>
+    </div>
+  </div>
+  <nav class="tabbar glass" data-system><div class="tab on"><svg class="i"><use href="#books"/></svg>Library</div><div class="tab"><svg class="i"><use href="#feed"/></svg>Friends</div><div class="tab"><svg class="i"><use href="#me"/></svg>You</div></nav>
+  <div class="searchbtn glass" data-system><svg class="i"><use href="#search"/></svg></div>
+</section>
+</div>
+
+<!-- B -->
+<div class="col">
+<div class="label">B · Echo is a fluorescent-pink riso zine <p>Printed. Pink colour field, black ink, Archivo condensed, covers printed duotone. Pink is the paper everything is printed on.</p></div>
+<section class="screen B" data-name="b-zine" data-time="8:12">
+  <div class="body">
+    <div class="mast"><span>Echo · Reading</span><span>3 books</span></div>
+    <h1>Piranesi</h1>
+    <div class="hero">
+      <div class="duo"><img class="cover" src="../covers/9781635575637.jpg"></div>
+      <div style="flex:1;min-width:0">
+        <div class="num">168</div>
+        <div class="meta">of <b>245</b> pages.<br>Susanna Clarke.<br>Started 29 Sep.</div>
+      </div>
+    </div>
+    <div class="btns"><div class="m"><svg class="i"><use href="#minus"/></svg></div><div class="p">+1 PAGE</div></div>
+    <div class="list" data-scrolls>
+      <div class="li"><span class="t">Orbital</span><span class="p">41 / 136</span></div>
+      <div class="li"><span class="t">Tomorrow, and Tomorrow…</span><span class="p">212 / 401</span></div>
+      <div class="li"><span class="t" style="opacity:.6">Want to read</span><span class="p">7</span></div>
+    </div>
+  </div>
+  <nav class="tabbar glass" data-system><div class="tab on"><svg class="i"><use href="#books"/></svg>Library</div><div class="tab"><svg class="i"><use href="#feed"/></svg>Friends</div><div class="tab"><svg class="i"><use href="#me"/></svg>You</div></nav>
+  <div class="searchbtn glass" data-system><svg class="i"><use href="#search"/></svg></div>
+</section>
+</div>
+
+<!-- C -->
+<div class="col">
+<div class="label">C · Echo is a bookshop window at night <p>Place. Dark, the current cover lights the room, SF Pro Expanded. Pink is the page you are on.</p></div>
+<section class="screen C" data-name="c-night" data-theme="dark" data-time="23:47">
+  <div class="bg"><img src="../covers/9781635575637.jpg"></div>
+  <div class="body">
+    <div class="top"><h1>Reading · 1 of 3</h1><div class="circ glass" data-system><svg class="i"><use href="#more"/></svg></div></div>
+    <img class="cover cv" src="../covers/9781635575637.jpg">
+    <div class="t">Piranesi</div>
+    <div class="a">Susanna Clarke</div>
+    <div class="big"><span>168</span><em>of 245</em></div>
+    <div class="scrub"><span class="m">0</span><div class="track"><i></i><b></b></div><span class="m" style="text-align:right">245</span></div>
+    <div class="others"><img class="cover" src="../covers/9780802161543.jpg"><img class="cover" src="../covers/9780593321201.jpg"><span class="cap">Orbital, Tomorrow…</span></div>
+  </div>
+  <nav class="tabbar glass" data-system><div class="tab on"><svg class="i"><use href="#books"/></svg>Library</div><div class="tab"><svg class="i"><use href="#feed"/></svg>Friends</div><div class="tab"><svg class="i"><use href="#me"/></svg>You</div></nav>
+  <div class="searchbtn glass" data-system><svg class="i" style="color:var(--ink)"><use href="#search"/></svg></div>
+</section>
+</div>
+
+<script src="kit/device.js"></script>
+</body></html>
