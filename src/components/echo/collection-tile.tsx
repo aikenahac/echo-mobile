@@ -1,4 +1,5 @@
 import { collectionColor, lucideExportName } from "@/lib/collection-style";
+import { fixed } from "@/lib/theme";
 import type { LucideIcon } from "lucide-react-native";
 import * as icons from "lucide-react-native/icons";
 import { View, type StyleProp, type ViewStyle } from "react-native";
@@ -28,14 +29,14 @@ export function CollectionTile({ colorTag, iconName, size = 40, wash, style }: P
           height: size,
           borderRadius: size * 0.2,
           borderCurve: "continuous",
-          backgroundColor: wash ? "rgba(255,255,255,0.16)" : collectionColor(colorTag),
+          backgroundColor: wash ? fixed.onColorWash : collectionColor(colorTag),
           alignItems: "center",
           justifyContent: "center",
         },
         style,
       ]}
     >
-      <Icon size={size * 0.5} color="#FFFFFF" strokeWidth={1.8} />
+      <Icon size={size * 0.5} color={fixed.onColor} strokeWidth={1.8} />
     </View>
   );
 }

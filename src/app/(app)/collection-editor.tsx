@@ -10,7 +10,7 @@ import { COLLECTION_ICONS, RECENT_ICONS } from "@/lib/collection-icons";
 import { collectionColor, lucideExportName, RISO_SWATCHES } from "@/lib/collection-style";
 import { findUserBook } from "@/lib/library-cache";
 import type { Collection } from "@/lib/schemas";
-import { radius, spacing, useColors } from "@/lib/theme";
+import { fixed, radius, spacing, useColors } from "@/lib/theme";
 import { useQueryClient } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
@@ -315,7 +315,7 @@ function IconChoice({ name, selected, accent, onPress }: { name: string; selecte
         justifyContent: "center",
       }}
     >
-      <Icon size={22} color={selected ? "#FFFFFF" : colors.ink} strokeWidth={1.8} />
+      <Icon size={22} color={selected ? fixed.onColor : colors.ink} strokeWidth={1.8} />
     </Pressable>
   );
 }

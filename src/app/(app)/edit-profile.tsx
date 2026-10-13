@@ -6,7 +6,7 @@ import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { getErrorMessage } from "@/lib/api/errors";
 import { type ImageContentType, useProfileApi } from "@/lib/api/profile";
 import type { UpdateProfileRequest, User } from "@/lib/schemas";
-import { spacing, useColors } from "@/lib/theme";
+import { fixed, spacing, useColors } from "@/lib/theme";
 import { cleanUsername } from "@/lib/username";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, useRouter } from "expo-router";
@@ -147,8 +147,8 @@ function Editor({ me }: { me: User }) {
           <View>
             <Avatar user={{ ...me, displayName: displayName || me.displayName, profilePictureUrl: photo }} size={96} />
             {uploading && (
-              <View style={{ position: "absolute", inset: 0, alignItems: "center", justifyContent: "center", backgroundColor: "rgba(0,0,0,0.25)", borderRadius: 6 }}>
-                <ActivityIndicator color="#FFFFFF" />
+              <View style={{ position: "absolute", inset: 0, alignItems: "center", justifyContent: "center", backgroundColor: fixed.dimmer, borderRadius: 6 }}>
+                <ActivityIndicator color={fixed.onColor} />
               </View>
             )}
           </View>

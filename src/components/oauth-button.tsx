@@ -1,6 +1,6 @@
 import { SFIcon } from "@/components/echo";
 import { authError } from "@/lib/clerk-errors";
-import { useColors } from "@/lib/theme";
+import { fixed, useColors } from "@/lib/theme";
 import { useSSO } from "@clerk/clerk-expo";
 import * as AuthSession from "expo-auth-session";
 import { Image } from "expo-image";
@@ -27,8 +27,8 @@ type Props = {
 };
 
 // Brand rules: Apple's button is black with the white logo; Google's keeps the 4-colour G
-const APPLE_BLACK = "#000000";
-const WHITE = "#FFFFFF";
+const APPLE_BLACK = fixed.appleBlack;
+const WHITE = fixed.onColor;
 
 /** Continue with Apple / Google through Clerk SSO (r6 11) */
 export default function OAuthButton({ provider, onError, style }: Props) {

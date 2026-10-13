@@ -1,4 +1,4 @@
-import { fonts, radius, useColors } from "@/lib/theme";
+import { fixed, fonts, radius, useColors } from "@/lib/theme";
 import { Image } from "expo-image";
 import type { ReactNode } from "react";
 import { Text, View, type StyleProp, type ViewStyle } from "react-native";
@@ -37,7 +37,7 @@ export function Cover({ uri, image, title, author, width, flat, children, style 
     <View
       accessibilityRole="image"
       accessibilityLabel={author ? `${title}, ${author}` : title}
-      style={[{ width, height }, corners, { boxShadow: flat ? "0 1px 2px rgba(23,11,17,0.2)" : colors.coverShadow }, style]}
+      style={[{ width, height }, corners, { boxShadow: flat ? fixed.thumbShadow : colors.coverShadow }, style]}
     >
       <View style={[{ flex: 1, overflow: "hidden" }, corners]}>
         {uri || image ? (
@@ -48,8 +48,7 @@ export function Cover({ uri, image, title, author, width, flat, children, style 
               style={{
                 position: "absolute",
                 inset: 0,
-                experimental_backgroundImage:
-                  "linear-gradient(90deg, rgba(0,0,0,0.16) 0%, rgba(255,255,255,0.16) 2.5%, rgba(0,0,0,0.06) 5%, transparent 9%)",
+                experimental_backgroundImage: fixed.coverSheen,
               }}
             />
           </>

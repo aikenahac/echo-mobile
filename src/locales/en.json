@@ -1,12 +1,8 @@
 {
   "common": {
     "cancel": "Cancel",
-    "done": "Done",
     "save": "Save",
-    "delete": "Delete",
-    "continue": "Continue",
     "retry": "Try again",
-    "loading": "Loading",
     "offline": "Couldn't reach Echo. Check your connection and try again."
   },
   "tabs": {
@@ -248,7 +244,6 @@
     "finished": "Finished",
     "recentlyFinished": "Recently finished",
     "seeAll": "See all",
-    "noBio": "",
     "followers_one": "{{count}} follower",
     "followers_other": "{{count}} followers",
     "following": "{{count}} following",
@@ -293,16 +288,13 @@
     "addPhoto": "Add photo",
     "changePhoto": "Change photo",
     "removePhoto": "Remove photo",
-    "uploading": "Uploading",
     "displayName": "Display name",
     "username": "Username",
     "usernameRule": "3 to 30 letters, numbers, underscores or dots.",
     "available": "Available",
-    "checking": "Checking",
     "bio": "Bio",
     "counter": "{{n}} / {{max}}",
-    "photoTooLarge": "Pick a smaller photo (up to 5 MB).",
-    "photoPermission": "Allow access to your photos in Settings to add one."
+    "photoTooLarge": "Pick a smaller photo (up to 5 MB)."
   },
   "premium": {
     "brand": "Echo",

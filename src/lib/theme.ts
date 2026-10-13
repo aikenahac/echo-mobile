@@ -30,6 +30,8 @@ const light = {
   onFieldButton: '#FF6BA8',
   /** Glass tint for circular toolbar buttons that sit on the field */
   fieldGlass: 'rgba(255,235,243,0.42)',
+  /** Avatar tile on the field (feed band) */
+  fieldTile: 'rgba(255,235,243,0.6)',
   /** Lift under floating glass controls (system chrome, not content) */
   glassShadow: '0 6px 16px rgba(70,8,36,0.12)',
   /** The one shadow: covers only */
@@ -55,11 +57,29 @@ const dark: typeof light = {
   fieldOutline: 'rgba(255,232,241,0.78)',
   onFieldButton: '#3A0C22',
   fieldGlass: 'rgba(255,140,191,0.16)',
+  fieldTile: 'rgba(255,232,241,0.14)',
   glassShadow: '0 6px 16px rgba(0,0,0,0.35)',
   coverShadow: '0 0 0 0.5px rgba(255,255,255,0.08), 0 14px 22px -12px rgba(0,0,0,0.8)',
 };
 
 export const palette = { light, dark };
+
+/**
+ * Colours that don't change with light/dark: text and icons on a user-coloured
+ * collection banner or tile, scrims over photos, the cover's spine sheen, and brand
+ * colours other companies require (Apple's button is black).
+ */
+export const fixed = {
+  onColor: '#FFFFFF',
+  onColor2: 'rgba(255,255,255,0.86)',
+  onColorWash: 'rgba(255,255,255,0.16)',
+  photoScrim: 'linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.65) 100%)',
+  dimmer: 'rgba(0,0,0,0.25)',
+  coverSheen: 'linear-gradient(90deg, rgba(0,0,0,0.16) 0%, rgba(255,255,255,0.16) 2.5%, rgba(0,0,0,0.06) 5%, transparent 9%)',
+  thumbShadow: '0 1px 2px rgba(23,11,17,0.2)',
+  cardShadow: '0 12px 24px -14px rgba(70,8,36,0.45)',
+  appleBlack: '#000000',
+} as const;
 export type Palette = typeof light;
 
 /** The resolved palette for the current light/dark mode */

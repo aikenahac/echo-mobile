@@ -5,7 +5,7 @@ import { useLibraryLayout } from "@/hooks/use-library-layout";
 import { getErrorMessage, isApiRequestError } from "@/lib/api/errors";
 import { collectionColor } from "@/lib/collection-style";
 import type { UserBook } from "@/lib/schemas";
-import { spacing, useColors } from "@/lib/theme";
+import { fixed, spacing, useColors } from "@/lib/theme";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
@@ -13,9 +13,10 @@ import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Alert, ScrollView, Text, useWindowDimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const WHITE = "#FFFFFF";
-const WHITE_2 = "rgba(255,255,255,0.86)";
 
+
+const WHITE = fixed.onColor;
+const WHITE_2 = fixed.onColor2;
 /**
  * Collection detail (r6 18): a full-bleed banner in the collection's own colour (never the
  * pink field) with its icon tile, Archivo name, description and "Private · 5 books";
@@ -103,7 +104,7 @@ export default function CollectionScreen() {
                 style={{
                   position: "absolute",
                   inset: 0,
-                  experimental_backgroundImage: "linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.65) 100%)",
+                  experimental_backgroundImage: fixed.photoScrim,
                 }}
               />
             </>

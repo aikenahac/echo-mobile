@@ -4,7 +4,7 @@ import { useUpdateProfile } from "@/hooks/api/user/use-update-me";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useKeyboardVisible } from "@/hooks/use-keyboard-visible";
 import { getErrorMessage } from "@/lib/api/errors";
-import { spacing, useColors } from "@/lib/theme";
+import { fixed, spacing, useColors } from "@/lib/theme";
 import { cleanUsername } from "@/lib/username";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -115,7 +115,7 @@ export function UsernameOnboarding() {
               alignItems: "center",
               gap: 12,
               transform: [{ rotate: "-1.5deg" }],
-              boxShadow: "0 12px 24px -14px rgba(70,8,36,0.45)",
+              boxShadow: fixed.cardShadow,
             }}
           >
             <Avatar user={{ displayName: null, username: handle, profilePictureUrl: null }} />

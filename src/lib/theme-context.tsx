@@ -16,7 +16,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const systemColorScheme = useRNColorScheme();
   const [themeMode, setThemeMode] = useState<ColorScheme>(() => {
-    const savedScheme = getFromLocalStorage<ColorScheme>(STORAGE_KEYS.THEME) || 'light';
+    const savedScheme = getFromLocalStorage<ColorScheme>(STORAGE_KEYS.THEME) || 'system';
     Uniwind.setTheme(savedScheme);
     return savedScheme;
   });

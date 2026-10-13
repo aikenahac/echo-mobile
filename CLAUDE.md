@@ -23,149 +23,109 @@ Echo is a mobile reading tracker application built with React Native and Expo (S
 
 ## Architecture
 
+The UI follows the approved redesign in `design/redesign/` (spec: `shots/r6/*.png`; rules: `HANDOFF.md`,
+`DIRECTION.md`; data: `API.md`). The pink **field** means "in progress / now" only; everything else sits on
+**paper**. Display type is Archivo Condensed; UI and body text are the system font.
+
 ### Routing & Navigation
 - **Expo Router** with file-based routing in `src/app/`
-- Route groups use parentheses: `(auth)`, `(app)`
-- Bottom tabs implemented using `expo-router/unstable-native-tabs` in `src/app/(app)/_layout.tsx`
-- Auth flow: Unauthenticated users redirect to `/(auth)/sign-in`, authenticated users redirect to `/(app)/library`
-- Main tabs: Search, Library, Feed, Profile
+- `(auth)` — signed out: `welcome` (first screen), `sign-in`, `sign-up`, `verify`, `forgot-password`, `reset-password`
+- `(app)` — signed in, a Stack (`src/app/(app)/_layout.tsx`) that also blocks the app with `UsernameOnboarding` while the profile has no username
+  - `(tabs)` — native tabs (`expo-router/unstable-native-tabs`): Library · Friends · You, plus Search as the search-role tab; each tab is its own Stack
+  - Pushed: `book/[bookId]` (catalog id), `collection/[id]`, `settings`, `user/[userId]`
+  - Sheets (`formSheet`): `review/[bookId]`, `edit-profile`, `collection-editor`, `add-to-collection/[userBookId]`
+  - `premium` — full-screen modal paywall
+- Under the UIScene life cycle iOS ignores app-wide status bar styling: every Stack sets `statusBarStyle` (`useStatusBarStyle()` from `src/lib/theme.ts`)
 
 ### Authentication
-- **Clerk** for user authentication
-- Token stored in secure storage via `@clerk/clerk-expo/token-cache`
-- All API requests automatically include Bearer token via `useFetch()` hook
-- Username enforcement: Users without username are prompted via `SetUsernameDrawer` on first app load
+- **Clerk** (`@clerk/clerk-expo`); token cache via `@clerk/clerk-expo/token-cache`
+- All API requests include the Bearer token via `useFetch()`
+- Clerk errors map to inline field errors with `authError()` (`src/lib/clerk-errors.ts`) — never toasts
+- Apple/Google through `OAuthButton` (`src/components/oauth-button.tsx`)
 
 ### Data Layer
-- **React Query** (`@tanstack/react-query`) for server state management
-- **MMKV** for local storage (theme, language, library view preferences)
-- Query keys centralized in `src/hooks/query-keys.ts`
-- API hooks located in `src/hooks/api/` with pattern: `use-{action}-{resource}.ts`
-- All API functions use Zod schemas for runtime validation (defined in `src/lib/schemas/index.ts`)
+- **React Query** for server state; query keys and `invalidateLibrary()` in `src/hooks/query-keys.ts`
+- API modules in `src/lib/api/` (`library`, `catalog`, `collections`, `search`, `feed`, `profile`, `user`), endpoints in `endpoints.ts`
+- Hooks in `src/hooks/api/{resource}/`
+- Zod schemas and inferred types in `src/lib/schemas/index.ts` (the single source of types); other users are `PublicUser`
+- Book IDs: `userBook.id` is the library entry (`/books/{id}/…`, collections); `book.id` / `userBook.bookId` is the catalog book (`/catalog/{id}`, reviews)
+- Page total everywhere: `bookTotal(userBook, book)` in `src/lib/books.ts`
+- Library mutations are optimistic and mirror the server's status rules (`src/lib/library-cache.ts`); page changes go through `useProgressCommitter` (optimistic, 600ms debounce, coalescing, rollback)
+- "+N today" is device-local (`src/lib/daily-pages.ts`); the server keeps no reading history
+- **MMKV** via `src/lib/storage.ts` (`STORAGE_KEYS`); `useLibraryLayout()` is the reactive grid/list setting
 
 ### API Integration
-- Base URL: `process.env.EXPO_PUBLIC_API_URL` (fallback: `https://echobook.club/api`)
-- Custom fetch wrapper: `useFetch()` hook in `src/lib/api/fetch-wrapper.ts`
-  - Uses `react-native-nitro-fetch` for performance
-  - Automatically adds Clerk auth token to requests
-  - Returns native Response objects
-- Endpoints centralized in `src/lib/api/endpoints.ts`
-- API modules in `src/lib/api/` (e.g., `library.ts`, `user.ts`)
-- Response validation with `handleApiResponse()` from `src/lib/api/errors.ts`
+- Base URL: `process.env.EXPO_PUBLIC_API_URL` (fallback: `https://echobook.club/api`); paths are relative to `/api` and start with `/v1`
+- `useFetch()` in `src/lib/api/fetch-wrapper.ts` (`react-native-nitro-fetch`, adds the Clerk token)
+- Validate responses with `handleApiResponse(response, schema)`; show errors with `getErrorMessage()` (`src/lib/api/errors.ts`)
+- Collections are Premium: gate actions with `usePremiumGate().guard(...)`; treat a 403 as "open the paywall" (`isPaywallError`)
+- Buying Premium lives only in `src/components/premium-cta.tsx` (web link for now; swap for IAP there)
 
-### Type System
-- All types defined in `src/lib/types/index.ts`
-- Zod schemas in `src/lib/schemas/index.ts` with inferred types
-- Key types:
-  - `UserBook` - User's book with reading progress
-  - `LibraryResponse` - Categorized library data (favorites, want, reading, finished)
-  - `ReadingStatus` - "want" | "reading" | "finished"
-  - API responses validated at runtime using Zod
-
-### State Management Patterns
-- **Server state**: React Query hooks in `src/hooks/api/`
-- **UI state**: React hooks (`useState`, `useReducer`)
-- **Persistent state**: MMKV via `src/lib/storage.ts` utilities
-  - `getFromLocalStorage<T>(key)` - Type-safe retrieval
-  - `setInLocalStorage<T>(key, value)` - Auto-serializes objects
-  - Storage keys defined in `STORAGE_KEYS` constant
-
-### Styling & Theming
-- **Uniwind** (Tailwind CSS v4 for React Native) — configured via `withUniwindConfig` in `metro.config.js`; there is no `tailwind.config.js` or Babel preset
-- CSS-first theming in `src/global.css`: light/dark values live in `@layer theme { :root { @variant light/dark { ... } } }` and are exposed as utilities via `@theme inline` (`--color-*`, `--radius-*`, `--font-*`)
-- Dark mode is driven by `Uniwind.setTheme()` (called from `ThemeProvider`); `dark:` variants work without a class on the root view
-- Wrap third-party components that need className → prop mapping with `withUniwind` (see `src/components/ui/icon.tsx`, `src/lib/icons/`)
-- `TextInput` placeholder color: `placeholderTextColorClassName="accent-..."`
-- Theme state managed by `ThemeProvider` in `src/lib/theme-context.tsx`
-- Custom hook: `useColorScheme()` returns current theme
-- Navigation theme in `src/lib/theme.ts` (`DarkTheme`/`DefaultTheme`/`ThemeProvider` imported from `expo-router`, never `@react-navigation/*`)
-- Custom font: EB Garamond (loaded in root layout)
-
-### UI Components
-- **React Native Reusables** (shadcn/ui for React Native)
-- Components in `src/components/ui/`
-- Built on `@rn-primitives` for accessibility
-- Add new components: `npx @react-native-reusables/cli@latest add [component]`
-- Custom components follow same styling patterns (Uniwind/Tailwind classes)
+### Styling & Design System
+- Tokens: `src/global.css` (Uniwind CSS variables: `paper`, `field`, `ink`, `ink-2`, `ink-3`, `rule`, `tint`, `pink-ink`, `on-field`, `plate`, `surface`, …, light and dark) mirrored in `src/lib/theme.ts` (`useColors()`, `spacing`, `radius`, `fonts`, `type`, `motion`). Never hard-code colours, sizes or radii in screens
+- Dark mode is designed, not inverted; `ThemeProvider` (`src/lib/theme-context.tsx`) calls `Uniwind.setTheme()`
+- Shared primitives in `src/components/echo/`: `Cover`, `Stamp`, `PlateNumber`, `DisplayText`, `FieldBand`, `Avatar`, `Stars`, `ProgressBar`, `CapsuleButton`, `CircleButton`, `TextField`, `Hairline`, `SFIcon`, `CollectionTile`, `NativeMenu`, `NativeSwitch`
+- Feature components by area: `components/{library,book,search,feed,profile,settings,auth}`
+- Native controls come from **`@expo/ui`** (BottomSheet, Switch, segmented control, SwiftUI `Menu`/`Form`/`Picker`). Do not add React Native Reusables or `@rn-primitives`
+- Icons: SF Symbols via `expo-symbols` (`SFIcon`); `lucide-react-native` only for user-chosen collection icons (`src/lib/collection-icons.ts`)
+- Covers are the only things with a shadow; group content with space and 0.5pt hairlines, not cards
+- Display font: Archivo Condensed Black/ExtraBold static cuts in `src/lib/assets/fonts/` (embedded by the `expo-font` plugin; word spacing is baked into the space glyph)
+- Motion: Reanimated + Gesture Handler; the numbering stamp is `components/library/page-dial.tsx` + `page-wheels.tsx`; haptics via `expo-haptics`
+- Navigation theme `NAV_THEME` in `src/lib/theme.ts` (import from `expo-router`, never `@react-navigation/*`)
 
 ### Internationalization
-- **react-i18next** for translations
-- Translation files in `src/locales/` (JSON format)
-- Configured in `src/lib/i18n.ts`
-- System language detection via `expo-localization`
-- Language preference persisted in MMKV
+- **react-i18next**; English in `src/locales/en.json`, configured in `src/lib/i18n.ts`
+- All user-visible strings go through `t()`; plurals use `_one` / `_other`
+
+### Native configuration
+- `plugins/with-ios-scene-lifecycle.js` adopts the UIScene life cycle (the iOS 27 SDK requires it; remove after upgrading to SDK 58)
+- `UIViewControllerBasedStatusBarAppearance` is on (`app.json`)
+- Splash: field pink with `assets/images/splash-mark.png`
 
 ## Project Structure
 
 ```
 src/
-├── app/                      # Expo Router pages
-│   ├── (auth)/              # Auth screens (sign-in, sign-up)
-│   ├── (app)/               # Main app screens (library, feed, search, profile)
-│   ├── _layout.tsx          # Root layout with providers
-│   └── index.tsx            # Entry point with auth redirect
+├── app/
+│   ├── (auth)/                 # welcome, sign-in, sign-up, verify, forgot/reset password
+│   ├── (app)/
+│   │   ├── (tabs)/             # library, friends, you, search
+│   │   ├── book/ collection/ user/ review/ add-to-collection/
+│   │   ├── settings.tsx edit-profile.tsx collection-editor.tsx premium.tsx
+│   │   └── _layout.tsx         # signed-in Stack + username gate
+│   ├── _layout.tsx             # providers
+│   └── index.tsx               # redirect
 ├── components/
-│   ├── ui/                  # Reusable UI components (shadcn-style)
-│   └── *.tsx                # Feature components
-├── hooks/
-│   ├── api/                 # React Query hooks organized by resource
-│   │   ├── library/
-│   │   └── user/
-│   ├── query-keys.ts        # Centralized query key definitions
-│   └── use-*.ts             # Custom hooks
-├── lib/
-│   ├── api/                 # API client code
-│   │   ├── endpoints.ts     # API endpoint definitions
-│   │   ├── errors.ts        # Error handling & response validation
-│   │   ├── fetch-wrapper.ts # Authenticated fetch hook
-│   │   ├── library.ts       # Library API functions
-│   │   └── user.ts          # User API functions
-│   ├── assets/              # Static assets (fonts, images)
-│   ├── icons/               # Custom icon components
-│   ├── schemas/             # Zod validation schemas
-│   ├── types/               # TypeScript type definitions
-│   ├── i18n.ts              # i18next configuration
-│   ├── storage.ts           # MMKV storage utilities
-│   ├── theme.ts             # Navigation theme config
-│   ├── theme-context.tsx    # Theme provider
-│   └── utils.ts             # Utility functions
-├── locales/                 # Translation files (en.json, sl.json)
-└── global.css               # Global styles & CSS variables
+│   ├── echo/                   # design-system primitives
+│   └── {library,book,search,feed,profile,settings,auth}/
+├── hooks/                      # api/{resource}/, query-keys.ts, use-*.ts
+├── lib/                        # api/, schemas/, theme.ts, storage.ts, books.ts, dates.ts, …
+├── locales/en.json
+└── global.css                  # tokens
 ```
 
 ## Development Patterns
 
 ### Adding a New API Endpoint
-1. Add endpoint to `src/lib/api/endpoints.ts`
-2. Create Zod schema in `src/lib/schemas/index.ts` for response validation
-3. Add API function to appropriate file in `src/lib/api/` (use `useFetch()` hook)
-4. Validate response with `handleApiResponse(response, schema)`
-5. Create query key in `src/hooks/query-keys.ts`
-6. Create React Query hook in `src/hooks/api/{resource}/use-{action}-{resource}.ts`
+1. Add the path to `src/lib/api/endpoints.ts`
+2. Add a Zod schema (and its inferred type) to `src/lib/schemas/index.ts`
+3. Add the call to the matching module in `src/lib/api/` and validate with `handleApiResponse`
+4. Add a query key to `src/hooks/query-keys.ts`
+5. Add a hook in `src/hooks/api/{resource}/`; mutations invalidate per API.md §0.2
 
 ### Creating a New Screen
-1. Add file to `src/app/` following Expo Router conventions
-2. For authenticated screens, place in `src/app/(app)/`
-3. Export default component
-4. Use `<ScreenContainer>` wrapper for consistent layout
-5. Navigate with `<Link href="/path">` or `router.push('/path')`
+1. Add the route under `src/app/(app)/` (or a tab's folder) and register its presentation in the parent `_layout.tsx`
+2. Build it from `src/components/echo` primitives and tokens; paper ground, the field only for "now"
+3. Toolbar buttons and menus via `Stack.Toolbar`; native forms and sheets via `@expo/ui` or `presentation: "formSheet"`
+4. Compare with the matching `design/redesign/shots/r6` PNG in the simulator, in light and dark
 
-### Working with Storage
-- Use centralized utilities from `src/lib/storage.ts`
-- Add new keys to `STORAGE_KEYS` constant
-- Values are automatically JSON serialized/deserialized
-- Example: `setInLocalStorage(STORAGE_KEYS.LIBRARY_VIEW, "grid")`
-
-### Creating API Hooks
-- Use React Query's `useQuery` for GET requests
-- Use React Query's `useMutation` for POST/PUT/DELETE
-- Always validate responses with Zod schemas
-- Invalidate related queries on mutations
-- Pattern: Export custom hook that wraps useQuery/useMutation
+### Local development
+- Backend: run `pnpm dev` in the `echo` repo (`feat/mobile-api-parity`); seed with `pnpm db:seed:dev --email <your test user>`
+- `.env.local` sets `EXPO_PUBLIC_API_URL` (simulator: `http://localhost:3000/api`; a phone needs the Mac's LAN IP) and the Clerk key of that backend
 
 ## Environment Variables
 
-Set in `eas.json` build profiles:
+Set in `eas.json` build profiles (and `.env.local` for local development):
 - `EXPO_PUBLIC_API_URL` - Backend API base URL
 - `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY` - Clerk authentication key
 

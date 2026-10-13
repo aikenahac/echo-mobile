@@ -1,4 +1,4 @@
-import { useColors, useStatusBarStyle } from "@/lib/theme";
+import { fixed, useColors, useStatusBarStyle } from "@/lib/theme";
 import { UsernameOnboarding } from "@/components/username-onboarding";
 import { useProfile } from "@/hooks/api/user/use-get-me";
 import { useAuth } from "@clerk/clerk-expo";
@@ -103,7 +103,7 @@ export default function AppLayout() {
           headerTitle: "",
           headerBackButtonDisplayMode: "minimal",
           headerShadowVisible: false,
-          headerTintColor: "#FFFFFF",
+          headerTintColor: fixed.onColor,
           statusBarStyle: "light",
         }}
       />

@@ -37,8 +37,8 @@ export function SettingsForm() {
                 </RNHostView>
               )}
               <VStack alignment="leading" spacing={2}>
-                <Text modifiers={[font({ size: 17, weight: "semibold" }), foregroundStyle({ type: "color", color: colors.ink })]}>{s.name}</Text>
-                <Text modifiers={[font({ size: 15 }), secondary]}>{s.email}</Text>
+                <Text modifiers={[font({ textStyle: "headline" }), foregroundStyle({ type: "color", color: colors.ink })]}>{s.name}</Text>
+                <Text modifiers={[font({ textStyle: "subheadline" }), secondary]}>{s.email}</Text>
               </VStack>
               <Spacer />
               <Image systemName="chevron.right" size={13} color={colors.ink3} />
@@ -96,7 +96,7 @@ export function SettingsForm() {
           <LinkRow title={t("settings.privacy")} onPress={s.privacy} />
         </Section>
 
-        <Section modifiers={rows} footer={<Text modifiers={[font({ size: 13 }), secondary]}>{s.version}</Text>}>
+        <Section modifiers={rows} footer={<Text modifiers={[font({ textStyle: "footnote" }), secondary]}>{s.version}</Text>}>
           <Button label={t("settings.signOut")} onPress={s.signOut} modifiers={[foregroundStyle({ type: "color", color: colors.ink })]} />
           <Button label={t("settings.deleteAccount")} role="destructive" onPress={s.deleteAccount} />
         </Section>

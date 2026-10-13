@@ -4,7 +4,7 @@ import { relativeTime } from "@/lib/dates";
 import type { FeedItem } from "@/lib/schemas";
 import { PLATE_OFFSET, spacing, useColors } from "@/lib/theme";
 import { useTranslation } from "react-i18next";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text, useWindowDimensions, View } from "react-native";
 
 type Props = {
   item: FeedItem;
@@ -43,7 +43,7 @@ export function FeedItemView({ item, onOpenBook, onOpenUser }: Props) {
           onPress={openUser}
           hitSlop={6}
         >
-          <Avatar user={item.user} background="rgba(255,235,243,0.6)" />
+          <Avatar user={item.user} background={colors.fieldTile} />
         </Pressable>
         <View style={{ flex: 1, minWidth: 0 }}>
           <Who
@@ -250,10 +250,25 @@ function Who({
   onPressName: () => void;
 }) {
   const colors = useColors();
+  const { fontScale } = useWindowDimensions();
   const ink = onField ? colors.onField : colors.ink;
+  // At accessibility text sizes the time moves under the name instead of squeezing it
+  const stacked = fontScale > 1.6;
   return (
-    <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
-      <Text style={{ flex: 1, fontSize: 15, lineHeight: 20, color: ink }}>
+    <View
+      style={{
+        flexDirection: stacked ? "column" : "row",
+        alignItems: "flex-start",
+      }}
+    >
+      <Text
+        style={{
+          flex: stacked ? undefined : 1,
+          fontSize: 15,
+          lineHeight: 20,
+          color: ink,
+        }}
+      >
         <Text
           style={{ fontWeight: "600" }}
           onPress={onPressName}
@@ -267,7 +282,7 @@ function Who({
         style={{
           fontSize: 13,
           color: onField ? colors.onField2 : colors.ink2,
-          paddingLeft: 8,
+          paddingLeft: stacked ? 0 : 8,
         }}
       >
         {when}
