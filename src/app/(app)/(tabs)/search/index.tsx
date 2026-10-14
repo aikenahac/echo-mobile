@@ -122,7 +122,7 @@ export default function SearchScreen() {
           ItemSeparatorComponent={() => <Hairline style={{ marginHorizontal: spacing.lg }} />}
           renderItem={({ item }) => {
             const mine = owned(item);
-            const bookId = mine?.bookId ?? (item.source === "internal" ? item.id : undefined);
+            const bookId = mine?.bookId ?? item.id;
             const key = searchResultKey(item);
             return (
               <View style={{ paddingHorizontal: spacing.lg }}>

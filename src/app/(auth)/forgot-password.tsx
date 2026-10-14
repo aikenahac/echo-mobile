@@ -3,7 +3,7 @@ import { CapsuleButton, TextField } from "@/components/echo";
 import { authError, type AuthError } from "@/lib/clerk-errors";
 import { useColors } from "@/lib/theme";
 import { isValidEmail } from "@/lib/utils";
-import { useSignIn } from "@clerk/clerk-expo";
+import { useSignIn } from "@clerk/expo/legacy";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

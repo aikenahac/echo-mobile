@@ -1,7 +1,7 @@
 import { fixed, useColors, useStatusBarStyle } from "@/lib/theme";
 import { UsernameOnboarding } from "@/components/username-onboarding";
 import { useProfile } from "@/hooks/api/user/use-get-me";
-import { useAuth } from "@clerk/clerk-expo";
+import { useAuth } from "@clerk/expo";
 import { Redirect, Stack } from "expo-router";
 
 /**

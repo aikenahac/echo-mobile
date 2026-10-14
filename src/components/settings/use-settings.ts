@@ -5,7 +5,7 @@ import { useProfileApi } from "@/lib/api/profile";
 import { getErrorMessage } from "@/lib/api/errors";
 import { displayName } from "@/lib/books";
 import { useTheme, type ColorScheme } from "@/lib/theme-context";
-import { useClerk } from "@clerk/clerk-expo";
+import { useClerk } from "@clerk/expo";
 import { useQueryClient } from "@tanstack/react-query";
 import Constants from "expo-constants";
 import { useRouter } from "expo-router";

@@ -1,7 +1,7 @@
 import { invalidateLibrary, queryKeys } from "@/hooks/query-keys";
 import { useLibraryApi } from "@/lib/api/library";
 import { applyFavorite } from "@/lib/library-cache";
-import type { AddBookRequest, Book, CatalogBookResponse, LibraryResponse, ReadingStatus } from "@/lib/schemas";
+import type { AddBookRequest, CatalogBookResponse, LibraryResponse, ReadingStatus, SearchResult } from "@/lib/schemas";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type Ids = { userBookId: string; bookId: string };
@@ -76,16 +76,9 @@ export const useAddBook = () => {
 };
 
 /** The POST /books body for a book we already have the details of */
-export function addBookBody(book: Pick<Book, "title" | "author" | "isbn" | "coverUrl" | "pages" | "publishedYear">, status: ReadingStatus): AddBookRequest {
-  return {
-    bookData: {
-      title: book.title,
-      author: book.author,
-      isbn: book.isbn,
-      coverUrl: book.coverUrl,
-      pages: book.pages,
-      publishedYear: book.publishedYear,
-    },
-    status,
-  };
+export function addBookBody(book: Pick<SearchResult, "id" | "doc">, status: ReadingStatus, isFavorite?: boolean): AddBookRequest {
+  const favorite = isFavorite === undefined ? {} : { isFavorite };
+  if (book.id) return { book: { bookId: book.id }, status, ...favorite };
+  if (book.doc) return { book: { openLibrary: book.doc }, status, ...favorite };
+  throw new Error("Book has no catalog id or Open Library document");
 }

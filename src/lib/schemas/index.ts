@@ -1,3 +1,4 @@
+import { OpenLibraryDocSchema, type OpenLibraryDoc } from "@/lib/open-library";
 import { z } from "zod";
 
 /*
@@ -95,15 +96,12 @@ export const LibraryResponseSchema = z.object({
 });
 
 export const AddBookRequestSchema = z.object({
-  bookData: z.object({
-    title: z.string(),
-    author: z.string(),
-    isbn: z.string().nullable().optional(),
-    coverUrl: z.string().nullable().optional(),
-    pages: z.number().int().nonnegative().nullable().optional(),
-    publishedYear: z.number().int().nullable().optional(),
-  }),
+  book: z.union([
+    z.object({ bookId: z.string() }),
+    z.object({ openLibrary: OpenLibraryDocSchema }),
+  ]),
   status: ReadingStatusSchema,
+  isFavorite: z.boolean().optional(),
 });
 
 export const AddBookResponseSchema = z.object({
@@ -167,10 +165,19 @@ export const SearchResultSchema = z.object({
 });
 
 export const SearchResponseSchema = z.object({
-  results: z.array(SearchResultSchema),
-  hasMore: z.boolean(),
-  offset: z.number().int(),
-  limit: z.number().int(),
+  catalog: z.array(SearchResultSchema),
+  openLibrary: z.discriminatedUnion("status", [
+    z.object({
+      status: z.literal("hit"),
+      results: z.array(SearchResultSchema),
+      numFound: z.number().int().nonnegative(),
+    }),
+    z.object({ status: z.literal("miss") }),
+  ]),
+});
+
+export const SearchIngestResponseSchema = z.object({
+  ids: z.record(z.string(), z.string()),
 });
 
 export const ReaderSchema = PublicUserSchema.extend({
@@ -349,8 +356,10 @@ export type Review = z.infer<typeof ReviewSchema>;
 export type ReviewWithUser = z.infer<typeof ReviewWithUserSchema>;
 export type SaveReviewRequest = z.infer<typeof SaveReviewRequestSchema>;
 export type CatalogBookResponse = z.infer<typeof CatalogBookResponseSchema>;
-export type SearchResult = z.infer<typeof SearchResultSchema>;
+export type SearchResult = z.infer<typeof SearchResultSchema> & { doc?: OpenLibraryDoc };
 export type SearchResponse = z.infer<typeof SearchResponseSchema>;
+export type SearchIngestRequest = { query: string; page: number; numFound: number; docs: Array<OpenLibraryDoc> };
+export type SearchIngestResponse = z.infer<typeof SearchIngestResponseSchema>;
 export type Reader = z.infer<typeof ReaderSchema>;
 export type UserSearchResponse = z.infer<typeof UserSearchResponseSchema>;
 export type FeedItem = z.infer<typeof FeedItemSchema>;

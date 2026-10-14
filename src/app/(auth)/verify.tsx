@@ -4,7 +4,7 @@ import { CapsuleButton } from "@/components/echo";
 import { formatCountdown, useCountdown } from "@/hooks/use-countdown";
 import { authError } from "@/lib/clerk-errors";
 import { useColors } from "@/lib/theme";
-import { useSignIn, useSignUp } from "@clerk/clerk-expo";
+import { useSignIn, useSignUp } from "@clerk/expo/legacy";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";

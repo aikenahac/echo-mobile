@@ -1,8 +1,8 @@
 import "@/lib/i18n";
 import { NAV_THEME, useColors, useStatusBarStyle } from "@/lib/theme";
 import { ThemeProvider, useTheme } from "@/lib/theme-context";
-import { ClerkLoaded, ClerkProvider } from "@clerk/clerk-expo";
-import { tokenCache } from "@clerk/clerk-expo/token-cache";
+import { ClerkLoaded, ClerkProvider } from "@clerk/expo";
+import { tokenCache } from "@clerk/expo/token-cache";
 import NetInfo from "@react-native-community/netinfo";
 import { onlineManager, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider as NavThemeProvider, Stack } from "expo-router";
@@ -27,7 +27,7 @@ const queryClient = new QueryClient();
 export default function RootLayout() {
   return (
     <ThemeProvider>
-      <ClerkProvider tokenCache={tokenCache}>
+      <ClerkProvider publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
         <ClerkLoaded>
           <RootLayoutContent />
         </ClerkLoaded>

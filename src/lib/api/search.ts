@@ -1,18 +1,21 @@
-import { type SearchResponse, type UserSearchResponse, MutationResponseSchema, SearchResponseSchema, UserSearchResponseSchema } from "@/lib/schemas";
+import { type SearchIngestRequest, type SearchIngestResponse, type SearchResponse, type UserSearchResponse, MutationResponseSchema, SearchIngestResponseSchema, SearchResponseSchema, UserSearchResponseSchema } from "@/lib/schemas";
 import { Endpoints } from "./endpoints";
 import { ApiRequestError, handleApiResponse } from "./errors";
 import { useFetch } from "./fetch-wrapper";
 
-export const BOOK_PAGE_SIZE = 20;
-
 export function useSearchApi() {
   const { authenticatedFetch } = useFetch();
 
-  /** GET /books/search: the Echo catalog first, then Open Library */
-  const searchBooks = async (q: string, offset: number): Promise<SearchResponse> => {
-    const params = new URLSearchParams({ q, offset: String(offset), limit: String(BOOK_PAGE_SIZE) });
-    const response = await authenticatedFetch(`${Endpoints.library.search}?${params}`);
+  /** GET /books/search: catalog matches and a stored Open Library page */
+  const searchBooks = async (q: string, page: number, signal?: AbortSignal): Promise<SearchResponse> => {
+    const params = new URLSearchParams({ q, page: String(page) });
+    const response = await authenticatedFetch(`${Endpoints.library.search}?${params}`, { signal });
     return handleApiResponse(response, SearchResponseSchema);
+  };
+
+  const ingestSearch = async (body: SearchIngestRequest): Promise<SearchIngestResponse> => {
+    const response = await authenticatedFetch(Endpoints.library.searchIngest, { method: "POST", body: JSON.stringify(body) });
+    return handleApiResponse(response, SearchIngestResponseSchema);
   };
 
   /** GET /users/search (2+ characters). No offset: raise `limit` (max 50) for more. */
@@ -38,5 +41,5 @@ export function useSearchApi() {
     return handleApiResponse(response, MutationResponseSchema);
   };
 
-  return { searchBooks, searchUsers, follow, unfollow };
+  return { searchBooks, ingestSearch, searchUsers, follow, unfollow };
 }

@@ -4,7 +4,7 @@ import { PasswordRule } from "@/components/auth/password-rule";
 import { CapsuleButton, TextField } from "@/components/echo";
 import { authError, MIN_PASSWORD, type AuthError } from "@/lib/clerk-errors";
 import { useColors } from "@/lib/theme";
-import { useSignIn } from "@clerk/clerk-expo";
+import { useSignIn } from "@clerk/expo/legacy";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";

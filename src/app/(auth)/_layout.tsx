@@ -1,5 +1,5 @@
 import { useColors, useStatusBarStyle } from "@/lib/theme";
-import { useAuth } from "@clerk/clerk-expo";
+import { useAuth } from "@clerk/expo";
 import { Redirect, Stack } from "expo-router";
 
 /** Signed-out screens: Welcome on the field, then the paper forms with a native back button */

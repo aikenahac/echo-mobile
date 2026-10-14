@@ -4,6 +4,7 @@ export const Endpoints = {
     get: "/v1/books",
     add: "/v1/books",
     search: "/v1/books/search",
+    searchIngest: "/v1/books/search/ingest",
     getById: (id: string) => `/v1/books/${id}`,
     remove: (id: string) => `/v1/books/${id}`,
     updateStatus: (id: string) => `/v1/books/${id}/status`,

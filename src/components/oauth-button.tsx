@@ -1,7 +1,7 @@
 import { SFIcon } from "@/components/echo";
 import { authError } from "@/lib/clerk-errors";
 import { fixed, useColors } from "@/lib/theme";
-import { useSSO } from "@clerk/clerk-expo";
+import { useSSO } from "@clerk/expo";
 import * as AuthSession from "expo-auth-session";
 import { Image } from "expo-image";
 import * as WebBrowser from "expo-web-browser";
