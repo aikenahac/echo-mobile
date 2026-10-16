@@ -40,7 +40,13 @@ No ads, no feed trying to sell you something.
 
 ## 🧱 Built with
 
-[Expo](https://expo.dev) & Expo Router · [Clerk](https://clerk.com) auth · [TanStack Query](https://tanstack.com/query) + [Zod](https://zod.dev) · [Uniwind](https://uniwind.dev) styling · [`@expo/ui`](https://docs.expo.dev/versions/latest/sdk/ui/) native controls · Reanimated · i18next
+- [Expo](https://expo.dev) & Expo Router
+- [Clerk](https://clerk.com) auth
+- [TanStack Query](https://tanstack.com/query)
+- [Zod](https://zod.dev)
+- [Uniwind](https://uniwind.dev) styling
+- Reanimated
+- i18next
 
 ## 🚀 Getting started
 
