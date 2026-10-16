@@ -1,27 +1,34 @@
-export const profileQueryKeys = {
-  get: ["profile"],
-  update: ["profile"],
+import type { QueryClient } from "@tanstack/react-query";
+
+/** Query keys (design/redesign/API.md §0.2) */
+export const queryKeys = {
+  library: ["library"] as const,
+  libraryBook: (userBookId: string) => ["library", userBookId] as const,
+  catalog: (bookId: string) => ["catalog", bookId] as const,
+  profile: ["profile"] as const,
+  stats: ["profile", "stats"] as const,
+  subscription: ["profile", "subscription"] as const,
+  collections: ["collections"] as const,
+  collection: (id: string) => ["collections", id] as const,
+  feed: ["feed"] as const,
+  search: ["search"] as const,
+  searchBooks: (q: string) => ["search", "books", q] as const,
+  searchUsers: (q: string) => ["users", "search", q] as const,
+  users: ["users"] as const,
+  user: (userId: string) => ["users", userId] as const,
+};
+
+/**
+ * Any library mutation (add, status, progress, rating, favorite, remove)
+ * refreshes the library, the entry, its catalog book and the profile stats.
+ */
+export function invalidateLibrary(
+  queryClient: QueryClient,
+  ids: { userBookId?: string; bookId?: string } = {},
+) {
+  return Promise.all([
+    queryClient.invalidateQueries({ queryKey: queryKeys.library }),
+    ids.bookId ? queryClient.invalidateQueries({ queryKey: queryKeys.catalog(ids.bookId) }) : null,
+    queryClient.invalidateQueries({ queryKey: queryKeys.stats }),
+  ]);
 }
-
-export const libraryQueryKeys = {
-  get: ["library"],
-  view: ["library-view"],
-  getBook: (userBookId: string) =>  ["library", userBookId],
-  updateCurrentPage: (userBookId: string) => ["library", "update-progress", "current-page", userBookId],
-  updatePageCount: (userBookId: string) => ["library", "update-progress", "page-count" , userBookId],
-  toggleFavorite: (userBookId: string) => ["library", "toggle-favorite" , userBookId],
-  updateStatus: (userBookId: string) => ["library", "update-status" , userBookId],
-  rateBook: (userBookId: string) => ["library", "rate", userBookId],
-};
-
-export const reviewQueryKeys = {
-  getByBook: (bookId: string) => ["reviews", "book", bookId],
-  create: (bookId: string) => ["reviews", "create", bookId],
-  update: (reviewId: string) => ["reviews", "update", reviewId],
-  delete: (reviewId: string) => ["reviews", "delete", reviewId],
-};
-
-export const searchQueryKeys = {
-  all: ["search"],
-  books: (query: string, offset?: number) => ["search", "books", query, offset],
-};

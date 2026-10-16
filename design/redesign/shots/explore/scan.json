@@ -1,0 +1,93 @@
+[
+  {
+    "name": "a-hardback",
+    "fails": [
+      "Contrast below WCAG on solid ground: 4.02:1 15px \"Read to page 180\""
+    ],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "New York": 3,
+        "SF Pro": 13
+      },
+      "sizes": [
+        72,
+        34,
+        22,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "700"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "b-zine",
+    "fails": [],
+    "warns": [
+      "Lines of text touching vertically (ink under 2pt apart): \"168\" / \"of 245 pages.Susanna Clarke.St\"; \"168\" / \"245\""
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 13
+      },
+      "sizes": [
+        128,
+        64,
+        22,
+        15,
+        13
+      ],
+      "weights": [
+        "500",
+        "600",
+        "700",
+        "800",
+        "900"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "c-night",
+    "fails": [
+      "Large blurred blob x1. Ambient orbs behind content are a slop signature."
+    ],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 8
+      },
+      "sizes": [
+        56,
+        30,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "700",
+        "800"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  }
+]

@@ -3,12 +3,17 @@ import { createMMKV } from "react-native-mmkv";
 export const STORAGE_KEYS = {
   LANGUAGE: "app_language",
   THEME: "app_theme",
+  /** "grid" | "list" for the Want / Finished / Favourites shelves */
   LIBRARY_VIEW: "library_view",
+  /** The last shelf opened in Library */
   LIBRARY_TAB: "library_tab",
-  SEARCH_VIEW: "search_view",
-}
+  /** Sort order of a non-Reading shelf */
+  LIBRARY_SORT: "library_sort",
+  /** Device-local `{ [userBookId]: { date, startPage } }` behind "+12 today" */
+  DAILY_PAGE_SNAPSHOT: "daily_page_snapshot",
+} as const
 
-const storage = createMMKV({
+export const storage = createMMKV({
   id: "default",
 });
 

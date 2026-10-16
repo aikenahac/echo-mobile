@@ -1,4 +1,9 @@
-import { ProfileResponseSchema, type ProfileResponse } from '@/lib/schemas';
+import {
+  type UpdateProfileRequest,
+  type User,
+  MutationResponseSchema,
+  UserSchema,
+} from '@/lib/schemas';
 import { Endpoints } from './endpoints';
 import { handleApiResponse } from './errors';
 import { useFetch } from './fetch-wrapper';
@@ -6,42 +11,23 @@ import { useFetch } from './fetch-wrapper';
 export function useUsersApi() {
   const { authenticatedFetch } = useFetch();
 
-  /**
-   * Get current user's profile
-   * @returns User profile with optional stats
-   * @throws {ApiRequestError} When the API request fails
-   * @throws {ValidationError} When response validation fails
-   */
-  const getMe = async (): Promise<ProfileResponse> => {
+  /** GET /profile: the signed-in user, with isPremium and planName */
+  const getMe = async (): Promise<User> => {
     const response = await authenticatedFetch(Endpoints.profile.get);
-
-    // Handle response with validation
-    return handleApiResponse(response, ProfileResponseSchema);
+    return handleApiResponse(response, UserSchema);
   };
 
   /**
-   * Update current user's profile
-   * @param {}
-   * @returns User profile with optional stats
-   * @throws {ApiRequestError} When the API request fails
-   * @throws {ValidationError} When response validation fails
+   * PUT /profile is a partial update: send only the fields that changed.
+   * `null` clears displayName, bio or profilePictureUrl; username can't be cleared.
    */
-  const updateMe = async ({ username, bio }: UpdateUserParams) => {
+  const updateMe = async (changes: UpdateProfileRequest) => {
     const response = await authenticatedFetch(Endpoints.profile.update, {
-      method: "PUT",
-      body: JSON.stringify({ username, bio })
+      method: 'PUT',
+      body: JSON.stringify(changes),
     });
-
-    return handleApiResponse(response);
-  }
-
-  return {
-    getMe,
-    updateMe,
+    return handleApiResponse(response, MutationResponseSchema);
   };
-}
 
-export type UpdateUserParams = {
-  username: string;
-  bio: string;
+  return { getMe, updateMe };
 }

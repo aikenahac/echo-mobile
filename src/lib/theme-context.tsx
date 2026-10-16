@@ -1,6 +1,7 @@
 import { getFromLocalStorage, setInLocalStorage, STORAGE_KEYS } from '@/lib/storage';
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, use, useState } from 'react';
 import { useColorScheme as useRNColorScheme } from 'react-native';
+import { Uniwind } from 'uniwind';
 
 export type ColorScheme = 'light' | 'dark' | 'system';
 
@@ -15,26 +16,30 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const systemColorScheme = useRNColorScheme();
   const [themeMode, setThemeMode] = useState<ColorScheme>(() => {
-    const savedScheme = getFromLocalStorage<ColorScheme>(STORAGE_KEYS.THEME);
-    return savedScheme || 'light';
+    const savedScheme = getFromLocalStorage<ColorScheme>(STORAGE_KEYS.THEME) || 'system';
+    Uniwind.setTheme(savedScheme);
+    return savedScheme;
   });
 
-  const activeColorScheme = themeMode === 'system' ? systemColorScheme : themeMode;
+  const resolvedSystemScheme =
+    systemColorScheme === 'light' || systemColorScheme === 'dark' ? systemColorScheme : null;
+  const activeColorScheme = themeMode === 'system' ? resolvedSystemScheme : themeMode;
 
   const setColorScheme = (scheme: ColorScheme) => {
     setThemeMode(scheme);
     setInLocalStorage(STORAGE_KEYS.THEME, scheme);
+    Uniwind.setTheme(scheme);
   };
 
   return (
-    <ThemeContext.Provider value={{ colorScheme: activeColorScheme ?? null, themeMode, setColorScheme }}>
+    <ThemeContext value={{ colorScheme: activeColorScheme ?? null, themeMode, setColorScheme }}>
       {children}
-    </ThemeContext.Provider>
+    </ThemeContext>
   );
 }
 
 export function useTheme() {
-  const context = useContext(ThemeContext);
+  const context = use(ThemeContext);
   if (context === undefined) {
     throw new Error('useTheme must be used within a ThemeProvider');
   }

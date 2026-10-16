@@ -1,85 +1,124 @@
-import { FullScreenLoader } from "@/components/full-screen-loader";
-import { SetUsernameDrawer } from "@/components/set-username-drawer";
+import { fixed, useColors, useStatusBarStyle } from "@/lib/theme";
+import { UsernameOnboarding } from "@/components/username-onboarding";
 import { useProfile } from "@/hooks/api/user/use-get-me";
-import { useAuth } from "@clerk/clerk-expo";
-import createIconSet from "@expo/vector-icons/createIconSet";
-import { Redirect } from "expo-router";
-import {
-  Icon,
-  Label,
-  NativeTabs,
-  VectorIcon,
-} from "expo-router/unstable-native-tabs";
-import { useEffect, useState } from "react";
+import { useAuth } from "@clerk/expo";
+import { Redirect, Stack } from "expo-router";
 
-// Lucide icon glyph mappings from info.json
-const glyphMap = {
-  search: 0xe151,
-  library: 0xe100,
-  activity: 0xe038,
-  users: 0xe1a4,
-  user: 0xe19f,
-};
-
-const LucideIcon = createIconSet(
-  glyphMap,
-  "Lucide",
-  require("@/lib/assets/lucide-font/lucide.ttf"),
-);
-
-export default function AppRoutesLayout() {
+/**
+ * Signed-in app: the tabs, plus screens that cover them —
+ * Book detail, Settings and other readers' profiles (pushed, no tab bar), and the
+ * review editor and Edit profile (large-detent sheets).
+ */
+export default function AppLayout() {
   const { isSignedIn } = useAuth();
-  const [open, setOpen] = useState(false);
-
-  const { data: profile, isLoading } = useProfile();
-
-  useEffect(() => {
-    if (profile && (!profile.username || profile.username.length === 0)) {
-      setOpen(true);
-    }
-  }, [profile]);
-
-  if (isLoading) {
-    return <FullScreenLoader />;
-  }
+  const statusBarStyle = useStatusBarStyle();
+  const colors = useColors();
+  const profile = useProfile();
 
   if (!isSignedIn) {
-    return <Redirect href={"/(auth)/sign-in"} />;
+    return <Redirect href="/welcome" />;
+  }
+
+  // A reader without a username can't use the app yet: the onboarding blocks everything
+  if (profile.data && !profile.data.username) {
+    return <UsernameOnboarding />;
   }
 
   return (
-    <>
-      <NativeTabs>
-        <NativeTabs.Trigger name="search">
-          <Icon
-            selectedColor={"#fda5d5"}
-            src={<VectorIcon family={LucideIcon} name="search" />}
-          />
-          <Label hidden />
-        </NativeTabs.Trigger>
-        <NativeTabs.Trigger name="library">
-          <Icon
-            selectedColor={"#fda5d5"}
-            src={<VectorIcon family={LucideIcon} name="library" />}
-          />
-          <Label hidden />
-        </NativeTabs.Trigger>
-        <NativeTabs.Trigger name="feed">
-          <Icon
-            selectedColor={"#fda5d5"}
-            src={<VectorIcon family={LucideIcon} name="activity" />}
-          />
-          <Label hidden />
-        </NativeTabs.Trigger>
-        <NativeTabs.Trigger name="profile">
-          <Icon
-            selectedColor={"#fda5d5"}
-            src={<VectorIcon family={LucideIcon} name="user" />}
-          />
-          <Label hidden />
-        </NativeTabs.Trigger>
-      </NativeTabs>
-      <SetUsernameDrawer open={open} setOpen={setOpen} />
-    </>
+    <Stack screenOptions={{ headerShown: false, statusBarStyle }}>
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen
+        name="book/[bookId]"
+        options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: "",
+          headerBackButtonDisplayMode: "minimal",
+          headerShadowVisible: false,
+          // Stays live under the review sheet so saved changes show when it closes
+          freezeOnBlur: false,
+        }}
+      />
+      <Stack.Screen
+        name="review/[bookId]"
+        options={{
+          presentation: "formSheet",
+          sheetAllowedDetents: [1],
+          sheetGrabberVisible: true,
+          headerShown: true,
+          headerTransparent: true,
+          headerShadowVisible: false,
+          // The sheet is paper, like every other ground in the app
+          contentStyle: { backgroundColor: colors.paper },
+        }}
+      />
+      <Stack.Screen
+        name="settings"
+        options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: "",
+          headerBackButtonDisplayMode: "minimal",
+          headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="edit-profile"
+        options={{
+          presentation: "formSheet",
+          sheetAllowedDetents: [1],
+          sheetGrabberVisible: true,
+          headerShown: true,
+          headerTransparent: true,
+          headerShadowVisible: false,
+          contentStyle: { backgroundColor: colors.paper },
+        }}
+      />
+      <Stack.Screen
+        name="user/[userId]"
+        options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: "",
+          headerBackButtonDisplayMode: "minimal",
+          headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen name="premium" options={{ presentation: "fullScreenModal", statusBarStyle: "dark" }} />
+      <Stack.Screen
+        name="add-to-collection/[userBookId]"
+        options={{
+          presentation: "formSheet",
+          sheetAllowedDetents: "fitToContents",
+          sheetGrabberVisible: true,
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.paper },
+        }}
+      />
+      <Stack.Screen
+        name="collection/[id]"
+        options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: "",
+          headerBackButtonDisplayMode: "minimal",
+          headerShadowVisible: false,
+          headerTintColor: fixed.onColor,
+          statusBarStyle: "light",
+        }}
+      />
+      <Stack.Screen
+        name="collection-editor"
+        options={{
+          presentation: "formSheet",
+          sheetAllowedDetents: [1],
+          sheetGrabberVisible: true,
+          headerShown: true,
+          headerTransparent: true,
+          headerShadowVisible: false,
+          contentStyle: { backgroundColor: colors.paper },
+        }}
+      />
+    </Stack>
   );
 }

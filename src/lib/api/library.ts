@@ -1,13 +1,11 @@
 import {
-  AddBookToLibraryResponseSchema,
-  LibraryResponse,
+  type AddBookRequest,
+  type LibraryResponse,
+  type ReadingStatus,
+  AddBookResponseSchema,
   LibraryResponseSchema,
-  RateBookResponse,
-  RateBookResponseSchema,
-  ReadingStatus,
-  UserBookSchema,
-} from "../schemas";
-import { SearchResult, UserBook } from "../types";
+  MutationResponseSchema,
+} from "@/lib/schemas";
 import { Endpoints } from "./endpoints";
 import { handleApiResponse } from "./errors";
 import { useFetch } from "./fetch-wrapper";
@@ -15,120 +13,48 @@ import { useFetch } from "./fetch-wrapper";
 export function useLibraryApi() {
   const { authenticatedFetch } = useFetch();
 
-  const getMyLibrary = async (): Promise<LibraryResponse> => {
-    const response = await authenticatedFetch(Endpoints.library.get);
+  const json = (method: string, body: unknown) => ({ method, body: JSON.stringify(body) });
 
-    // Handle response with validation
+  /** GET /books: the four shelves, each newest-added first */
+  const getLibrary = async (): Promise<LibraryResponse> => {
+    const response = await authenticatedFetch(Endpoints.library.get);
     return handleApiResponse(response, LibraryResponseSchema);
   };
 
-  const getUserBook = async (userBookId: string): Promise<UserBook> => {
-    const response = await authenticatedFetch(Endpoints.library.getById(userBookId));
-
-    return handleApiResponse(response, UserBookSchema);
-  }
-
-  const updateCurrentPage = async (userBookId: string, currentPage: number) => {
-    const response = await authenticatedFetch(
-      Endpoints.library.updateProgress(userBookId),
-      {
-        method: "PUT",
-        body: JSON.stringify({ currentPage }),
-      },
-    );
-
-    return handleApiResponse(response);
-  };
-
-  const updatePageCount = async (userBookId: string, pageCount: number) => {
-    const response = await authenticatedFetch(
-      Endpoints.library.updateProgress(userBookId),
-      {
-        method: "PUT",
-        body: JSON.stringify({ pageCount }),
-      },
-    );
-
-    return handleApiResponse(response);
-  };
-
-  const toggleFavorite = async (userBookId: string, isFavorite: boolean) => {
-    const response = await authenticatedFetch(
-      Endpoints.library.toggleFavorite(userBookId),
-      {
-        method: "PUT",
-        body: JSON.stringify({ isFavorite })
-      }
-    );
-
-    return handleApiResponse(response);
-  };
-
-  const rateBook = async (
-    userBookId: string,
-    rating: number
-  ): Promise<RateBookResponse> => {
-    const response = await authenticatedFetch(
-      Endpoints.library.rate(userBookId),
-      {
-        method: "PUT",
-        body: JSON.stringify({ rating }),
-      }
-    );
-
-    return handleApiResponse(response, RateBookResponseSchema);
-  };
-
-  const addBookToLibrary = async (
-    bookData: SearchResult,
-    status: ReadingStatus,
-    isFavorite: boolean = false
-  ) => {
-    const response = await authenticatedFetch(Endpoints.library.add, {
-      method: "POST",
-      body: JSON.stringify({
-        bookData: {
-          isbn: bookData.isbn,
-          title: bookData.title,
-          author: bookData.author,
-          coverUrl: bookData.coverUrl,
-          pages: bookData.pages,
-          publishedYear: bookData.publishedYear,
-        },
-        status,
-        isFavorite,
-      }),
-    });
-
-    const result = await handleApiResponse(response, AddBookToLibraryResponseSchema);
-
-    if (result.error) {
-      throw new Error(result.error);
-    }
-
-    return result;
+  /**
+   * PUT /books/{id}/progress. `pageCount` is applied first, so both can change in one call.
+   * Server rules: reaching the total finishes the book; any other page above 0 moves it to reading.
+   */
+  const updateProgress = async (userBookId: string, body: { currentPage?: number; pageCount?: number }) => {
+    const response = await authenticatedFetch(Endpoints.library.updateProgress(userBookId), json("PUT", body));
+    return handleApiResponse(response, MutationResponseSchema);
   };
 
   const updateStatus = async (userBookId: string, status: ReadingStatus) => {
-    const response = await authenticatedFetch(
-      Endpoints.library.updateStatus(userBookId),
-      {
-        method: "PUT",
-        body: JSON.stringify({ status }),
-      }
-    );
-
-    return handleApiResponse(response);
+    const response = await authenticatedFetch(Endpoints.library.updateStatus(userBookId), json("PUT", { status }));
+    return handleApiResponse(response, MutationResponseSchema);
   };
 
-  return {
-    getMyLibrary,
-    updateCurrentPage,
-    updatePageCount,
-    toggleFavorite,
-    getUserBook,
-    rateBook,
-    addBookToLibrary,
-    updateStatus,
+  const setFavorite = async (userBookId: string, isFavorite: boolean) => {
+    const response = await authenticatedFetch(Endpoints.library.toggleFavorite(userBookId), json("PUT", { isFavorite }));
+    return handleApiResponse(response, MutationResponseSchema);
   };
+
+  const rate = async (userBookId: string, rating: number) => {
+    const response = await authenticatedFetch(Endpoints.library.rate(userBookId), json("PUT", { rating }));
+    return handleApiResponse(response, MutationResponseSchema);
+  };
+
+  const remove = async (userBookId: string) => {
+    const response = await authenticatedFetch(Endpoints.library.remove(userBookId), { method: "DELETE" });
+    return handleApiResponse(response, MutationResponseSchema);
+  };
+
+  /** POST /books → 201 { success, userBook }. 400 "Book already in your library" means stale data. */
+  const add = async (body: AddBookRequest) => {
+    const response = await authenticatedFetch(Endpoints.library.add, json("POST", body));
+    return handleApiResponse(response, AddBookResponseSchema);
+  };
+
+  return { getLibrary, updateProgress, updateStatus, setFavorite, rate, remove, add };
 }

@@ -7,25 +7,24 @@
     "icon": "./assets/images/icons/echo_icon.png",
     "scheme": "echo",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "club.echobook.app",
-      "icon": "./assets/images/icons/app_icon_echo.icon",
+      "bundleIdentifier": "app.echoreads.mobile",
+      "icon": "./assets/images/icons/echo.icon",
       "usesAppleSignIn": true,
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "UIViewControllerBasedStatusBarAppearance": true
       }
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#FF6BA8",
         "foregroundImage": "./assets/images/icons/echo_icon_foreground.png",
         "backgroundImage": "./assets/images/icons/echo_icon_background.png",
-        "monochromeImage": "./assets/images/icons/echo_icon_foreground.png"
+        "monochromeImage": "./assets/images/icons/echo_icon_monochrome.png"
       },
-      "package": "club.echobook.app",
-      "edgeToEdgeEnabled": true,
+      "package": "app.echoreads.mobile",
       "predictiveBackGestureEnabled": false
     },
     "plugins": [
@@ -38,10 +37,10 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/icons/echo_icon_foreground.png",
-          "imageWidth": 200,
+          "image": "./assets/images/splash-mark.png",
+          "imageWidth": 75,
           "resizeMode": "contain",
-          "backgroundColor": "#1F212D"
+          "backgroundColor": "#FF6BA8"
         }
       ],
       "expo-localization",
@@ -50,21 +49,48 @@
         "expo-asset",
         {
           "assets": [
-            "./assets/images/echo_logo.png",
             "./assets/images/google_icon.png",
-            "./assets/images/apple_icon_light.png",
-            "./assets/images/apple_icon_dark.png"
+            "./assets/images/covers/pachinko.jpg",
+            "./assets/images/covers/piranesi.jpg",
+            "./assets/images/covers/james.jpg"
           ]
         }
       ],
-      "expo-font",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./src/lib/assets/fonts/ArchivoCondensed-Black.ttf",
+            "./src/lib/assets/fonts/ArchivoCondensed-ExtraBold.ttf"
+          ]
+        }
+      ],
       [
         "expo-web-browser",
         {
           "experimentalLauncherActivity": true
         }
       ],
-      "expo-apple-authentication"
+      "expo-apple-authentication",
+      "expo-image",
+      "expo-status-bar",
+      "./plugins/with-ios-scene-lifecycle",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Echo uses your photos to set your profile picture and collection covers.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "17.0"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
@@ -72,11 +98,13 @@
     },
     "extra": {
       "router": {
-        "origin": false
+        "origin": false,
+        "root": "./src/app"
       },
       "eas": {
-        "projectId": "9ba87fbc-711c-457e-ba0c-f6d275e8a1f7"
+        "projectId": "ef5a368c-66cf-496f-80ff-fe88b248f6bd"
       }
-    }
+    },
+    "owner": "aiken"
   }
 }

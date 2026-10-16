@@ -1,3 +1,4 @@
+import i18n from "i18next";
 import type { ApiError } from '@/lib/schemas';
 import { z } from 'zod';
 
@@ -105,6 +106,10 @@ export function getErrorMessage(error: unknown): string {
   }
 
   if (error instanceof Error) {
+    // The request never got an answer (offline, timed out, server unreachable)
+    if (/NSURLErrorDomain|Network request failed|timed out|Failed to fetch/i.test(error.message)) {
+      return i18n.t("common.offline");
+    }
     return error.message;
   }
 

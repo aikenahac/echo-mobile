@@ -1,0 +1,273 @@
+[
+  {
+    "name": "library",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 16
+      },
+      "sizes": [
+        96,
+        44,
+        28,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "detail-james",
+    "fails": [],
+    "warns": [
+      "Text inside the system's safe areas: \"L\" (home indicator); \"Luka Novak · 6 Oct\" (home indicator); \"Luka Novak\" (home indicator)"
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 5,
+        "SF Pro": 9
+      },
+      "sizes": [
+        44,
+        28,
+        22,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "friends",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 7,
+        "SF Pro": 14
+      },
+      "sizes": [
+        44,
+        28,
+        22,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 5,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "search",
+    "fails": [],
+    "warns": [
+      "Text inside the system's safe areas: \"An Artist of the Floatin\" (home indicator); \"An Artist of the Floatin\" (home indicator); \"Kazuo Ishiguro\" (home indicator)"
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 8,
+        "SF Pro": 16
+      },
+      "sizes": [
+        44,
+        22,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "add-to-collection",
+    "fails": [],
+    "warns": [
+      "4 icon-in-tinted-square chips. If every row has one, none of them mean anything."
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 2,
+        "SF Pro": 9
+      },
+      "sizes": [
+        44,
+        28,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336,
+        192
+      ],
+      "cards": 1
+    }
+  },
+  {
+    "name": "premium",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 8
+      },
+      "sizes": [
+        44,
+        22,
+        17,
+        15
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "library-dark",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 16
+      },
+      "sizes": [
+        96,
+        44,
+        28,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "profile",
+    "fails": [],
+    "warns": [
+      "9 elements cast shadows. Depth should come from one or two layers, not every tile."
+    ],
+    "facts": {
+      "fonts": {
+        "Archivo": 3,
+        "SF Pro": 9
+      },
+      "sizes": [
+        120,
+        28,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "800",
+        "900"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "first-run-username",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "Archivo": 2,
+        "SF Pro": 5
+      },
+      "sizes": [
+        44,
+        22,
+        17,
+        15
+      ],
+      "weights": [
+        "400",
+        "600",
+        "900"
+      ],
+      "leftEdges": 1,
+      "accentHues": [
+        336
+      ],
+      "cards": 0
+    }
+  }
+]

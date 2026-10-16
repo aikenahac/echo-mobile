@@ -1,0 +1,170 @@
+{
+  "surfaces": [
+    {
+      "name": "01-log-the-page",
+      "type": "panel",
+      "fails": [],
+      "warns": [],
+      "facts": {
+        "os": "ios",
+        "kind": "panel",
+        "fonts": {
+          "Archivo": 1
+        },
+        "sizes": [
+          58
+        ],
+        "weights": [
+          "900"
+        ],
+        "words": 6,
+        "headline": "58px, 6 words, 2 line(s)",
+        "accentHues": [],
+        "cards": 0
+      }
+    },
+    {
+      "name": "02-friends",
+      "type": "panel",
+      "fails": [],
+      "warns": [],
+      "facts": {
+        "os": "ios",
+        "kind": "panel",
+        "fonts": {
+          "Archivo": 1
+        },
+        "sizes": [
+          58
+        ],
+        "weights": [
+          "900"
+        ],
+        "words": 6,
+        "headline": "58px, 6 words, 2 line(s)",
+        "accentHues": [],
+        "cards": 0
+      }
+    },
+    {
+      "name": "03-rate-review",
+      "type": "panel",
+      "fails": [],
+      "warns": [
+        "Title Case: \"Rate it. Review it. Keep it.\". Sentence case reads as a person (mark data-proper on real names)."
+      ],
+      "facts": {
+        "os": "ios",
+        "kind": "panel",
+        "fonts": {
+          "Archivo": 1
+        },
+        "sizes": [
+          58
+        ],
+        "weights": [
+          "900"
+        ],
+        "words": 6,
+        "headline": "58px, 6 words, 2 line(s)",
+        "accentHues": [],
+        "cards": 0
+      }
+    },
+    {
+      "name": "04-search",
+      "type": "panel",
+      "fails": [],
+      "warns": [],
+      "facts": {
+        "os": "ios",
+        "kind": "panel",
+        "fonts": {
+          "Archivo": 1
+        },
+        "sizes": [
+          58
+        ],
+        "weights": [
+          "900"
+        ],
+        "words": 5,
+        "headline": "58px, 5 words, 2 line(s)",
+        "accentHues": [],
+        "cards": 0
+      }
+    },
+    {
+      "name": "05-collections",
+      "type": "panel",
+      "fails": [],
+      "warns": [],
+      "facts": {
+        "os": "ios",
+        "kind": "panel",
+        "fonts": {
+          "Archivo": 1
+        },
+        "sizes": [
+          58
+        ],
+        "weights": [
+          "900"
+        ],
+        "words": 4,
+        "headline": "58px, 4 words, 2 line(s)",
+        "accentHues": [],
+        "cards": 0
+      }
+    },
+    {
+      "name": "06-profile",
+      "type": "panel",
+      "fails": [],
+      "warns": [],
+      "facts": {
+        "os": "ios",
+        "kind": "panel",
+        "fonts": {
+          "Archivo": 1
+        },
+        "sizes": [
+          58
+        ],
+        "weights": [
+          "900"
+        ],
+        "words": 6,
+        "headline": "58px, 6 words, 2 line(s)",
+        "accentHues": [],
+        "cards": 0
+      }
+    },
+    {
+      "name": "07-dark",
+      "type": "panel",
+      "fails": [],
+      "warns": [],
+      "facts": {
+        "os": "ios",
+        "kind": "panel",
+        "fonts": {
+          "Archivo": 1
+        },
+        "sizes": [
+          58
+        ],
+        "weights": [
+          "900"
+        ],
+        "words": 4,
+        "headline": "58px, 4 words, 2 line(s)",
+        "accentHues": [
+          336
+        ],
+        "cards": 0
+      }
+    }
+  ],
+  "exports": []
+}

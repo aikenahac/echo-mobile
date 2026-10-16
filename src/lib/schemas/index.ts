@@ -1,20 +1,21 @@
+import { OpenLibraryDocSchema, type OpenLibraryDoc } from "@/lib/open-library";
 import { z } from "zod";
+
+/*
+ * Runtime schemas for the /api/v1 responses (design/redesign/API.md, and
+ * echo/docs/mobile-handoff.md §6). Dates arrive as ISO strings.
+ * Other users always come back as PublicUser (no email or role).
+ */
+
+const Timestamp = z.string();
 
 // ============================================================================
 // ENUMS
 // ============================================================================
 
 export const ReadingStatusSchema = z.enum(["want", "reading", "finished"]);
-
 export const UserRoleSchema = z.enum(["user", "moderator", "admin"]);
-
-export const BillingIntervalSchema = z.enum([
-  "month",
-  "year",
-  "lifetime",
-  "free",
-]);
-
+export const BillingIntervalSchema = z.enum(["month", "year", "lifetime", "free"]);
 export const SubscriptionStatusSchema = z.enum([
   "active",
   "canceled",
@@ -25,168 +26,68 @@ export const SubscriptionStatusSchema = z.enum([
 ]);
 
 // ============================================================================
-// BASE SCHEMAS
+// PEOPLE
 // ============================================================================
 
+/** The signed-in user (GET /profile) */
 export const UserSchema = z.object({
   id: z.string(),
-  email: z.string().email(),
+  email: z.string(),
   username: z.string().nullable(),
+  displayName: z.string().nullable(),
   bio: z.string().nullable(),
+  profilePictureUrl: z.string().nullable(),
   role: UserRoleSchema,
   isPremium: z.boolean(),
   planName: z.string().nullable(),
-  createdAt: z.union([z.string(), z.date()]),
-  updatedAt: z.union([z.string(), z.date()]),
+  createdAt: Timestamp,
+  updatedAt: Timestamp,
 });
 
+/** Anyone else */
+export const PublicUserSchema = z.object({
+  id: z.string(),
+  username: z.string().nullable(),
+  displayName: z.string().nullable(),
+  profilePictureUrl: z.string().nullable(),
+});
+
+// ============================================================================
+// BOOKS
+// ============================================================================
+
 export const BookSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string(),
   isbn: z.string().nullable(),
   title: z.string(),
   author: z.string(),
-  coverUrl: z.string().url().nullable(),
-  pages: z.number().int().positive().nullable(),
+  coverUrl: z.string().nullable(),
+  /** 0 or null means unknown */
+  pages: z.number().int().nonnegative().nullable(),
   publishedYear: z.number().int().nullable(),
-  createdAt: z.union([z.string(), z.date()]),
+  createdAt: Timestamp.optional(),
 });
 
 export const UserBookWithoutBookSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string(),
   userId: z.string(),
-  bookId: z.string().uuid(),
+  bookId: z.string(),
   status: ReadingStatusSchema,
   currentPage: z.number().int().nonnegative().nullable(),
-  pageCount: z.number().int().positive().nullable(),
+  /** 0 or null means unknown; falls back to book.pages */
+  pageCount: z.number().int().nonnegative().nullable(),
   rating: z.number().int().min(1).max(5).nullable(),
   isFavorite: z.boolean(),
-  startedAt: z.union([z.string(), z.date()]).nullable(),
-  finishedAt: z.union([z.string(), z.date()]).nullable(),
-  createdAt: z.union([z.string(), z.date()]),
-  updatedAt: z.union([z.string(), z.date()]),
+  startedAt: Timestamp.nullable(),
+  finishedAt: Timestamp.nullable(),
+  createdAt: Timestamp,
+  updatedAt: Timestamp,
 });
-
-export const ReviewSchema = z.object({
-  id: z.string().uuid(),
-  userId: z.string(),
-  bookId: z.string().uuid(),
-  content: z.string(),
-  isPrivate: z.boolean(),
-  createdAt: z.union([z.string(), z.date()]),
-  updatedAt: z.union([z.string(), z.date()]),
-});
-
-export const FollowSchema = z.object({
-  followerId: z.string(),
-  followingId: z.string(),
-  createdAt: z.union([z.string(), z.date()]),
-});
-
-export const SubscriptionPlanSchema = z.object({
-  id: z.string().uuid(),
-  name: z.string(),
-  stripePriceId: z.string().nullable(),
-  stripeProductId: z.string().nullable(),
-  price: z.number().int().nonnegative(),
-  interval: BillingIntervalSchema,
-  features: z.string().nullable(),
-  isActive: z.boolean(),
-  isInternal: z.boolean(),
-  sortOrder: z.number().int(),
-  createdAt: z.union([z.string(), z.date()]),
-  updatedAt: z.union([z.string(), z.date()]),
-});
-
-export const UserSubscriptionSchema = z.object({
-  id: z.string().uuid(),
-  userId: z.string(),
-  planId: z.string().uuid(),
-  stripeSubscriptionId: z.string().nullable(),
-  stripeCustomerId: z.string().nullable(),
-  status: SubscriptionStatusSchema,
-  currentPeriodStart: z.union([z.string(), z.date()]).nullable(),
-  currentPeriodEnd: z.union([z.string(), z.date()]).nullable(),
-  cancelAtPeriodEnd: z.boolean(),
-  canceledAt: z.union([z.string(), z.date()]).nullable(),
-  createdAt: z.union([z.string(), z.date()]),
-  updatedAt: z.union([z.string(), z.date()]),
-});
-
-export const CollectionSchema = z.object({
-  id: z.string().uuid(),
-  userId: z.string(),
-  name: z.string(),
-  description: z.string().nullable(),
-  slug: z.string(),
-  colorTag: z.string().nullable(),
-  iconName: z.string().nullable(),
-  coverImageUrl: z.string().url().nullable(),
-  isPublic: z.boolean(),
-  sortOrder: z.number().int(),
-  createdAt: z.union([z.string(), z.date()]),
-  updatedAt: z.union([z.string(), z.date()]),
-});
-
-// ============================================================================
-// COMPOSITE SCHEMAS
-// ============================================================================
 
 export const UserBookSchema = UserBookWithoutBookSchema.extend({
   book: BookSchema,
 });
 
-export const UserBookWithDetailsSchema = UserBookWithoutBookSchema.extend({
-  book: BookSchema,
-  user: UserSchema,
-});
-
-export const ReviewWithUserSchema = ReviewSchema.extend({
-  user: UserSchema,
-});
-
-export const ReviewWithBookSchema = ReviewSchema.extend({
-  book: BookSchema,
-});
-
-export const ReviewWithDetailsSchema = ReviewSchema.extend({
-  user: UserSchema,
-  book: BookSchema,
-});
-
-export const UserWithStatsSchema = UserSchema.extend({
-  _count: z
-    .object({
-      followers: z.number().int().nonnegative().optional(),
-      following: z.number().int().nonnegative().optional(),
-      userBooks: z.number().int().nonnegative().optional(),
-      reviews: z.number().int().nonnegative().optional(),
-    })
-    .optional(),
-});
-
-export const UserSubscriptionWithPlanSchema = UserSubscriptionSchema.extend({
-  plan: SubscriptionPlanSchema,
-});
-
-// ============================================================================
-// API RESPONSE SCHEMAS
-// ============================================================================
-
-export const ApiErrorSchema = z.object({
-  error: z.string(),
-  limitReached: z.boolean().optional(),
-  usage: z
-    .object({
-      current: z.number().int().nonnegative(),
-      limit: z.number().int().positive(),
-    })
-    .optional(),
-});
-
-// Profile response schema (can be User or UserWithStats)
-export const ProfileResponseSchema = z.union([UserSchema, UserWithStatsSchema]);
-
-// Library response schema
 export const LibraryResponseSchema = z.object({
   favoriteBooks: z.array(UserBookSchema),
   wantToRead: z.array(UserBookSchema),
@@ -194,123 +95,281 @@ export const LibraryResponseSchema = z.object({
   finished: z.array(UserBookSchema),
 });
 
-// Rate book request/response schemas
-export const RateBookRequestSchema = z.object({
-  rating: z.number().int().min(1).max(5),
+export const AddBookRequestSchema = z.object({
+  book: z.union([
+    z.object({ bookId: z.string() }),
+    z.object({ openLibrary: OpenLibraryDocSchema }),
+  ]),
+  status: ReadingStatusSchema,
+  isFavorite: z.boolean().optional(),
 });
 
-export const RateBookResponseSchema = z.object({
+export const AddBookResponseSchema = z.object({
   success: z.boolean(),
-  userBook: UserBookWithoutBookSchema.optional(),
+  userBook: UserBookWithoutBookSchema,
 });
 
-// Review array response schema
-export const ReviewsResponseSchema = z.array(ReviewWithUserSchema);
+export const MutationResponseSchema = z.object({ success: z.boolean() }).loose();
 
-// Create review request schema
-export const CreateReviewRequestSchema = z.object({
-  bookId: z.string().uuid(),
-  content: z.string().min(1).max(5000),
-  isPrivate: z.boolean().optional().default(false),
+// ============================================================================
+// REVIEWS
+// ============================================================================
+
+export const REVIEW_MAX_LENGTH = 10000;
+
+export const ReviewSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  bookId: z.string(),
+  content: z.string(),
+  isPrivate: z.boolean(),
+  createdAt: Timestamp,
+  updatedAt: Timestamp,
 });
 
-// Update review request schema
-export const UpdateReviewRequestSchema = z.object({
-  content: z.string().min(1).max(5000).optional(),
-  isPrivate: z.boolean().optional(),
+export const ReviewWithUserSchema = ReviewSchema.extend({
+  user: PublicUserSchema,
 });
 
-// Review response schemas
-export const CreateReviewResponseSchema = z.object({
-  success: z.boolean(),
-  review: ReviewSchema.optional(),
+export const SaveReviewRequestSchema = z.object({
+  bookId: z.string(),
+  content: z.string().min(1).max(REVIEW_MAX_LENGTH),
+  isPrivate: z.boolean(),
 });
 
-export const UpdateReviewResponseSchema = CreateReviewResponseSchema;
+// ============================================================================
+// CATALOG (book detail)
+// ============================================================================
 
-export const DeleteReviewResponseSchema = z.object({
-  success: z.boolean(),
+export const CatalogBookResponseSchema = z.object({
+  book: BookSchema,
+  userBook: UserBookWithoutBookSchema.nullable(),
+  myReview: ReviewSchema.nullable(),
+  followingReviews: z.array(ReviewWithUserSchema),
 });
 
-// Search result schema
+// ============================================================================
+// SEARCH
+// ============================================================================
+
 export const SearchResultSchema = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().optional(),
   key: z.string().optional(),
   isbn: z.string().nullable(),
   title: z.string(),
   author: z.string(),
-  coverUrl: z.string().nullable().optional(),
-  pages: z.number().int().positive().nullable(),
+  coverUrl: z.string().nullable(),
+  pages: z.number().int().nonnegative().nullable(),
   publishedYear: z.number().int().nullable(),
   source: z.enum(["internal", "external"]),
 });
 
-// Search response schema - API returns array directly
-export const SearchResponseSchema = z.array(SearchResultSchema);
+export const SearchResponseSchema = z.object({
+  catalog: z.array(SearchResultSchema),
+  openLibrary: z.discriminatedUnion("status", [
+    z.object({
+      status: z.literal("hit"),
+      results: z.array(SearchResultSchema),
+      numFound: z.number().int().nonnegative(),
+    }),
+    z.object({ status: z.literal("miss") }),
+  ]),
+});
 
-// Add book to library request schema
-export const AddBookToLibraryRequestSchema = z.object({
-  book: z.object({
-    isbn: z.string().nullable().optional(),
-    title: z.string(),
-    author: z.string(),
-    coverUrl: z.string().url().nullable().optional(),
-    pages: z.number().int().positive().nullable().optional(),
-    publishedYear: z.number().int().nullable().optional(),
+export const SearchIngestResponseSchema = z.object({
+  ids: z.record(z.string(), z.string()),
+});
+
+export const ReaderSchema = PublicUserSchema.extend({
+  bio: z.string().nullable(),
+  isFollowing: z.boolean(),
+});
+
+export const UserSearchResponseSchema = z.object({
+  results: z.array(ReaderSchema),
+  hasMore: z.boolean(),
+  total: z.number().int().optional(),
+  query: z.string().optional(),
+});
+
+// ============================================================================
+// FEED
+// ============================================================================
+
+export const FeedBookItemSchema = z.object({
+  type: z.literal("book"),
+  date: Timestamp,
+  user: PublicUserSchema,
+  book: BookSchema,
+  data: z.object({
+    status: z.enum(["reading", "finished"]),
+    rating: z.number().int().nullable(),
+    currentPage: z.number().int().nullable(),
+    startedAt: Timestamp.nullable(),
+    finishedAt: Timestamp.nullable(),
   }),
-  status: ReadingStatusSchema,
-  isFavorite: z.boolean().optional().default(false),
 });
 
-// Add book to library response schema
-export const AddBookToLibraryResponseSchema = z.object({
-  success: z.boolean(),
-  userBook: UserBookWithoutBookSchema.optional(),
-  error: z.string().optional(),
+export const FeedReviewItemSchema = z.object({
+  type: z.literal("review"),
+  date: Timestamp,
+  user: PublicUserSchema,
+  book: BookSchema,
+  data: z.object({
+    content: z.string(),
+    isPrivate: z.boolean(),
+  }),
+});
+
+export const FeedItemSchema = z.discriminatedUnion("type", [FeedBookItemSchema, FeedReviewItemSchema]);
+
+export const FeedResponseSchema = z.object({
+  activities: z.array(FeedItemSchema),
+  hasMore: z.boolean(),
+  limit: z.number().int().optional(),
+  offset: z.number().int().optional(),
 });
 
 // ============================================================================
-// TYPE EXPORTS (inferred from schemas)
+// PROFILE
 // ============================================================================
 
+export const ProfileStatsSchema = z.object({
+  booksFinishedThisYear: z.number().int(),
+  pagesReadThisYear: z.number().int(),
+  totalBooks: z.number().int(),
+  countsByStatus: z.object({
+    want: z.number().int(),
+    reading: z.number().int(),
+    finished: z.number().int(),
+  }),
+  favoritesCount: z.number().int(),
+});
+
+export const UpdateProfileRequestSchema = z
+  .object({
+    username: z.string(),
+    displayName: z.string().nullable(),
+    bio: z.string().nullable(),
+    profilePictureUrl: z.string().nullable(),
+  })
+  .partial();
+
+export const UsernameAvailabilitySchema = z.object({
+  available: z.boolean(),
+  reason: z.string().optional(),
+});
+
+export const UploadUrlResponseSchema = z.object({
+  uploadUrl: z.string(),
+  publicUrl: z.string(),
+  expiresIn: z.number(),
+});
+
+export const OtherUserProfileSchema = z.object({
+  user: PublicUserSchema.extend({ bio: z.string().nullable() }),
+  stats: z.object({
+    booksFinishedThisYear: z.number().int(),
+    finishedCount: z.number().int(),
+  }),
+  followerCount: z.number().int(),
+  followingCount: z.number().int(),
+  isFollowing: z.boolean(),
+  currentlyReading: z.array(UserBookSchema),
+  recentlyFinished: z.array(UserBookSchema),
+  favorites: z.array(UserBookSchema),
+  publicCollections: z.array(z.lazy(() => CollectionSummarySchema)),
+});
+
+// ============================================================================
+// COLLECTIONS
+// ============================================================================
+
+export const CollectionSummarySchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  name: z.string(),
+  description: z.string().nullable(),
+  slug: z.string(),
+  colorTag: z.string().nullable(),
+  iconName: z.string().nullable(),
+  coverImageUrl: z.string().nullable(),
+  isPublic: z.boolean(),
+  sortOrder: z.number().int(),
+  createdAt: Timestamp,
+  updatedAt: Timestamp,
+  bookCount: z.number().int().optional(),
+});
+
+export const CollectionSchema = CollectionSummarySchema.extend({
+  bookCount: z.number().int(),
+  books: z.array(UserBookSchema),
+});
+
+export const CollectionsResponseSchema = z.array(CollectionSchema);
+
+// ============================================================================
+// SUBSCRIPTIONS
+// ============================================================================
+
+export const SubscriptionPlanSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  price: z.number().int().nonnegative(),
+  interval: BillingIntervalSchema,
+});
+
+export const SubscriptionResponseSchema = z.object({
+  subscription: z
+    .object({
+      id: z.string(),
+      status: SubscriptionStatusSchema,
+      currentPeriodStart: Timestamp.nullable(),
+      currentPeriodEnd: Timestamp.nullable(),
+      cancelAtPeriodEnd: z.boolean(),
+    })
+    .nullable(),
+  plan: SubscriptionPlanSchema.nullable(),
+  isActive: z.boolean(),
+  isFree: z.boolean(),
+});
+
+// ============================================================================
+// ERRORS
+// ============================================================================
+
+export const ApiErrorSchema = z.object({ error: z.string() });
+
+// ============================================================================
+// TYPES
+// ============================================================================
+
+export type ReadingStatus = z.infer<typeof ReadingStatusSchema>;
 export type User = z.infer<typeof UserSchema>;
+export type PublicUser = z.infer<typeof PublicUserSchema>;
 export type Book = z.infer<typeof BookSchema>;
 export type UserBookWithoutBook = z.infer<typeof UserBookWithoutBookSchema>;
 export type UserBook = z.infer<typeof UserBookSchema>;
-export type Review = z.infer<typeof ReviewSchema>;
-export type Follow = z.infer<typeof FollowSchema>;
-export type SubscriptionPlan = z.infer<typeof SubscriptionPlanSchema>;
-export type UserSubscription = z.infer<typeof UserSubscriptionSchema>;
-export type Collection = z.infer<typeof CollectionSchema>;
-export type UserWithStats = z.infer<typeof UserWithStatsSchema>;
-export type UserSubscriptionWithPlan = z.infer<
-  typeof UserSubscriptionWithPlanSchema
->;
-export type ApiError = z.infer<typeof ApiErrorSchema>;
-export type ProfileResponse = z.infer<typeof ProfileResponseSchema>;
 export type LibraryResponse = z.infer<typeof LibraryResponseSchema>;
-export type RateBookRequest = z.infer<typeof RateBookRequestSchema>;
-export type RateBookResponse = z.infer<typeof RateBookResponseSchema>;
-export type ReviewsResponse = z.infer<typeof ReviewsResponseSchema>;
-export type CreateReviewRequest = z.infer<typeof CreateReviewRequestSchema>;
-export type UpdateReviewRequest = z.infer<typeof UpdateReviewRequestSchema>;
-export type CreateReviewResponse = z.infer<typeof CreateReviewResponseSchema>;
-export type UpdateReviewResponse = z.infer<typeof UpdateReviewResponseSchema>;
-export type DeleteReviewResponse = z.infer<typeof DeleteReviewResponseSchema>;
+export type AddBookRequest = z.infer<typeof AddBookRequestSchema>;
+export type Review = z.infer<typeof ReviewSchema>;
 export type ReviewWithUser = z.infer<typeof ReviewWithUserSchema>;
-export type ReviewWithBook = z.infer<typeof ReviewWithBookSchema>;
-export type ReviewWithDetails = z.infer<typeof ReviewWithDetailsSchema>;
-export type SearchResult = z.infer<typeof SearchResultSchema>;
-export type SearchResponse = z.infer<typeof SearchResponseSchema>; // Array<SearchResult>
-export type AddBookToLibraryRequest = z.infer<
-  typeof AddBookToLibraryRequestSchema
->;
-export type AddBookToLibraryResponse = z.infer<
-  typeof AddBookToLibraryResponseSchema
->;
-
-// Re-export enum types
-export type ReadingStatus = z.infer<typeof ReadingStatusSchema>;
-export type UserRole = z.infer<typeof UserRoleSchema>;
-export type BillingInterval = z.infer<typeof BillingIntervalSchema>;
-export type SubscriptionStatus = z.infer<typeof SubscriptionStatusSchema>;
+export type SaveReviewRequest = z.infer<typeof SaveReviewRequestSchema>;
+export type CatalogBookResponse = z.infer<typeof CatalogBookResponseSchema>;
+export type SearchResult = z.infer<typeof SearchResultSchema> & { doc?: OpenLibraryDoc };
+export type SearchResponse = z.infer<typeof SearchResponseSchema>;
+export type SearchIngestRequest = { query: string; page: number; numFound: number; docs: Array<OpenLibraryDoc> };
+export type SearchIngestResponse = z.infer<typeof SearchIngestResponseSchema>;
+export type Reader = z.infer<typeof ReaderSchema>;
+export type UserSearchResponse = z.infer<typeof UserSearchResponseSchema>;
+export type FeedItem = z.infer<typeof FeedItemSchema>;
+export type FeedResponse = z.infer<typeof FeedResponseSchema>;
+export type ProfileStats = z.infer<typeof ProfileStatsSchema>;
+export type UpdateProfileRequest = z.infer<typeof UpdateProfileRequestSchema>;
+export type UsernameAvailability = z.infer<typeof UsernameAvailabilitySchema>;
+export type UploadUrlResponse = z.infer<typeof UploadUrlResponseSchema>;
+export type OtherUserProfile = z.infer<typeof OtherUserProfileSchema>;
+export type CollectionSummary = z.infer<typeof CollectionSummarySchema>;
+export type Collection = z.infer<typeof CollectionSchema>;
+export type SubscriptionResponse = z.infer<typeof SubscriptionResponseSchema>;
+export type ApiError = z.infer<typeof ApiErrorSchema>;
