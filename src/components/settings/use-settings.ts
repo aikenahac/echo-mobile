@@ -13,7 +13,7 @@ import * as WebBrowser from "expo-web-browser";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
 
-const SITE = "https://echobook.club";
+const SITE = "https://echoreads.app";
 
 /** Everything the Settings screen shows and does, independent of how it's drawn */
 export function useProfileQueriesForSettings() {

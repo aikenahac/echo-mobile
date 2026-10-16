@@ -55,7 +55,7 @@ The UI follows the approved redesign in `design/redesign/` (spec: `shots/r6/*.pn
 - **MMKV** via `src/lib/storage.ts` (`STORAGE_KEYS`); `useLibraryLayout()` is the reactive grid/list setting
 
 ### API Integration
-- Base URL: `process.env.EXPO_PUBLIC_API_URL` (fallback: `https://echobook.club/api`); paths are relative to `/api` and start with `/v1`
+- Base URL: `process.env.EXPO_PUBLIC_API_URL` (fallback: `https://echoreads.app/api`); paths are relative to `/api` and start with `/v1`
 - `useFetch()` in `src/lib/api/fetch-wrapper.ts` (`react-native-nitro-fetch`, adds the Clerk token)
 - Validate responses with `handleApiResponse(response, schema)`; show errors with `getErrorMessage()` (`src/lib/api/errors.ts`)
 - Collections are Premium: gate actions with `usePremiumGate().guard(...)`; treat a 403 as "open the paywall" (`isPaywallError`)

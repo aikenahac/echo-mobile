@@ -260,7 +260,7 @@
     "paidOnce": "Paid once",
     "renews": "Renews",
     "expires": "Expires",
-    "billing": "Billing on echobook.club",
+    "billing": "Billing on echoreads.app",
     "app": "App",
     "appearance": "Appearance",
     "appearanceSystem": "System",
@@ -305,7 +305,7 @@
     "benefit3": "Every book you own is still free, without limits",
     "benefit4": "Priority support and early features",
     "price": "<b>€1.99 a month</b> or <b>€19.99 once</b>, for life.",
-    "continue": "Continue on echobook.club",
+    "continue": "Continue on echoreads.app",
     "later": "Maybe later"
   },
   "collections": {

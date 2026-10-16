@@ -1,0 +1,56 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Echo banners</title>
+<link rel="stylesheet" href="file:///Users/aiken/.claude/skills/app-designer-pro/assets/device.css">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+  :root { --field:#FF6BA8; --ink:#170B11; --pink-ink:#B3165A; --paper:#FBF7F8; --disp:"Archivo", sans-serif; }
+  body { margin:0; background:#eee; display:flex; flex-direction:column; gap:24px; padding:24px; }
+  .panel[data-store="banner"] { container-type: size; background: var(--field); color: var(--ink); overflow:hidden; position:relative; }
+  .panel[data-ratio="16x9"] { width:1748px; height:983px; }
+  .panel[data-ratio="21x9"] { width:1280px; height:549px; }
+  .panel[data-ratio="3x2"]  { width:640px;  height:427px; }
+  .t { position:absolute; left:8cqw; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:3cqh; }
+  .t svg { width:22cqh; height:22cqh; }
+  .t b { font-family:var(--disp); font-stretch:62%; font-weight:900; font-size:34cqh; line-height:.85; letter-spacing:-.01em; }
+  .t span { font-family:var(--disp); font-stretch:62%; font-weight:900; font-size:11cqh; line-height:1; letter-spacing:.2px; word-spacing:.14em; text-shadow: .5cqh .5cqh 0 var(--pink-ink); }
+  .fan { position:absolute; right:7cqw; top:0; bottom:0; width:48cqw; }
+  .bk { position:absolute; height:66cqh; aspect-ratio:2/3; border-radius:.5cqh 1cqh 1cqh .5cqh; overflow:hidden; box-shadow: 0 .4cqh .5cqh rgba(23,11,17,.16), 0 4cqh 6cqh -3cqh rgba(70,8,36,.6); }
+  .bk img { width:100%; height:100%; object-fit:cover; display:block; }
+  .bk::after { content:""; position:absolute; inset:0; background: linear-gradient(90deg, rgba(0,0,0,.16) 0, rgba(255,255,255,.16) 2.5%, rgba(0,0,0,.06) 5%, transparent 9%); }
+  .stamp { position:absolute; border:1.1cqh solid var(--ink); outline:.9cqh solid var(--paper); background:var(--paper); color:var(--ink); font-family:var(--disp); font-stretch:62%; font-weight:900; font-size:8cqh; line-height:1; letter-spacing:.1cqh; padding:1.2cqh 2.4cqh .8cqh; transform:rotate(-7deg); white-space:nowrap; }
+  /* three covers: left, right, centre in front */
+  .a { left:2cqw; top:19cqh; transform:rotate(-8deg); }
+  .c { left:25cqw; top:15cqh; transform:rotate(7deg); }
+  .b { left:13cqw; top:12cqh; height:76cqh; z-index:2; }
+  .stamp { left:30cqw; top:70cqh; z-index:3; }
+  /* wide: fan can sit further right and the text block shrinks */
+  [data-ratio="21x9"] .t b { font-size:40cqh; } [data-ratio="21x9"] .t svg { width:28cqh; height:28cqh; } [data-ratio="21x9"] .t span { font-size:13cqh; }
+  [data-ratio="21x9"] .a { left:6cqw; } [data-ratio="21x9"] .c { left:24cqw; } [data-ratio="21x9"] .b { left:14.5cqw; } [data-ratio="21x9"] .stamp { left:28cqw; }
+  [data-ratio="21x9"] .fan { width:42cqw; right:9cqw; }
+  [data-ratio="3x2"] .t { left:7cqw; } [data-ratio="3x2"] .t b { font-size:28cqh; } [data-ratio="3x2"] .t svg { width:19cqh; height:19cqh; } [data-ratio="3x2"] .t span { font-size:9cqh; }
+  [data-ratio="3x2"] .fan { right:5cqw; width:46cqw; }
+  [data-ratio="3x2"] .bk { height:58cqh; } [data-ratio="3x2"] .b { height:68cqh; left:14cqw; top:16cqh; } [data-ratio="3x2"] .a { left:2cqw; top:24cqh; } [data-ratio="3x2"] .c { left:27cqw; top:20cqh; } [data-ratio="3x2"] .stamp { left:31cqw; top:68cqh; font-size:7cqh; }
+
+  [data-ratio="16x9"] .fan, [data-ratio="3x2"] .fan { inset:0; width:auto; right:auto; }
+  [data-ratio="16x9"] .t span { font-size:9.5cqh; }
+  [data-ratio="16x9"] .bk { height:56cqh; } [data-ratio="16x9"] .b { height:66cqh; }
+  [data-ratio="16x9"] .a { left:53cqw; top:24cqh; } [data-ratio="16x9"] .b { left:64cqw; top:14cqh; } [data-ratio="16x9"] .c { left:73.5cqw; top:20cqh; }
+  [data-ratio="16x9"] .stamp { left:79cqw; top:66cqh; font-size:7.5cqh; }
+  [data-ratio="3x2"] .t span { font-size:7cqh; }
+  [data-ratio="3x2"] .bk { height:50cqh; } [data-ratio="3x2"] .b { height:60cqh; }
+  [data-ratio="3x2"] .a { left:48cqw; top:30cqh; } [data-ratio="3x2"] .b { left:60cqw; top:20cqh; } [data-ratio="3x2"] .c { left:72cqw; top:26cqh; }
+  [data-ratio="3x2"] .stamp { left:74cqw; top:72cqh; font-size:6.5cqh; }
+</style></head><body>
+<section class="panel" data-store="banner" data-ratio="16x9" data-name="banner-16x9">
+  <div class="t"><svg viewBox="0 0 344 344"><path d="M178 0h70v226l-35-30-35 30z" fill="#B3165A"/><path d="M124 0h70v250l-35-30-35 30z" fill="#170B11"/></svg><b>Echo</b><span>Every page, counted.</span></div>
+  <div class="fan"><div class="bk a"><img src="../../covers/9781455563920.jpg"></div><div class="bk c"><img src="../../covers/9780385550369.jpg"></div><div class="bk b"><img src="../../covers/9781635575637.jpg"></div><div class="stamp">FINISHED</div></div>
+</section>
+<section class="panel" data-store="banner" data-ratio="21x9" data-name="banner-21x9">
+  <div class="t"><svg viewBox="0 0 344 344"><path d="M178 0h70v226l-35-30-35 30z" fill="#B3165A"/><path d="M124 0h70v250l-35-30-35 30z" fill="#170B11"/></svg><b>Echo</b><span>Every page, counted.</span></div>
+  <div class="fan"><div class="bk a"><img src="../../covers/9781455563920.jpg"></div><div class="bk c"><img src="../../covers/9780385550369.jpg"></div><div class="bk b"><img src="../../covers/9781635575637.jpg"></div><div class="stamp">FINISHED</div></div>
+</section>
+<section class="panel" data-store="banner" data-ratio="3x2" data-name="banner-3x2">
+  <div class="t"><svg viewBox="0 0 344 344"><path d="M178 0h70v226l-35-30-35 30z" fill="#B3165A"/><path d="M124 0h70v250l-35-30-35 30z" fill="#170B11"/></svg><b>Echo</b><span>Every page, counted.</span></div>
+  <div class="fan"><div class="bk a"><img src="../../covers/9781455563920.jpg"></div><div class="bk c"><img src="../../covers/9780385550369.jpg"></div><div class="bk b"><img src="../../covers/9781635575637.jpg"></div><div class="stamp">FINISHED</div></div>
+</section>
+<script src="file:///Users/aiken/.claude/skills/app-designer-pro/assets/device.js"></script></body></html>

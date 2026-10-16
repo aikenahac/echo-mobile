@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "club.echobook.app",
+      "bundleIdentifier": "app.echoreads.mobile",
       "icon": "./assets/images/icons/echo.icon",
       "usesAppleSignIn": true,
       "infoPlist": {
@@ -24,7 +24,7 @@
         "backgroundImage": "./assets/images/icons/echo_icon_background.png",
         "monochromeImage": "./assets/images/icons/echo_icon_monochrome.png"
       },
-      "package": "club.echobook.app",
+      "package": "app.echoreads.mobile",
       "predictiveBackGestureEnabled": false
     },
     "plugins": [
@@ -98,11 +98,13 @@
     },
     "extra": {
       "router": {
-        "origin": false
+        "origin": false,
+        "root": "./src/app"
       },
       "eas": {
-        "projectId": "9ba87fbc-711c-457e-ba0c-f6d275e8a1f7"
+        "projectId": "ef5a368c-66cf-496f-80ff-fe88b248f6bd"
       }
-    }
+    },
+    "owner": "aiken"
   }
 }

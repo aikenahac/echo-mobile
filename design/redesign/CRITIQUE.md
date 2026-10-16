@@ -83,7 +83,7 @@ One independent critic (fresh agent), same agent every round. Rubric: app-design
 - Premium on the small phone: the 4th benefit is hidden on purpose below 760pt height.
 
 **Open before engineering**
-- IAP decision: "Continue on echobook.club" needs the external-purchase entitlement (guideline 3.1.1), or switch to in-app purchase.
+- IAP decision: "Continue on echoreads.app" needs the external-purchase entitlement (guideline 3.1.1), or switch to in-app purchase.
 - Screens not drawn: find-users list, settings, review editor (with its private toggle), edit profile, collection detail and editor, Want/Finished shelf views, list view, sign-in.
 
 ## Round 4 (shots/r4): auth and first open, added after sign-off

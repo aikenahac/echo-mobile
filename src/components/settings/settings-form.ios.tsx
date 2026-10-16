@@ -105,7 +105,7 @@ export function SettingsForm() {
   );
 }
 
-/** A row that opens a page on echobook.club: the title and an outward arrow */
+/** A row that opens a page on echoreads.app: the title and an outward arrow */
 function LinkRow({ title, onPress, accent }: { title: string; onPress: () => void; accent?: boolean }) {
   const colors = useColors();
   const color = accent ? colors.pinkInk : colors.ink;

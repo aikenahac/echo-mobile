@@ -8,7 +8,7 @@ import { Trans, useTranslation } from "react-i18next";
 import { ScrollView, Text, useWindowDimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const SITE = "https://echobook.club";
+const SITE = "https://echoreads.app";
 const COVERS = {
   pachinko: require("../../../assets/images/covers/pachinko.jpg"),
   piranesi: require("../../../assets/images/covers/piranesi.jpg"),

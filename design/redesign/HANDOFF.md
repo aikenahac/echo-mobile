@@ -142,7 +142,7 @@ No cards: group with space and 0.5pt hairlines.
      - "Continue with Apple" (black; use the native `expo-apple-authentication` button if it fits the look, otherwise
        follow Apple's button guidelines), "Continue with Google" (paper capsule, official 4-colour G), and a
        "Use email instead" text button.
-     - Terms and Privacy links underneath, pointing to echobook.club `/documents/terms-of-service` and `/documents/privacy-policy`.
+     - Terms and Privacy links underneath, pointing to echoreads.app `/documents/terms-of-service` and `/documents/privacy-policy`.
      - On small screens the cover fan is hidden.
    - **Sign in** (paper):
      - Fields: Email, then Password with a show/hide eye.
@@ -195,7 +195,7 @@ No cards: group with space and 0.5pt hairlines.
    - **Settings** (`22`, pushed from You): native grouped form via `@expo/ui`.
      - Account row (opens Edit profile).
      - Plan: Echo Premium with a LIFETIME stamp, plus "Paid once 4 Mar 2026". Monthly plans show "Renews 4 Nov 2026".
-       Then Billing on echobook.club.
+       Then Billing on echoreads.app.
      - App: Appearance, Language, Library layout.
      - Terms and Privacy links.
      - Sign out, and **Delete account**. App Store guideline 5.1.1(v) requires in-app deletion, and the API has no
@@ -217,7 +217,7 @@ Stub these behind clearly named hooks, with a TODO and mock data. Do not invent 
 
 ## Open decisions (ask the owner; do not decide)
 
-1. **Premium purchase.** The design says "Continue on echobook.club". App Review guideline 3.1.1 needs IAP, or the
+1. **Premium purchase.** The design says "Continue on echoreads.app". App Review guideline 3.1.1 needs IAP, or the
    external-purchase link entitlement. Keep the button behind one component so the label and action can change.
 2. **Account deletion.** Apple requires it, and the backend has no endpoint yet.
 3. **Anything not drawn** (Want/Favourites grid view, the collection icon-picker list, the forgot-password step 1,

@@ -10,7 +10,7 @@ Full reference with every field and error: `/Users/aiken/repos/projects/echo/doc
 
 > **Backend branch.** The new endpoints live on the `feat/mobile-api-parity` branch of the `echo` repo and are not
 > deployed yet. Point `EXPO_PUBLIC_API_URL` at a local `pnpm dev` of that branch (`http://<your-mac-ip>:3000/api`)
-> until it ships to echobook.club.
+> until it ships to echoreads.app.
 
 ---
 
@@ -324,7 +324,7 @@ Library collections row's +) opens the Premium paywall instead. Also treat any *
 Limits: name 1–100 characters, description up to 1000, `colorTag`/`iconName` up to 50.
 
 ### Premium paywall
-- **No API for buying.** The "Continue on echobook.club" button opens `https://echobook.club/subscription` in the
+- **No API for buying.** The "Continue on echoreads.app" button opens `https://echoreads.app/subscription` in the
   system browser (`expo-web-browser`). Keep it behind the one component the HANDOFF asks for. The IAP decision is still open.
 - **Prices** ("€1.99 a month or €19.99 once") have **no public API**: `GET /subscriptions` only returns the user's own
   plan. Keep the copy in i18n for now and flag it.
@@ -361,8 +361,8 @@ Limits: name 1–100 characters, description up to 1000, `colorTag`/`iconName` u
 - Plan: `GET /subscriptions` → `{ subscription: { status, currentPeriodEnd, cancelAtPeriodEnd } | null, plan: { name, price (cents), interval }, isActive, isFree }`.
   Show "Renews" or "Expires" with `currentPeriodEnd`, or "lifetime" when `plan.interval === "lifetime"`. Use `isPremium`
   from `/profile` for gating, not `isFree`.
-- "Manage subscription" → open `https://echobook.club/subscription` in the browser.
-- Legal: `https://echobook.club/documents/privacy-policy` and `/documents/terms-of-service`.
+- "Manage subscription" → open `https://echoreads.app/subscription` in the browser.
+- Legal: `https://echoreads.app/documents/privacy-policy` and `/documents/terms-of-service`.
 - Sign out: Clerk `signOut()`, then clear the React Query cache.
 
 ---

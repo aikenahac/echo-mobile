@@ -1,0 +1,61 @@
+{
+  "me": {
+    "first": "Naomie",
+    "last": "Effertz",
+    "name": "Naomie Effertz",
+    "user": "naomie.reads",
+    "email": "naomie.effertz@gmail.com"
+  },
+  "people": {
+    "luka": {
+      "first": "Lucius",
+      "last": "Koch",
+      "name": "Lucius Koch",
+      "user": "lucius.k"
+    },
+    "ana": {
+      "first": "Annie",
+      "last": "Daniel",
+      "name": "Annie Daniel",
+      "user": "anniedv"
+    },
+    "maja": {
+      "first": "Mayra",
+      "last": "Moore",
+      "name": "Mayra Moore",
+      "user": "mayra.moore"
+    },
+    "tine": {
+      "first": "Twila",
+      "last": "Gibson",
+      "name": "Twila Gibson",
+      "user": "twila.gibson"
+    },
+    "anamarija": {
+      "first": "Audra",
+      "last": "Cronin",
+      "name": "Audra Cronin",
+      "user": "audra.c"
+    },
+    "hana": {
+      "first": "Hassan",
+      "last": "Donnelly",
+      "name": "Hassan Donnelly",
+      "user": "hassan.reads"
+    },
+    "anze": {
+      "first": "Alec",
+      "last": "Crona",
+      "name": "Alec Crona",
+      "user": "alec.c"
+    }
+  },
+  "bios": {
+    "ana": "Reads classics and the occasional thriller. Mostly Russians.",
+    "anamarija": "Poetry, mostly. Some science fiction on trains.",
+    "hana": "Bookseller in Portland. Ask me about translated fiction.",
+    "anze": "Crime novels and cycling books."
+  },
+  "handleOnly": "ideal_ruin",
+  "city": "Portland"
+}

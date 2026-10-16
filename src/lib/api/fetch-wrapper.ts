@@ -44,7 +44,7 @@ export function useFetch() {
     async (endpoint: string, options: FetchOptions = {}) => {
       const token = await getToken();
 
-      const baseUrl = process.env.EXPO_PUBLIC_API_URL ?? "https://echobook.club/api";
+      const baseUrl = process.env.EXPO_PUBLIC_API_URL ?? "https://echoreads.app/api";
       const url = baseUrl + endpoint;
 
       return fetchWithAuth(url, token, options);

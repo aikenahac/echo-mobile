@@ -8,7 +8,7 @@
    review, follow) happens a few times a week; logging pages happens most days.
 3. **Feel.** Warm, literate, a little loud. References outside apps: a fluorescent risograph zine from an
    independent bookshop, the ribbon marker sewn into a hardback, a well-lit bookshop window at night.
-4. **What exists.** Name "Echo" / echobook.club. Primary pink (web: `oklch(0.823 0.12 346)` ≈ `#F5A3C7`,
+4. **What exists.** Name "Echo" / echoreads.app. Primary pink (web: `oklch(0.823 0.12 346)` ≈ `#F5A3C7`,
    mobile: `#FDA5D5`). EB Garamond + IBM Plex Mono on the web. Real covers in `design/covers/`.
 5. **Need.** A complete redesign of the mobile app covering the handoff's feature list.
 6. **Hard requirement (user):** the primary colour is a nice shade of pink.
@@ -208,7 +208,7 @@ Private off: "Public reviews show on the book and in your followers' Friends fee
 
 **Settings.**
 - Neža Kovač, neza.kovac@gmail.com
-- Plan: Echo Premium (LIFETIME), Paid once 4 Mar 2026, Billing on echobook.club
+- Plan: Echo Premium (LIFETIME), Paid once 4 Mar 2026, Billing on echoreads.app
 - App: Appearance System, Language English, Library layout Grid
 - Terms of Service, Privacy Policy
 - Sign out, Delete account

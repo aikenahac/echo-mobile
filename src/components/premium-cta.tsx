@@ -6,11 +6,11 @@ import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { AppState } from "react-native";
 
-const SUBSCRIBE_URL = "https://echobook.club/subscription";
+const SUBSCRIBE_URL = "https://echoreads.app/subscription";
 
 /**
  * The one place the Premium purchase happens (HANDOFF.md open decision 1).
- * For now: "Continue on echobook.club" in the browser, then refresh /profile when the
+ * For now: "Continue on echoreads.app" in the browser, then refresh /profile when the
  * app comes back so isPremium updates. Swap this component's body for in-app purchase
  * (or the external-purchase link entitlement) without touching the paywall.
  */
