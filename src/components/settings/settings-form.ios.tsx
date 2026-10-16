@@ -2,7 +2,7 @@ import { Avatar, DisplayText, Stamp } from "@/components/echo";
 import { useColors } from "@/lib/theme";
 import { Host } from "@expo/ui";
 import { Button, Form, HStack, Image, LabeledContent, Picker, RNHostView, Section, Spacer, Text, VStack } from "@expo/ui/swift-ui";
-import { font, foregroundStyle, listRowBackground, listRowInsets, pickerStyle, scrollContentBackground, tag, tint } from "@expo/ui/swift-ui/modifiers";
+import { accessibilityLabel, font, foregroundStyle, listRowBackground, listRowInsets, pickerStyle, scrollContentBackground, tag, tint } from "@expo/ui/swift-ui/modifiers";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { useProfileQueriesForSettings } from "./use-settings";
@@ -37,7 +37,17 @@ export function SettingsForm() {
                 </RNHostView>
               )}
               <VStack alignment="leading" spacing={2}>
-                <Text modifiers={[font({ textStyle: "headline" }), foregroundStyle({ type: "color", color: colors.ink })]}>{s.name}</Text>
+                <HStack spacing={4}>
+                  <Text modifiers={[font({ textStyle: "headline" }), foregroundStyle({ type: "color", color: colors.ink })]}>{s.name}</Text>
+                  {s.isAdmin && (
+                    <Image
+                      systemName="sparkle"
+                      size={13}
+                      color={colors.ink}
+                      modifiers={[accessibilityLabel(t("badges.systemAdmin"))]}
+                    />
+                  )}
+                </HStack>
                 <Text modifiers={[font({ textStyle: "subheadline" }), secondary]}>{s.email}</Text>
               </VStack>
               <Spacer />

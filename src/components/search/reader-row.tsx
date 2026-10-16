@@ -1,4 +1,5 @@
-import { Avatar, CapsuleButton } from "@/components/echo";
+import { AdminBadge, Avatar, CapsuleButton } from "@/components/echo";
+import { isAdmin } from "@/lib/books";
 import type { Reader } from "@/lib/schemas";
 import { useColors } from "@/lib/theme";
 import { useTranslation } from "react-i18next";
@@ -22,9 +23,12 @@ export function ReaderRow({ reader, onToggle, onOpen }: { reader: Reader; onTogg
     >
       <Avatar user={reader} size={44} />
       <View style={{ flex: 1, minWidth: 0 }}>
-        <Text numberOfLines={1} style={{ fontSize: 17, fontWeight: "600", letterSpacing: -0.4, color: colors.ink }}>
-          {name}
-        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+          <Text numberOfLines={1} style={{ flexShrink: 1, fontSize: 17, fontWeight: "600", letterSpacing: -0.4, color: colors.ink }}>
+            {name}
+          </Text>
+          {isAdmin(reader) && <AdminBadge size={14} />}
+        </View>
         {handle && <Text style={{ fontSize: 13, lineHeight: 18, color: colors.ink2 }}>{handle}</Text>}
         {!!reader.bio && (
           <Text numberOfLines={2} style={{ fontSize: 13, lineHeight: 18, color: colors.ink2, marginTop: 2 }}>

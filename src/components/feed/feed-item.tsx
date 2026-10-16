@@ -1,5 +1,5 @@
-import { Avatar, Cover, DisplayText, Stamp, Stars } from "@/components/echo";
-import { displayName } from "@/lib/books";
+import { AdminBadge, Avatar, Cover, DisplayText, Stamp, Stars } from "@/components/echo";
+import { displayName, isAdmin } from "@/lib/books";
 import { relativeTime } from "@/lib/dates";
 import type { FeedItem } from "@/lib/schemas";
 import { PLATE_OFFSET, spacing, useColors } from "@/lib/theme";
@@ -48,6 +48,7 @@ export function FeedItemView({ item, onOpenBook, onOpenUser }: Props) {
         <View style={{ flex: 1, minWidth: 0 }}>
           <Who
             name={name}
+            admin={isAdmin(item.user)}
             verb={t("friends.startedReading")}
             when={when}
             onField
@@ -123,6 +124,7 @@ export function FeedItemView({ item, onOpenBook, onOpenUser }: Props) {
             <>
               <Who
                 name={name}
+                admin={isAdmin(item.user)}
                 verb={t("friends.finished")}
                 when={when}
                 onPressName={openUser}
@@ -186,6 +188,7 @@ export function FeedItemView({ item, onOpenBook, onOpenUser }: Props) {
             <>
               <Who
                 name={name}
+                admin={isAdmin(item.user)}
                 verb={t("friends.reviewed")}
                 when={when}
                 onPressName={openUser}
@@ -238,12 +241,14 @@ export function FeedItemView({ item, onOpenBook, onOpenUser }: Props) {
 
 function Who({
   name,
+  admin,
   verb,
   when,
   onField,
   onPressName,
 }: {
   name: string;
+  admin?: boolean;
   verb: string;
   when: string;
   onField?: boolean;
@@ -275,7 +280,8 @@ function Who({
           suppressHighlighting
         >
           {name}
-        </Text>{" "}
+        </Text>
+        {admin && <>{" "}<AdminBadge color={ink} /></>}{" "}
         {verb}
       </Text>
       <Text

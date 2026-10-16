@@ -1,7 +1,7 @@
 import {
   type UpdateProfileRequest,
   type User,
-  MutationResponseSchema,
+  UpdateProfileResponseSchema,
   UserSchema,
 } from '@/lib/schemas';
 import { Endpoints } from './endpoints';
@@ -26,7 +26,7 @@ export function useUsersApi() {
       method: 'PUT',
       body: JSON.stringify(changes),
     });
-    return handleApiResponse(response, MutationResponseSchema);
+    return handleApiResponse(response, UpdateProfileResponseSchema);
   };
 
   return { getMe, updateMe };

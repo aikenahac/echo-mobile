@@ -1,12 +1,13 @@
 import {
+  AdminBadge,
   Avatar,
   Cover,
   DisplayText,
   FieldBand,
   PlateNumber,
 } from "@/components/echo";
-import { bookTotal, displayName } from "@/lib/books";
-import type { Book, PublicUser, UserBook } from "@/lib/schemas";
+import { bookTotal, displayName, isAdmin } from "@/lib/books";
+import type { Book, PublicUser, User, UserBook } from "@/lib/schemas";
 import { spacing, useColors } from "@/lib/theme";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
@@ -21,7 +22,9 @@ import {
 type Person = Pick<
   PublicUser,
   "displayName" | "username" | "profilePictureUrl"
-> & { bio?: string | null; email?: string };
+> &
+  Partial<Pick<PublicUser, "isAdmin">> &
+  Partial<Pick<User, "role">> & { bio?: string | null; email?: string };
 
 /** Square 64pt avatar, the name in Archivo, @username, and the bio (r6 09) */
 export function ProfileHead({
@@ -46,14 +49,17 @@ export function ProfileHead({
       >
         <Avatar user={user} size={64} />
         <View style={{ flex: 1, minWidth: 0 }}>
-          <DisplayText
-            variant="heroTitle"
-            numberOfLines={2}
-            style={{ fontFamily: "ArchivoCondensed-Black", color: colors.ink }}
-            accessibilityRole="header"
-          >
-            {name}
-          </DisplayText>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+            <DisplayText
+              variant="heroTitle"
+              numberOfLines={2}
+              style={{ flexShrink: 1, fontFamily: "ArchivoCondensed-Black", color: colors.ink }}
+              accessibilityRole="header"
+            >
+              {name}
+            </DisplayText>
+            {isAdmin(user) && <AdminBadge size={20} />}
+          </View>
           {handle && (
             <Text style={{ fontSize: 15, color: colors.ink2, marginTop: 2 }}>
               {handle}

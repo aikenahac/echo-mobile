@@ -368,5 +368,8 @@
     "previewStarted": "started reading",
     "previewWhen": "Piranesi · just now",
     "continue": "Continue"
+  },
+  "badges": {
+    "systemAdmin": "System Administrator"
   }
 }

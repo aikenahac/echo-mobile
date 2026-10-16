@@ -29,3 +29,8 @@ export function initialOf(user: Pick<PublicUser, "displayName" | "username"> & {
 }
 
 export type ProfileLike = Pick<User, "displayName" | "username" | "email">;
+
+/** System administrators get the sparkle badge: others carry `isAdmin`, the signed-in user a role */
+export function isAdmin(user: Partial<Pick<PublicUser, "isAdmin">> & Partial<Pick<User, "role">>) {
+  return user.isAdmin === true || user.role === "admin";
+}

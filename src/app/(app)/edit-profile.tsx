@@ -43,6 +43,7 @@ function Editor({ me }: { me: User }) {
   const [username, setUsername] = useState(me.username ?? "");
   const [bio, setBio] = useState(me.bio ?? "");
   const [photo, setPhoto] = useState<string | null>(me.profilePictureUrl);
+  const [photoBlurhash, setPhotoBlurhash] = useState<string | null>(me.profilePictureBlurhash ?? null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<{ field: "username" | "form"; message: string } | null>(null);
 
@@ -59,9 +60,26 @@ function Editor({ me }: { me: User }) {
   if (displayName.trim() !== (me.displayName ?? "")) changes.displayName = displayName.trim() || null;
   if (username !== (me.username ?? "")) changes.username = username;
   if (bio.trim() !== (me.bio ?? "")) changes.bio = bio.trim() || null;
-  if (photo !== me.profilePictureUrl) changes.profilePictureUrl = photo;
   const dirty = Object.keys(changes).length > 0;
   const count = new Intl.NumberFormat(i18n.language);
+
+  /** The photo saves on its own, apart from the text fields; on failure the old one stays */
+  const savePhoto = async (url: string | null) => {
+    const saved = await updateProfile.mutateAsync({ profilePictureUrl: url });
+    setPhoto(saved.profilePictureUrl ?? url);
+    setPhotoBlurhash(saved.profilePictureBlurhash ?? null);
+  };
+
+  const removePhoto = async () => {
+    setUploading(true);
+    try {
+      await savePhoto(null);
+    } catch (e) {
+      Alert.alert(getErrorMessage(e));
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const pickPhoto = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ["images"], allowsEditing: true, aspect: [1, 1], quality: 0.8 });
@@ -71,7 +89,7 @@ function Editor({ me }: { me: User }) {
     const type = (["image/jpeg", "image/png", "image/webp"].includes(asset.mimeType ?? "") ? asset.mimeType : "image/jpeg") as ImageContentType;
     setUploading(true);
     try {
-      setPhoto(await uploadProfilePicture(asset.uri, type));
+      await savePhoto(await uploadProfilePicture(asset.uri, type));
     } catch (e) {
       Alert.alert(getErrorMessage(e));
     } finally {
@@ -83,7 +101,7 @@ function Editor({ me }: { me: User }) {
     if (!photo) return pickPhoto();
     Alert.alert(t("editProfile.changePhoto"), undefined, [
       { text: t("editProfile.changePhoto"), onPress: pickPhoto },
-      { text: t("editProfile.removePhoto"), style: "destructive", onPress: () => setPhoto(null) },
+      { text: t("editProfile.removePhoto"), style: "destructive", onPress: removePhoto },
       { text: t("common.cancel"), style: "cancel" },
     ]);
   };
@@ -145,7 +163,7 @@ function Editor({ me }: { me: User }) {
       >
         <View style={{ alignItems: "center", gap: 10 }}>
           <View>
-            <Avatar user={{ ...me, displayName: displayName || me.displayName, profilePictureUrl: photo }} size={96} />
+            <Avatar user={{ ...me, displayName: displayName || me.displayName, profilePictureUrl: photo, profilePictureBlurhash: photoBlurhash }} size={96} />
             {uploading && (
               <View style={{ position: "absolute", inset: 0, alignItems: "center", justifyContent: "center", backgroundColor: fixed.dimmer, borderRadius: 6 }}>
                 <ActivityIndicator color={fixed.onColor} />

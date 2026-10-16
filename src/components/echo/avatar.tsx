@@ -5,7 +5,7 @@ import { Image } from "expo-image";
 import { Text, View, type StyleProp, type ViewStyle } from "react-native";
 
 type Props = {
-  user: Pick<PublicUser, "displayName" | "username" | "profilePictureUrl"> & { email?: string };
+  user: Pick<PublicUser, "displayName" | "username" | "profilePictureUrl"> & Partial<Pick<PublicUser, "profilePictureBlurhash">> & { email?: string };
   /** Tile size: 36 in rows, 44 in reader rows, 64 on the profile, 96 in edit */
   size?: number;
   /** Tile ground; on the field the tile is a lighter wash */
@@ -37,7 +37,13 @@ export function Avatar({ user, size = 36, background, style }: Props) {
       ]}
     >
       {user.profilePictureUrl ? (
-        <Image source={{ uri: user.profilePictureUrl }} style={{ width: size, height: size }} contentFit="cover" />
+        <Image
+          source={{ uri: user.profilePictureUrl }}
+          placeholder={user.profilePictureBlurhash ? { blurhash: user.profilePictureBlurhash } : undefined}
+          transition={200}
+          style={{ width: size, height: size }}
+          contentFit="cover"
+        />
       ) : (
         <Text style={{ fontFamily: fonts.displayXB, fontSize: Math.round(size * 0.44), color: colors.ink }} allowFontScaling={false}>
           {initialOf(user)}

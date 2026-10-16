@@ -37,6 +37,7 @@ export const UserSchema = z.object({
   displayName: z.string().nullable(),
   bio: z.string().nullable(),
   profilePictureUrl: z.string().nullable(),
+  profilePictureBlurhash: z.string().nullable().optional(),
   role: UserRoleSchema,
   isPremium: z.boolean(),
   planName: z.string().nullable(),
@@ -50,6 +51,9 @@ export const PublicUserSchema = z.object({
   username: z.string().nullable(),
   displayName: z.string().nullable(),
   profilePictureUrl: z.string().nullable(),
+  profilePictureBlurhash: z.string().nullable().optional(),
+  /** System administrator (sparkle badge); optional until every server sends it */
+  isAdmin: z.boolean().optional(),
 });
 
 // ============================================================================
@@ -110,6 +114,13 @@ export const AddBookResponseSchema = z.object({
 });
 
 export const MutationResponseSchema = z.object({ success: z.boolean() }).loose();
+
+/** PUT /profile: echoes the photo (and its blurhash) when profilePictureUrl was set */
+export const UpdateProfileResponseSchema = z.object({
+  success: z.boolean(),
+  profilePictureUrl: z.string().nullable().optional(),
+  profilePictureBlurhash: z.string().nullable().optional(),
+});
 
 // ============================================================================
 // REVIEWS

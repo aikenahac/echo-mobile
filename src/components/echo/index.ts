@@ -1,3 +1,4 @@
+export { AdminBadge } from "./admin-badge";
 export { Avatar } from "./avatar";
 export { CapsuleButton } from "./capsule-button";
 export { CircleButton } from "./circle-button";

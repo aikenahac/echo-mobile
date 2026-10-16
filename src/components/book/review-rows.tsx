@@ -1,5 +1,5 @@
-import { Avatar, DisplayText, Hairline } from "@/components/echo";
-import { displayName } from "@/lib/books";
+import { AdminBadge, Avatar, DisplayText, Hairline } from "@/components/echo";
+import { displayName, isAdmin } from "@/lib/books";
 import { shortDate } from "@/lib/dates";
 import type { Review, ReviewWithUser } from "@/lib/schemas";
 import { useColors } from "@/lib/theme";
@@ -51,7 +51,8 @@ export function FollowingReviews({ reviews }: { reviews: Array<ReviewWithUser> }
             <Avatar user={r.user} />
             <View style={{ flex: 1, minWidth: 0 }}>
               <Text style={{ fontSize: 15, color: colors.ink2 }}>
-                <Text style={{ fontWeight: "600", color: colors.ink }}>{displayName(r.user)}</Text> · {shortDate(r.createdAt)}
+                <Text style={{ fontWeight: "600", color: colors.ink }}>{displayName(r.user)}</Text>
+                {isAdmin(r.user) && <>{" "}<AdminBadge /></>} · {shortDate(r.createdAt)}
               </Text>
               <Text style={{ fontSize: 15, lineHeight: 21, color: colors.ink, marginTop: 3 }}>{r.content}</Text>
             </View>

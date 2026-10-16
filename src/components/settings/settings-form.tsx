@@ -1,4 +1,4 @@
-import { Avatar, CapsuleButton, DisplayText, Hairline } from "@/components/echo";
+import { AdminBadge, Avatar, CapsuleButton, DisplayText, Hairline } from "@/components/echo";
 import { spacing, useColors } from "@/lib/theme";
 import { useTranslation } from "react-i18next";
 import { Pressable, ScrollView, Text, View } from "react-native";
@@ -17,7 +17,10 @@ export function SettingsForm() {
       <Pressable onPress={s.editProfile} style={{ flexDirection: "row", gap: 12, alignItems: "center", marginTop: 24 }}>
         {s.user && <Avatar user={s.user} size={44} />}
         <View>
-          <Text style={{ fontSize: 17, fontWeight: "600", color: colors.ink }}>{s.name}</Text>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+            <Text style={{ fontSize: 17, fontWeight: "600", color: colors.ink }}>{s.name}</Text>
+            {s.isAdmin && <AdminBadge />}
+          </View>
           <Text style={{ fontSize: 15, color: colors.ink2 }}>{s.email}</Text>
         </View>
       </Pressable>

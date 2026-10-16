@@ -17,7 +17,7 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_c2VsZWN0LXdvbGYtNDkuY2xlcmsuYWNjb3VudHMuZGV2JA",
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_live_Y2xlcmsuZWNob2Jvb2suY2x1YiQ",
         "EXPO_PUBLIC_API_URL": "https://echoreads.app/api"
       }
     },

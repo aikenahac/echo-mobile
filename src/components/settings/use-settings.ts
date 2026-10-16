@@ -3,7 +3,7 @@ import { useProfile } from "@/hooks/api/user/use-get-me";
 import { useLibraryLayout } from "@/hooks/use-library-layout";
 import { useProfileApi } from "@/lib/api/profile";
 import { getErrorMessage } from "@/lib/api/errors";
-import { displayName } from "@/lib/books";
+import { displayName, isAdmin } from "@/lib/books";
 import { useTheme, type ColorScheme } from "@/lib/theme-context";
 import { useClerk } from "@clerk/expo";
 import { useQueryClient } from "@tanstack/react-query";
@@ -54,6 +54,7 @@ export function useProfileQueriesForSettings() {
 
   return {
     name: me ? displayName(me) : "",
+    isAdmin: !!me && isAdmin(me),
     email: me?.email ?? "",
     user: me,
     isPremium: !!me?.isPremium,
