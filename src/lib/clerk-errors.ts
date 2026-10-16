@@ -1,6 +1,6 @@
 import i18n from "i18next";
 
-export type AuthField = "email" | "password" | "code" | "form";
+export type AuthField = "email" | "password" | "legal" | "code" | "form";
 export type AuthError = { field: AuthField; message: string };
 
 type ClerkErr = { code?: string; message?: string; longMessage?: string; meta?: { paramName?: string } };
@@ -15,6 +15,7 @@ const CODES: Record<string, { field: AuthField; key: string }> = {
   form_code_incorrect: { field: "code", key: "wrongCode" },
   verification_expired: { field: "code", key: "codeExpired" },
   verification_failed: { field: "code", key: "wrongCode" },
+  form_legal_consent_required: { field: "legal", key: "legalRequired" },
   too_many_requests: { field: "form", key: "tooMany" },
 };
 
@@ -24,6 +25,8 @@ const FIELD_BY_PARAM: Record<string, AuthField> = {
   emailAddress: "email",
   password: "password",
   code: "code",
+  legal_accepted: "legal",
+  legalAccepted: "legal",
 };
 
 /**

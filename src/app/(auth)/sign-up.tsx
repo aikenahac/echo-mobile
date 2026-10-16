@@ -1,4 +1,5 @@
 import { AuthScreen, FooterLink } from "@/components/auth/auth-screen";
+import { LegalCheckbox } from "@/components/auth/legal-checkbox";
 import { PasswordRule } from "@/components/auth/password-rule";
 import { CapsuleButton, TextField } from "@/components/echo";
 import { authError, MIN_PASSWORD, type AuthError } from "@/lib/clerk-errors";
@@ -23,6 +24,7 @@ export default function SignUpScreen() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [legalAccepted, setLegalAccepted] = useState(false);
   const [error, setError] = useState<AuthError | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -30,10 +32,11 @@ export default function SignUpScreen() {
     if (!isLoaded || busy) return;
     if (!isValidEmail(email)) return setError({ field: "email", message: t(email.trim() ? "auth.errors.invalidEmail" : "auth.errors.enterEmail") });
     if (password.length < MIN_PASSWORD) return setError({ field: "password", message: t("auth.errors.passwordShort") });
+    if (!legalAccepted) return setError({ field: "legal", message: t("auth.errors.legalRequired") });
     setError(null);
     setBusy(true);
     try {
-      await signUp.create({ emailAddress: email.trim(), password });
+      await signUp.create({ emailAddress: email.trim(), password, legalAccepted });
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
       router.push({ pathname: "/verify", params: { mode: "signup", email: email.trim() } });
     } catch (err) {
@@ -85,6 +88,14 @@ export default function SignUpScreen() {
           />
           {error?.field !== "password" && <PasswordRule password={password} />}
         </View>
+        <LegalCheckbox
+          checked={legalAccepted}
+          onChange={(v) => {
+            setLegalAccepted(v);
+            if (v && error?.field === "legal") setError(null);
+          }}
+          error={error?.field === "legal" ? error.message : null}
+        />
         {(error?.field === "form" || error?.field === "code") && <Text style={{ fontSize: 13, color: colors.negative }}>{error.message}</Text>}
       </View>
     </AuthScreen>
