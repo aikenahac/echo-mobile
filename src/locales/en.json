@@ -282,7 +282,8 @@
     "deleteTitle": "Delete your account?",
     "deleteBody": "Your library, reviews, collections and follows are deleted for good. A running subscription is cancelled. This can't be undone.",
     "deleteConfirm": "Delete account",
-    "version": "Echo {{version}} ({{build}})"
+    "version": "Echo {{version}} ({{build}})",
+    "blockedUsers": "Blocked users"
   },
   "editProfile": {
     "title": "Edit profile",
@@ -371,5 +372,32 @@
   },
   "badges": {
     "systemAdmin": "System Administrator"
+  },
+  "moderation": {
+    "moreFor": "More actions for {{name}}",
+    "reportUser": "Report user",
+    "reportReview": "Report review",
+    "block": "Block user",
+    "reportBody": "Tell us what's wrong. Reports are private and reviewed by our team.",
+    "reasons": {
+      "spam": "Spam",
+      "harassment": "Harassment or bullying",
+      "hate": "Hate speech",
+      "inappropriate": "Inappropriate content",
+      "other": "Something else"
+    },
+    "details": "Details (optional)",
+    "detailsPlaceholder": "Anything else we should know?",
+    "submit": "Send report",
+    "done": "Done",
+    "reportedTitle": "Thanks for letting us know",
+    "reportedBody": "Our team will take a look. You can also block this reader so you don't see each other.",
+    "blockTitle": "Block {{name}}?",
+    "blockBody": "You won't see each other's reviews or activity, and you'll stop following each other.",
+    "blockedTitle": "Blocked users",
+    "blockedBody": "Blocked readers can't see your activity and you can't see theirs.",
+    "noneBlocked": "You haven't blocked anyone.",
+    "unblock": "Unblock",
+    "unblockName": "Unblock {{name}}"
   }
 }

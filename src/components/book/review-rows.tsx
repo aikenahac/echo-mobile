@@ -1,4 +1,5 @@
 import { AdminBadge, Avatar, DisplayText, Hairline } from "@/components/echo";
+import { ModerationMenu } from "@/components/moderation/moderation-menu";
 import { displayName, isAdmin } from "@/lib/books";
 import { shortDate } from "@/lib/dates";
 import type { Review, ReviewWithUser } from "@/lib/schemas";
@@ -56,6 +57,7 @@ export function FollowingReviews({ reviews }: { reviews: Array<ReviewWithUser> }
               </Text>
               <Text style={{ fontSize: 15, lineHeight: 21, color: colors.ink, marginTop: 3 }}>{r.content}</Text>
             </View>
+            <ModerationMenu userId={r.user.id} name={displayName(r.user)} reviewId={r.id} />
           </View>
         </View>
       ))}

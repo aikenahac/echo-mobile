@@ -63,6 +63,26 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
+        name="blocked-users"
+        options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: "",
+          headerBackButtonDisplayMode: "minimal",
+          headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="report/[type]/[id]"
+        options={{
+          presentation: "formSheet",
+          sheetAllowedDetents: [1],
+          sheetGrabberVisible: true,
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.paper },
+        }}
+      />
+      <Stack.Screen
         name="edit-profile"
         options={{
           presentation: "formSheet",

@@ -1,4 +1,5 @@
 import { AdminBadge, Avatar, Cover, DisplayText, Stamp, Stars } from "@/components/echo";
+import { ModerationMenu } from "@/components/moderation/moderation-menu";
 import { displayName, isAdmin } from "@/lib/books";
 import { relativeTime } from "@/lib/dates";
 import type { FeedItem } from "@/lib/schemas";
@@ -186,13 +187,20 @@ export function FeedItemView({ item, onOpenBook, onOpenUser }: Props) {
             </>
           ) : (
             <>
-              <Who
-                name={name}
-                admin={isAdmin(item.user)}
-                verb={t("friends.reviewed")}
-                when={when}
-                onPressName={openUser}
-              />
+              <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <Who
+                    name={name}
+                    admin={isAdmin(item.user)}
+                    verb={t("friends.reviewed")}
+                    when={when}
+                    onPressName={openUser}
+                  />
+                </View>
+                <View style={{ marginTop: -6, marginRight: -8 }}>
+                  <ModerationMenu userId={item.user.id} name={name} reviewId={item.data.id} />
+                </View>
+              </View>
               <Pressable accessibilityRole="button" onPress={open}>
                 <Text
                   numberOfLines={3}

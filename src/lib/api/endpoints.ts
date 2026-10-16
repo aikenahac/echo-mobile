@@ -25,6 +25,13 @@ export const Endpoints = {
   social: {
     follow: "/v1/social/follow",
     unfollow: (userId: string) => `/v1/social/follow/${userId}`,
+    block: "/v1/social/block",
+    unblock: (userId: string) => `/v1/social/block/${userId}`,
+    blocked: "/v1/social/blocked",
+  },
+
+  reports: {
+    create: "/v1/reports",
   },
 
   profile: {

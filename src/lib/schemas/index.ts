@@ -204,6 +204,23 @@ export const UserSearchResponseSchema = z.object({
 });
 
 // ============================================================================
+// BLOCKS & REPORTS
+// ============================================================================
+
+export const BlockedUsersResponseSchema = z.object({ users: z.array(PublicUserSchema) });
+
+export const REPORT_REASONS = ["spam", "harassment", "hate", "inappropriate", "other"] as const;
+export const ReportReasonSchema = z.enum(REPORT_REASONS);
+export const ReportTargetTypeSchema = z.enum(["user", "review"]);
+
+export const ReportRequestSchema = z.object({
+  targetType: ReportTargetTypeSchema,
+  targetId: z.string(),
+  reason: ReportReasonSchema,
+  details: z.string().max(500).optional(),
+});
+
+// ============================================================================
 // FEED
 // ============================================================================
 
@@ -227,6 +244,8 @@ export const FeedReviewItemSchema = z.object({
   user: PublicUserSchema,
   book: BookSchema,
   data: z.object({
+    /** Review id, needed to report it; optional until every server sends it */
+    id: z.string().optional(),
     content: z.string(),
     isPrivate: z.boolean(),
   }),
@@ -371,6 +390,10 @@ export type SearchResult = z.infer<typeof SearchResultSchema> & { doc?: OpenLibr
 export type SearchResponse = z.infer<typeof SearchResponseSchema>;
 export type SearchIngestRequest = { query: string; page: number; numFound: number; docs: Array<OpenLibraryDoc> };
 export type SearchIngestResponse = z.infer<typeof SearchIngestResponseSchema>;
+export type BlockedUsersResponse = z.infer<typeof BlockedUsersResponseSchema>;
+export type ReportReason = z.infer<typeof ReportReasonSchema>;
+export type ReportTargetType = z.infer<typeof ReportTargetTypeSchema>;
+export type ReportRequest = z.infer<typeof ReportRequestSchema>;
 export type Reader = z.infer<typeof ReaderSchema>;
 export type UserSearchResponse = z.infer<typeof UserSearchResponseSchema>;
 export type FeedItem = z.infer<typeof FeedItemSchema>;

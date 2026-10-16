@@ -31,6 +31,7 @@ export function SettingsForm() {
       <Row title={t("settings.appearance")} value={s.themeMode} onPress={() => s.setThemeMode(s.themeMode === "dark" ? "light" : "dark")} />
       <Row title={t("settings.libraryLayout")} value={s.layout} onPress={() => s.setLayout(s.layout === "grid" ? "list" : "grid")} />
       <Hairline />
+      <Row title={t("settings.blockedUsers")} onPress={s.blockedUsers} />
       <Row title={t("settings.terms")} onPress={s.terms} />
       <Row title={t("settings.privacy")} onPress={s.privacy} />
       <CapsuleButton title={t("settings.signOut")} variant="outline" onPress={s.signOut} style={{ marginTop: 24 }} />

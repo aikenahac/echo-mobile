@@ -14,6 +14,7 @@ export const queryKeys = {
   search: ["search"] as const,
   searchBooks: (q: string) => ["search", "books", q] as const,
   searchUsers: (q: string) => ["users", "search", q] as const,
+  blockedUsers: ["users", "blocked"] as const,
   users: ["users"] as const,
   user: (userId: string) => ["users", userId] as const,
 };

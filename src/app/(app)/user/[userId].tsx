@@ -3,10 +3,12 @@ import { CollectionRow } from "@/components/library/collection-row";
 import { ProfileHead, ReadingNowBand, ShelfStrip, YearStat } from "@/components/profile/profile-parts";
 import { useUserProfile } from "@/hooks/api/profile/use-profile-queries";
 import { useToggleFollow } from "@/hooks/api/social/use-follow";
+import { useModerationActions } from "@/hooks/use-moderation-actions";
+import { displayName } from "@/lib/books";
 import { getErrorMessage, isApiRequestError } from "@/lib/api/errors";
 import { spacing, useColors } from "@/lib/theme";
 import * as Haptics from "expo-haptics";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Alert, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -24,6 +26,7 @@ export default function UserProfileScreen() {
   const insets = useSafeAreaInsets();
   const profile = useUserProfile(userId);
   const toggleFollow = useToggleFollow();
+  const { report, confirmBlock } = useModerationActions();
 
   const openBook = (bookId: string) => router.push({ pathname: "/book/[bookId]", params: { bookId } });
 
@@ -47,6 +50,17 @@ export default function UserProfileScreen() {
   const following = p.isFollowing;
 
   return (
+    <>
+    <Stack.Toolbar placement="right">
+      <Stack.Toolbar.Menu icon="ellipsis" accessibilityLabel={t("moderation.moreFor", { name: displayName(p.user) })}>
+        <Stack.Toolbar.MenuAction icon="flag" onPress={() => report("user", p.user.id)}>
+          {t("moderation.reportUser")}
+        </Stack.Toolbar.MenuAction>
+        <Stack.Toolbar.MenuAction icon="hand.raised" destructive onPress={() => confirmBlock(p.user.id, displayName(p.user), () => router.back())}>
+          {t("moderation.block")}
+        </Stack.Toolbar.MenuAction>
+      </Stack.Toolbar.Menu>
+    </Stack.Toolbar>
     <ScrollView
       style={{ flex: 1, backgroundColor: colors.paper }}
       contentInsetAdjustmentBehavior="never"
@@ -86,5 +100,6 @@ export default function UserProfileScreen() {
         </View>
       )}
     </ScrollView>
+    </>
   );
 }

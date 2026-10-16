@@ -102,6 +102,13 @@ export function SettingsForm() {
         </Section>
 
         <Section modifiers={rows}>
+          <Button onPress={s.blockedUsers}>
+            <HStack>
+              <Text modifiers={[foregroundStyle({ type: "color", color: colors.ink })]}>{t("settings.blockedUsers")}</Text>
+              <Spacer />
+              <Image systemName="chevron.right" size={13} color={colors.ink3} />
+            </HStack>
+          </Button>
           <LinkRow title={t("settings.terms")} onPress={s.terms} />
           <LinkRow title={t("settings.privacy")} onPress={s.privacy} />
         </Section>

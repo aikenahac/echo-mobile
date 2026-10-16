@@ -70,6 +70,7 @@ export function useProfileQueriesForSettings() {
       build: Constants.expoConfig?.ios?.buildNumber ?? "1",
     }),
     editProfile: () => router.push("/edit-profile"),
+    blockedUsers: () => router.push("/blocked-users"),
     getPremium: () => router.push("/premium"),
     billing: () => open("/subscription"),
     terms: () => open("/documents/terms-of-service"),
