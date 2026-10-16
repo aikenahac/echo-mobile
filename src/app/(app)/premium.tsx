@@ -10,8 +10,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 const BENEFITS: Array<[SFSymbol, string]> = [
   ["folder", "premium.benefit1"],
   ["globe", "premium.benefit2"],
-  ["books.vertical", "premium.benefit3"],
-  ["checkmark", "premium.benefit4"],
+  ["checkmark", "premium.benefit3"],
+  ["sparkles", "premium.benefit4"],
 ];
 
 /**
