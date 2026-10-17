@@ -42,11 +42,25 @@ export default function OAuthButton({ provider, onError, style }: Props) {
   const onPress = async () => {
     setBusy(true);
     try {
-      const { createdSessionId, setActive } = await startSSOFlow({
+      const { createdSessionId, setActive, signUp, authSessionResult } = await startSSOFlow({
         strategy: apple ? "oauth_apple" : "oauth_google",
         redirectUrl: AuthSession.makeRedirectUri(),
       });
-      if (createdSessionId) await setActive!({ session: createdSessionId });
+      if (createdSessionId) {
+        await setActive!({ session: createdSessionId });
+        return;
+      }
+      if (authSessionResult?.type !== "success") return; // user closed the browser
+
+      // A new account stops at missing_requirements; the welcome screen's "By continuing you agree…" is the consent
+      if (signUp?.status === "missing_requirements" && signUp.missingFields.includes("legal_accepted")) {
+        await signUp.update({ legalAccepted: true });
+      }
+      if (signUp?.createdSessionId) {
+        await setActive!({ session: signUp.createdSessionId });
+        return;
+      }
+      onError?.(t("auth.errors.generic"));
     } catch (err) {
       onError?.(authError(err).message);
     } finally {
