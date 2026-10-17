@@ -4,6 +4,8 @@
 // Extra arguments are forwarded to `eoas publish` (e.g. -m "message", --platform ios, --rollout-percentage 10).
 
 const { spawn } = require('node:child_process');
+const { existsSync, readFileSync } = require('node:fs');
+const { parseEnv } = require('node:util');
 
 const RED_COLOR_TEXT = '\x1b[31m%s\x1b[0m';
 const GREEN_COLOR_TEXT = '\x1b[36m%s\x1b[0m';
@@ -12,8 +14,13 @@ const CHANNEL = 'production';
 // eoas exports with EXPO_NO_DOTENV=1, so the bundle's EXPO_PUBLIC_* values come from the build profile.
 const profileEnv = require('../eas.json').build[CHANNEL].env ?? {};
 
-if (!process.env.EOO_TOKEN) {
-  console.error(RED_COLOR_TEXT, 'EOO_TOKEN is not set. Create an API key for the app in the xprem dashboard and export it.');
+// Only EOO_TOKEN is taken from .env.local: its EXPO_PUBLIC_* values point at local development.
+const envLocalPath = `${__dirname}/../.env.local`;
+const EOO_TOKEN =
+  process.env.EOO_TOKEN ?? (existsSync(envLocalPath) ? parseEnv(readFileSync(envLocalPath, 'utf8')).EOO_TOKEN : undefined);
+
+if (!EOO_TOKEN) {
+  console.error(RED_COLOR_TEXT, 'EOO_TOKEN is not set. Create an API token in the xprem dashboard and add it to .env.local or export it.');
   process.exit(1);
 }
 
@@ -22,6 +29,6 @@ console.log(GREEN_COLOR_TEXT, `pnpm ${args.join(' ')}`);
 
 const child = spawn('pnpm', args, {
   stdio: 'inherit',
-  env: { ...process.env, ...profileEnv, RELEASE_CHANNEL: CHANNEL },
+  env: { ...process.env, ...profileEnv, EOO_TOKEN, RELEASE_CHANNEL: CHANNEL },
 });
 child.on('exit', (code) => process.exit(code ?? 1));

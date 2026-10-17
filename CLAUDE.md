@@ -127,7 +127,7 @@ src/
 
 - `expo-updates` served by a self-hosted xprem server at `https://ota.aiken.si` (not EAS Update); config in `app.config.ts`
 - Only production builds receive updates: `RELEASE_CHANNEL=production` (eas.json) enables them; other builds run their embedded bundle
-- Publish with `EOO_TOKEN=… pnpm ota -m "message"` (`scripts/update.js` → `eoas publish --branch production`, needs a clean git tree)
+- Publish with `pnpm ota -m "message"` (`EOO_TOKEN` from the shell or `.env.local`; `scripts/update.js` → `eoas publish --branch production`, needs a clean git tree)
 - Runtime version follows `version` (`appVersion` policy): bump `version` and rebuild for any native change
 - `certs/certificate.pem` is committed; the private key lives only on the xprem server. Keep `eoas` pinned to the server's version
 
