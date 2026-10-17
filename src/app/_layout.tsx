@@ -1,10 +1,12 @@
+import { Sentry } from "@/lib/sentry"; // first: initialises error reporting before anything else loads
 import "@/lib/i18n";
+import { isApiRequestError } from "@/lib/api/errors";
 import { NAV_THEME, useColors, useStatusBarStyle } from "@/lib/theme";
 import { ThemeProvider, useTheme } from "@/lib/theme-context";
-import { ClerkLoaded, ClerkProvider } from "@clerk/expo";
+import { ClerkLoaded, ClerkProvider, useUser } from "@clerk/expo";
 import { tokenCache } from "@clerk/expo/token-cache";
 import NetInfo from "@react-native-community/netinfo";
-import { onlineManager, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { MutationCache, onlineManager, QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider as NavThemeProvider, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
@@ -22,9 +24,20 @@ onlineManager.setEventListener((setOnline) => {
 // Keep the splash screen up until Clerk has restored the session
 SplashScreen.preventAutoHideAsync();
 
-const queryClient = new QueryClient();
+// Report only what the user can't fix: API 5xx and failures that never carried a status (bad response shape, bugs).
+// 4xx are expected (paywall, validation, not found) and offline errors are noise.
+function reportQueryError(error: unknown) {
+  if (isApiRequestError(error) && error.statusCode !== undefined && error.statusCode < 500) return;
+  if (error instanceof Error && /NSURLErrorDomain|Network request failed|timed out|Failed to fetch/i.test(error.message)) return;
+  Sentry.captureException(error);
+}
 
-export default function RootLayout() {
+const queryClient = new QueryClient({
+  queryCache: new QueryCache({ onError: reportQueryError }),
+  mutationCache: new MutationCache({ onError: reportQueryError }),
+});
+
+function RootLayout() {
   return (
     <ThemeProvider>
       <ClerkProvider publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
@@ -36,11 +49,18 @@ export default function RootLayout() {
   );
 }
 
+export default Sentry.wrap(RootLayout);
+
 function RootLayoutContent() {
+  const { user } = useUser();
   const { colorScheme } = useTheme();
   const scheme = colorScheme ?? "light";
   const colors = useColors();
   const statusBarStyle = useStatusBarStyle();
+
+  useEffect(() => {
+    Sentry.setUser(user ? { id: user.id, username: user.username ?? undefined } : null);
+  }, [user]);
 
   useEffect(() => {
     SplashScreen.hideAsync();

@@ -123,6 +123,14 @@ src/
 - Backend: run `pnpm dev` in the `echo` repo (`feat/mobile-api-parity`); seed with `pnpm db:seed:dev --email <your test user>`
 - `.env.local` sets `EXPO_PUBLIC_API_URL` (simulator: `http://localhost:3000/api`; a phone needs the Mac's LAN IP) and the Clerk key of that backend
 
+## Error Reporting
+
+- Errors go to the self-hosted **Bugsink** (`https://bugsink.aiken.si`, project 1) through `@sentry/react-native`; Bugsink speaks the Sentry protocol but ingests **error events only** (no tracing, sessions, replays, profiling)
+- Setup lives in `src/lib/sentry.ts` (imported first in `src/app/_layout.tsx`, which exports `Sentry.wrap(RootLayout)`); disabled in `__DEV__`; `environment` is the update channel (`production`, else `preview`); events are tagged `update.embedded` / `update.id`
+- The signed-in Clerk user is set on Sentry in the root layout; React Query query/mutation errors are reported unless they are 4xx or offline
+- Source maps are matched by debug ID (Metro via `getSentryExpoConfig` in `metro.config.js`). Native builds upload them through the Sentry plugin and OTA through `pnpm ota`; both need `SENTRY_AUTH_TOKEN` (EAS secret / `.env.local`; create it under Tokens in Bugsink) and skip quietly without it. `SENTRY_PROJECT=echo` (the Bugsink project slug) is set in `eas.json`. Bugsink's org is the literal `bugsinkhasnoorgs`
+- Native change: bump `version` and rebuild before shipping
+
 ## OTA Updates
 
 - `expo-updates` served by a self-hosted xprem server at `https://ota.aiken.si` (not EAS Update); config in `app.config.ts`
