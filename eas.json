@@ -28,7 +28,8 @@
       },
       "env": {
         "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_live_Y2xlcmsuZWNob3JlYWRzLmFwcCQ",
-        "EXPO_PUBLIC_API_URL": "https://echoreads.app/api"
+        "EXPO_PUBLIC_API_URL": "https://echoreads.app/api",
+        "RELEASE_CHANNEL": "production"
       }
     }
   },

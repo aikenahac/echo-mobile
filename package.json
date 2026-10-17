@@ -10,7 +10,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "build": "node ./scripts/build.js"
+    "build": "node ./scripts/build.js",
+    "ota": "node ./scripts/update.js"
   },
   "dependencies": {
     "@clerk/expo": "^3.7.8",
@@ -36,6 +37,7 @@
     "expo-status-bar": "~57.0.1",
     "expo-symbols": "~57.0.3",
     "expo-system-ui": "~57.0.4",
+    "expo-updates": "~57.0.26",
     "expo-web-browser": "~57.0.3",
     "i18next": "^26.4.4",
     "inquirer": "12.11.0",
@@ -61,6 +63,7 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.4",
+    "eoas": "3.2.5",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~57.0.2",
     "typescript": "~6.0.3"

@@ -29,6 +29,7 @@ yarn-error.*
 # macOS
 .DS_Store
 *.pem
+!certs/certificate.pem
 
 # local env files
 .env*
@@ -49,3 +50,6 @@ builds/*.apk
 builds/*.aab
 builds/*.app
 builds/*.tar.gz
+
+# Code signing private key (server-side secret, never commit it)
+private-key.pem
