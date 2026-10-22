@@ -61,6 +61,7 @@ export const Endpoints = {
 
   subscriptions: {
     get: "/v1/subscriptions",
+    sync: "/v1/subscriptions/sync",
   },
 
   users: {

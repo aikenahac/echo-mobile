@@ -11,7 +11,8 @@ import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import { useTranslation } from "react-i18next";
-import { Alert } from "react-native";
+import { Alert, Linking, Platform } from "react-native";
+import Purchases from "react-native-purchases";
 
 const SITE = "https://echoreads.app";
 
@@ -47,6 +48,26 @@ export function useProfileQueriesForSettings() {
 
   const open = (path: string) => WebBrowser.openBrowserAsync(`${SITE}${path}`);
 
+  // Store purchases are managed in the store that sold them; web ones on echoreads.app
+  const source = sub?.subscription?.source;
+  const storeName =
+    source === "app_store" ? t("settings.appStore") : source === "play_store" ? t("settings.playStore") : null;
+  const billing = () => {
+    switch (source) {
+      case "app_store":
+        return Platform.OS === "ios"
+          ? Purchases.showManageSubscriptions()
+          : Linking.openURL("https://apps.apple.com/account/subscriptions");
+      case "play_store":
+        return Linking.openURL("https://play.google.com/store/account/subscriptions?package=app.echoreads.mobile");
+      default:
+        return open("/subscription");
+    }
+  };
+  // A store lifetime purchase has nothing to manage
+  const canManageBilling = !!me?.isPremium && !(lifetime && storeName);
+  const storeSubscribed = !!storeName && !lifetime && sub?.isActive && !sub.subscription?.cancelAtPeriodEnd;
+
   const doSignOut = async () => {
     await signOut();
     queryClient.clear();
@@ -72,7 +93,8 @@ export function useProfileQueriesForSettings() {
     editProfile: () => router.push("/edit-profile"),
     blockedUsers: () => router.push("/blocked-users"),
     getPremium: () => router.push("/premium"),
-    billing: () => open("/subscription"),
+    canManageBilling,
+    billing,
     terms: () => open("/documents/terms-of-service"),
     privacy: () => open("/documents/privacy-policy"),
     signOut: () =>
@@ -81,7 +103,10 @@ export function useProfileQueriesForSettings() {
         { text: t("settings.signOut"), style: "destructive", onPress: doSignOut },
       ]),
     deleteAccount: () =>
-      Alert.alert(t("settings.deleteTitle"), t("settings.deleteBody"), [
+      Alert.alert(
+        t("settings.deleteTitle"),
+        storeSubscribed ? `${t("settings.deleteBody")}\n\n${t("settings.deleteStoreNote", { store: storeName })}` : t("settings.deleteBody"),
+        [
         { text: t("common.cancel"), style: "cancel" },
         {
           text: t("settings.deleteConfirm"),

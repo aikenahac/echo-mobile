@@ -80,7 +80,7 @@ export function SettingsForm() {
             </LabeledContent>
           )}
           {s.isPremium ? (
-            <LinkRow title={t("settings.billing")} onPress={s.billing} accent />
+            s.canManageBilling && <LinkRow title={t("settings.billing")} onPress={s.billing} accent />
           ) : (
             <LinkRow title={t("settings.getPremium")} onPress={s.getPremium} accent />
           )}

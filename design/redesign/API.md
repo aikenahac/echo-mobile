@@ -324,11 +324,11 @@ Library collections row's +) opens the Premium paywall instead. Also treat any *
 Limits: name 1–100 characters, description up to 1000, `colorTag`/`iconName` up to 50.
 
 ### Premium paywall
-- **No API for buying.** The "Continue on echoreads.app" button opens `https://echoreads.app/subscription` in the
-  system browser (`expo-web-browser`). Keep it behind the one component the HANDOFF asks for. The IAP decision is still open.
-- **Prices** ("€1.99 a month or €19.99 once") have **no public API**: `GET /subscriptions` only returns the user's own
-  plan. Keep the copy in i18n for now and flag it.
-- On return to the app (`AppState` active), refetch `GET /profile` to pick up `isPremium`.
+- **In-app purchase** through RevenueCat (`react-native-purchases`): plans and store-localised prices come from the
+  current offering (`$rc_monthly`, `$rc_annual`, `$rc_lifetime`); the purchase lives in `<PremiumCTA>`.
+- After a purchase or restore: `POST /subscriptions/sync` (re-reads RevenueCat, same body as `GET /subscriptions`),
+  then refetch `GET /profile` for `isPremium`. The RevenueCat webhook covers renewals, cancellations and refunds.
+- The paywall must show Restore purchases, Terms and Privacy (App Review 3.1.2). Store setup: `docs/billing-setup.md`.
 
 ---
 
@@ -358,10 +358,11 @@ Limits: name 1–100 characters, description up to 1000, `colorTag`/`iconName` u
 4. `PUT /profile { profilePictureUrl: publicUrl }`. Only URLs issued to this user are accepted.
 
 ### Settings (not drawn)
-- Plan: `GET /subscriptions` → `{ subscription: { status, currentPeriodEnd, cancelAtPeriodEnd } | null, plan: { name, price (cents), interval }, isActive, isFree }`.
+- Plan: `GET /subscriptions` → `{ subscription: { source, status, currentPeriodEnd, cancelAtPeriodEnd } | null, plan: { name, price (cents), interval }, isActive, isFree }`.
   Show "Renews" or "Expires" with `currentPeriodEnd`, or "lifetime" when `plan.interval === "lifetime"`. Use `isPremium`
   from `/profile` for gating, not `isFree`.
-- "Manage subscription" → open `https://echoreads.app/subscription` in the browser.
+- "Manage subscription" by `source`: `app_store` → `Purchases.showManageSubscriptions()`, `play_store` → Play's
+  subscriptions page, `lemonsqueezy` → `https://echoreads.app/subscription`. Hidden for a store lifetime purchase.
 - Legal: `https://echoreads.app/documents/privacy-policy` and `/documents/terms-of-service`.
 - Sign out: Clerk `signOut()`, then clear the React Query cache.
 
@@ -373,8 +374,7 @@ Limits: name 1–100 characters, description up to 1000, `colorTag`/`iconName` u
 |---|---|
 | "+12 today" pages | device-local MMKV snapshot (§2) |
 | Reading streak / goals | not built; leave them out |
-| Buying Premium in the app | open decision (IAP vs external link); web link for now |
-| Plan prices | i18n copy |
+| Buying Premium in the app | IAP via RevenueCat (§8) |
 | Clearing `finishedAt` on undo | not possible; harmless (§3) |
 | Paging the Readers search | raise `limit` up to 50 |
 | Push notifications, activity on your own reviews | not built |

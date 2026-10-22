@@ -1,45 +1,43 @@
 import { CapsuleButton } from "@/components/echo";
-import { queryKeys } from "@/hooks/query-keys";
-import { useQueryClient } from "@tanstack/react-query";
-import * as WebBrowser from "expo-web-browser";
-import { useEffect, useRef } from "react";
+import { usePurchasePackage } from "@/hooks/api/purchases/use-purchase-package";
+import { getErrorMessage } from "@/lib/api/errors";
 import { useTranslation } from "react-i18next";
-import { AppState } from "react-native";
+import { Alert } from "react-native";
+import { PACKAGE_TYPE, type PurchasesPackage } from "react-native-purchases";
 
-const SUBSCRIBE_URL = "https://echoreads.app/subscription";
+type Props = {
+  pkg: PurchasesPackage | undefined;
+  onPurchased: () => void;
+};
 
 /**
- * The one place the Premium purchase happens (HANDOFF.md open decision 1).
- * For now: "Continue on echoreads.app" in the browser, then refresh /profile when the
- * app comes back so isPremium updates. Swap this component's body for in-app purchase
- * (or the external-purchase link entitlement) without touching the paywall.
+ * The one place the Premium purchase happens: StoreKit / Google Play Billing through
+ * RevenueCat. The backend learns about it from the sync call (and the RevenueCat webhook).
  */
-export function PremiumCTA() {
+export function PremiumCTA({ pkg, onPurchased }: Props) {
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  const opened = useRef(false);
+  const purchase = usePurchasePackage();
 
-  useEffect(() => {
-    const sub = AppState.addEventListener("change", (state) => {
-      if (state === "active" && opened.current) {
-        opened.current = false;
-        queryClient.invalidateQueries({ queryKey: queryKeys.profile });
-      }
-    });
-    return () => sub.remove();
-  }, [queryClient]);
+  const title = !pkg
+    ? t("premium.subscribe")
+    : pkg.packageType === PACKAGE_TYPE.LIFETIME
+      ? t("premium.buyLifetime", { price: pkg.product.priceString })
+      : t("premium.subscribeFor", { price: pkg.product.priceString });
 
   return (
     <CapsuleButton
-      title={t("premium.continue")}
-      icon="arrow.up.right"
-      iconTrailing
+      title={title}
       variant="field"
-      onPress={async () => {
-        opened.current = true;
-        await WebBrowser.openBrowserAsync(SUBSCRIBE_URL);
-        // The in-app browser returns without an AppState change; refresh here too
-        queryClient.invalidateQueries({ queryKey: queryKeys.profile });
+      loading={purchase.isPending}
+      disabled={!pkg}
+      onPress={() => {
+        if (!pkg) return;
+        purchase.mutate(pkg, {
+          onSuccess: (result) => {
+            if (!result.cancelled) onPurchased();
+          },
+          onError: (error) => Alert.alert(t("premium.purchaseFailed"), getErrorMessage(error)),
+        });
       }}
       style={{ minHeight: 56 }}
     />

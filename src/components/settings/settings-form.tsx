@@ -26,7 +26,11 @@ export function SettingsForm() {
       </Pressable>
       <Hairline style={{ marginTop: 20 }} />
       <Row title={s.isPremium ? s.planName : t("settings.free")} value={s.planDate?.value} />
-      <Row title={s.isPremium ? t("settings.billing") : t("settings.getPremium")} onPress={s.isPremium ? s.billing : s.getPremium} />
+      {!s.isPremium ? (
+        <Row title={t("settings.getPremium")} onPress={s.getPremium} />
+      ) : (
+        s.canManageBilling && <Row title={t("settings.billing")} onPress={s.billing} />
+      )}
       <Hairline />
       <Row title={t("settings.appearance")} value={s.themeMode} onPress={() => s.setThemeMode(s.themeMode === "dark" ? "light" : "dark")} />
       <Row title={t("settings.libraryLayout")} value={s.layout} onPress={() => s.setLayout(s.layout === "grid" ? "list" : "grid")} />

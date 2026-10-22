@@ -16,6 +16,7 @@ const Timestamp = z.string();
 export const ReadingStatusSchema = z.enum(["want", "reading", "finished"]);
 export const UserRoleSchema = z.enum(["user", "moderator", "admin"]);
 export const BillingIntervalSchema = z.enum(["month", "year", "lifetime", "free"]);
+export const SubscriptionSourceSchema = z.enum(["lemonsqueezy", "app_store", "play_store", "manual"]);
 export const SubscriptionStatusSchema = z.enum([
   "active",
   "canceled",
@@ -354,6 +355,7 @@ export const SubscriptionResponseSchema = z.object({
     .object({
       id: z.string(),
       status: SubscriptionStatusSchema,
+      source: SubscriptionSourceSchema.optional(),
       currentPeriodStart: Timestamp.nullable(),
       currentPeriodEnd: Timestamp.nullable(),
       cancelAtPeriodEnd: z.boolean(),
@@ -405,5 +407,6 @@ export type UploadUrlResponse = z.infer<typeof UploadUrlResponseSchema>;
 export type OtherUserProfile = z.infer<typeof OtherUserProfileSchema>;
 export type CollectionSummary = z.infer<typeof CollectionSummarySchema>;
 export type Collection = z.infer<typeof CollectionSchema>;
+export type SubscriptionSource = z.infer<typeof SubscriptionSourceSchema>;
 export type SubscriptionResponse = z.infer<typeof SubscriptionResponseSchema>;
 export type ApiError = z.infer<typeof ApiErrorSchema>;

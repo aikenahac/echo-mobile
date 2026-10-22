@@ -59,7 +59,7 @@ The UI follows the approved redesign in `design/redesign/` (spec: `shots/r6/*.pn
 - `useFetch()` in `src/lib/api/fetch-wrapper.ts` (`react-native-nitro-fetch`, adds the Clerk token)
 - Validate responses with `handleApiResponse(response, schema)`; show errors with `getErrorMessage()` (`src/lib/api/errors.ts`)
 - Collections are Premium: gate actions with `usePremiumGate().guard(...)`; treat a 403 as "open the paywall" (`isPaywallError`)
-- Buying Premium lives only in `src/components/premium-cta.tsx` (web link for now; swap for IAP there)
+- Premium is sold by in-app purchase through **RevenueCat** (`react-native-purchases`, `src/lib/purchases.ts`; app user id = Clerk user id, entitlement `premium`). Plans/prices come from the current offering (`useOfferings`); buying lives only in `src/components/premium-cta.tsx`; after a purchase/restore the app calls `POST /v1/subscriptions/sync`. Web purchases (Lemon Squeezy) stay on echoreads.app. Store/RevenueCat setup: `docs/billing-setup.md`
 
 ### Styling & Design System
 - Tokens: `src/global.css` (Uniwind CSS variables: `paper`, `field`, `ink`, `ink-2`, `ink-3`, `rule`, `tint`, `pink-ink`, `on-field`, `plate`, `surface`, …, light and dark) mirrored in `src/lib/theme.ts` (`useColors()`, `spacing`, `radius`, `fonts`, `type`, `motion`). Never hard-code colours, sizes or radii in screens
@@ -144,6 +144,7 @@ src/
 Set in `eas.json` build profiles (and `.env.local` for local development):
 - `EXPO_PUBLIC_API_URL` - Backend API base URL
 - `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY` - Clerk authentication key
+- `EXPO_PUBLIC_REVENUECAT_IOS_KEY` / `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY` - RevenueCat public SDK keys (without them the paywall can't load plans)
 
 ## Build Profiles (eas.json)
 

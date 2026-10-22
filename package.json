@@ -52,6 +52,7 @@
     "react-native-mmkv": "^4.3.2",
     "react-native-nitro-fetch": "^1.8.0",
     "react-native-nitro-modules": "^0.37.1",
+    "react-native-purchases": "^10.14.0",
     "react-native-reanimated": "4.5.1",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "~4.26.0",
@@ -63,6 +64,7 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "@sentry/cli": "2.58.4",
     "@types/react": "~19.2.4",
     "eoas": "3.2.5",
     "eslint": "^9.25.0",

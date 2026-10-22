@@ -16,7 +16,8 @@
     "reading": "READING",
     "finished": "FINISHED",
     "premium": "PREMIUM",
-    "lifetime": "LIFETIME"
+    "lifetime": "LIFETIME",
+    "bestValue": "BEST VALUE"
   },
   "a11y": {
     "showPassword": "Show password",
@@ -263,7 +264,7 @@
     "paidOnce": "Paid once",
     "renews": "Renews",
     "expires": "Expires",
-    "billing": "Billing on echoreads.app",
+    "billing": "Manage subscription",
     "app": "App",
     "appearance": "Appearance",
     "appearanceSystem": "System",
@@ -283,7 +284,10 @@
     "deleteBody": "Your library, reviews, collections and follows are deleted for good. A running subscription is cancelled. This can't be undone.",
     "deleteConfirm": "Delete account",
     "version": "Echo {{version}} ({{build}})",
-    "blockedUsers": "Blocked users"
+    "blockedUsers": "Blocked users",
+    "deleteStoreNote": "Deleting your account doesn't stop a subscription bought in the {{store}}. Cancel it there first.",
+    "appStore": "App Store",
+    "playStore": "Google Play Store"
   },
   "editProfile": {
     "title": "Edit profile",
@@ -308,8 +312,26 @@
     "benefit2": "Make one public and share its link",
     "benefit3": "Priority support and early features",
     "benefit4": "Additional premium features coming in the future",
-    "price": "<b>€1.99 a month</b> or <b>€19.99 once</b>, for life.",
-    "continue": "Continue on echoreads.app",
+    "plan": {
+      "MONTHLY": "Monthly",
+      "ANNUAL": "Yearly",
+      "LIFETIME": "Lifetime"
+    },
+    "monthlyNote": "Cancel anytime",
+    "perMonth": "{{price}} a month, billed yearly",
+    "lifetimeNote": "Pay once, keep it for life",
+    "subscribe": "Subscribe",
+    "subscribeFor": "Subscribe for {{price}}",
+    "buyLifetime": "Buy for {{price}}",
+    "renewalNote": "Renews automatically until you cancel. Cancel anytime in your store account settings.",
+    "lifetimeLegal": "One payment. No subscription.",
+    "unavailable": "Plans can't be loaded right now. Try again later.",
+    "restore": "Restore purchases",
+    "nothingToRestore": "No Premium purchase found for this store account.",
+    "restoreFailed": "Couldn't restore purchases",
+    "purchaseFailed": "Purchase failed",
+    "terms": "Terms",
+    "privacy": "Privacy",
     "later": "Maybe later"
   },
   "collections": {

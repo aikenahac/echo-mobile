@@ -28,6 +28,10 @@ export function useProfileApi() {
   const getSubscription = async (): Promise<SubscriptionResponse> =>
     handleApiResponse(await authenticatedFetch(Endpoints.subscriptions.get), SubscriptionResponseSchema);
 
+  /** POST /subscriptions/sync: refresh the backend plan from RevenueCat */
+  const syncSubscription = async (): Promise<SubscriptionResponse> =>
+    handleApiResponse(await authenticatedFetch(Endpoints.subscriptions.sync, { method: "POST" }), SubscriptionResponseSchema);
+
   /** GET /profile/username-available (3+ characters; your own username counts as available) */
   const usernameAvailable = async (username: string): Promise<UsernameAvailability> => {
     const params = new URLSearchParams({ username });
@@ -62,5 +66,5 @@ export function useProfileApi() {
     return signed.publicUrl;
   };
 
-  return { getStats, getSubscription, usernameAvailable, getUser, deleteAccount, uploadProfilePicture };
+  return { getStats, getSubscription, syncSubscription, usernameAvailable, getUser, deleteAccount, uploadProfilePicture };
 }
