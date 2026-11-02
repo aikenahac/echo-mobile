@@ -1,6 +1,7 @@
 import { fixed, useColors, useStatusBarStyle } from "@/lib/theme";
 import { UsernameOnboarding } from "@/components/username-onboarding";
 import { useProfile } from "@/hooks/api/user/use-get-me";
+import { usePushRegistration } from "@/hooks/use-push-registration";
 import { useAuth } from "@clerk/expo";
 import { Redirect, Stack } from "expo-router";
 
@@ -11,8 +12,6 @@ import { Redirect, Stack } from "expo-router";
  */
 export default function AppLayout() {
   const { isSignedIn } = useAuth();
-  const statusBarStyle = useStatusBarStyle();
-  const colors = useColors();
   const profile = useProfile();
 
   if (!isSignedIn) {
@@ -23,6 +22,18 @@ export default function AppLayout() {
   if (profile.data && !profile.data.username) {
     return <UsernameOnboarding />;
   }
+
+  return profile.data?.username ? <RegisteredApp /> : <AppStack />;
+}
+
+function RegisteredApp() {
+  usePushRegistration();
+  return <AppStack />;
+}
+
+function AppStack() {
+  const statusBarStyle = useStatusBarStyle();
+  const colors = useColors();
 
   return (
     <Stack screenOptions={{ headerShown: false, statusBarStyle }}>

@@ -81,6 +81,13 @@
       "expo-apple-authentication",
       "expo-image",
       "expo-status-bar",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icons/echo_icon_monochrome.png",
+          "color": "#FF6BA8"
+        }
+      ],
       "./plugins/with-ios-scene-lifecycle",
       [
         "expo-image-picker",

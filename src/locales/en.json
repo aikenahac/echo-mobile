@@ -326,6 +326,23 @@
     "audiencePrivate": "Only me",
     "audienceNoOne": "No one",
     "privacyFooter": "Friends are readers you follow who follow you back. Reviews you mark private stay private.",
+    "notificationsSection": "Notifications",
+    "notificationsFooter": "These apply on every device you're signed in on. Your phone's notification setting for Echo still applies.",
+    "notifyFollows": "New followers",
+    "notifyActivity": "Reading activity",
+    "notifyActivityDescription": "People you follow start or finish a book",
+    "notifyReviews": "Reviews from people you follow",
+    "notifyCollectionFollows": "Collection follows",
+    "notifyAnnouncements": "Announcements",
+    "turnOnNotifications": "Turn on notifications",
+    "turnOnNotificationsInSettings": "Turn on in Settings",
+    "notificationChannels": {
+      "follows": "New followers",
+      "activity": "Reading activity",
+      "reviews": "Reviews",
+      "collectionFollows": "Collection follows",
+      "announcements": "Announcements"
+    },
     "promoGrant": "Granted with a code"
   },
   "editProfile": {

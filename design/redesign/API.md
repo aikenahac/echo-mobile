@@ -303,8 +303,9 @@ not marked private, everywhere; default public). The header is always visible so
   follow that row's reader, `followsYou` means they follow you, `isFriend` means both, and `isSelf` identifies your row.
   404 unless `access.content`.
 - Follow button: the same `/social/follow` calls as §5. Refetch the profile afterwards: following can unlock parts.
-- Your own settings: `GET /profile` returns `profileVisibility`, `activityVisibility`, `reviewVisibility`;
-  `PUT /profile` takes any of them.
+- Your own settings: `GET /profile` returns `profileVisibility`, `activityVisibility`, `reviewVisibility` and the
+  notification booleans `notifyFollows`, `notifyActivity`, `notifyReviews`, `notifyCollectionFollows`,
+  `notifyAnnouncements`; `PUT /profile` takes any of them as a partial update.
 
 ---
 
@@ -380,6 +381,12 @@ Limits: name 1–100 characters, description up to 1000, `colorTag`/`iconName` u
 - "Manage subscription" by `source`: `app_store` → `Purchases.showManageSubscriptions()`, `play_store` → Play's
   subscriptions page, `lemonsqueezy` → `https://echoreads.app/subscription`. Hidden for a store lifetime purchase.
 - Legal: `https://echoreads.app/documents/privacy-policy` and `/documents/terms-of-service`.
+- Notification preferences: `GET /profile` returns `notifyFollows`, `notifyActivity`, `notifyReviews`,
+  `notifyCollectionFollows` and `notifyAnnouncements` (all default true). `PUT /profile` accepts any of the five.
+- Register this installation with `POST /notifications/token { token, platform: "ios" | "android" }` (201), and
+  unregister it before sign-out with `DELETE /notifications/token { token }`. Both return `{ success: true }`.
+  Push data contains `{ url }`, an app path. Android channels are `follows`, `activity`, `reviews`,
+  `collectionFollows` and `announcements`.
 - Sign out: Clerk `signOut()`, then clear the React Query cache.
 
 ---
@@ -393,6 +400,6 @@ Limits: name 1–100 characters, description up to 1000, `colorTag`/`iconName` u
 | Buying Premium in the app | IAP via RevenueCat (§8) |
 | Clearing `finishedAt` on undo | not possible; harmless (§3) |
 | Paging the Readers search | raise `limit` up to 50 |
-| Push notifications, activity on your own reviews | not built |
+| Activity on your own reviews | not built |
 
 If a screen needs anything else from the server, stop and ask the owner. Don't add a mock that looks like a real endpoint.

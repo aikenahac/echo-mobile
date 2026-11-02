@@ -1,9 +1,10 @@
 import { AdminBadge, Avatar, CapsuleButton, DisplayText, Hairline } from "@/components/echo";
+import { NativeSwitch } from "@/components/echo/native-switch";
 import { spacing, useColors } from "@/lib/theme";
 import { useTranslation } from "react-i18next";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { PRIVACY_SETTINGS, useProfileQueriesForSettings } from "./use-settings";
+import { NOTIFICATION_SETTINGS, PRIVACY_SETTINGS, useProfileQueriesForSettings } from "./use-settings";
 
 /** Plain fallback where the SwiftUI form isn't available */
 export function SettingsForm() {
@@ -53,6 +54,34 @@ export function SettingsForm() {
           <Text style={{ fontSize: 13, lineHeight: 18, color: colors.ink2, marginBottom: 8 }}>{t("settings.privacyFooter")}</Text>
         </>
       )}
+      {s.notificationSettings && (
+        <>
+          <Hairline />
+          <Text style={{ fontSize: 15, fontWeight: "600", color: colors.ink2, marginTop: 18, marginBottom: 4 }}>
+            {t("settings.notificationsSection")}
+          </Text>
+          {NOTIFICATION_SETTINGS.map((setting, index) => (
+            <View key={setting}>
+              {index > 0 && <Hairline />}
+              <NotificationRow
+                title={t(`settings.${setting}`)}
+                subtitle={setting === "notifyActivity" ? t("settings.notifyActivityDescription") : undefined}
+                value={s.notificationSettings![setting]}
+                onValueChange={(value) => s.setNotification(setting, value)}
+              />
+            </View>
+          ))}
+          {s.pushPermissionStatus === "denied" && (
+            <Row title={t("settings.turnOnNotificationsInSettings")} onPress={s.openNotificationSettings} />
+          )}
+          {s.pushPermissionStatus === "undetermined" && (
+            <Row title={t("settings.turnOnNotifications")} onPress={() => void s.requestPushPermission()} />
+          )}
+          <Text style={{ fontSize: 13, lineHeight: 18, color: colors.ink2, marginBottom: 8 }}>
+            {t("settings.notificationsFooter")}
+          </Text>
+        </>
+      )}
       <Hairline />
       <Row title={t("settings.blockedUsers")} onPress={s.blockedUsers} />
       <Row title={t("settings.terms")} onPress={s.terms} />
@@ -61,6 +90,19 @@ export function SettingsForm() {
       <CapsuleButton title={t("settings.deleteAccount")} variant="plain" destructive onPress={s.deleteAccount} style={{ marginTop: 8 }} />
       <Text style={{ fontSize: 13, color: colors.ink2, textAlign: "center", marginTop: 16 }}>{s.version}</Text>
     </ScrollView>
+  );
+}
+
+function NotificationRow({ title, subtitle, value, onValueChange }: { title: string; subtitle?: string; value: boolean; onValueChange: (value: boolean) => void }) {
+  const colors = useColors();
+  return (
+    <View style={{ flexDirection: "row", alignItems: "center", gap: 16, paddingVertical: 14 }}>
+      <View style={{ flex: 1 }}>
+        <Text style={{ fontSize: 17, color: colors.ink }}>{title}</Text>
+        {subtitle && <Text style={{ fontSize: 13, lineHeight: 18, color: colors.ink2, marginTop: 2 }}>{subtitle}</Text>}
+      </View>
+      <NativeSwitch value={value} onValueChange={onValueChange} accessibilityLabel={title} />
+    </View>
   );
 }
 

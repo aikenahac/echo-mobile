@@ -3,10 +3,14 @@ import { useProfile } from "@/hooks/api/user/use-get-me";
 import { useUpdateProfile } from "@/hooks/api/user/use-update-me";
 import { queryKeys } from "@/hooks/query-keys";
 import { useLibraryLayout } from "@/hooks/use-library-layout";
+import { usePushPermission } from "@/hooks/use-push-registration";
 import { useProfileApi } from "@/lib/api/profile";
+import { useNotificationsApi } from "@/lib/api/notifications";
 import { getErrorMessage } from "@/lib/api/errors";
 import { displayName, isAdmin } from "@/lib/books";
+import { Sentry } from "@/lib/sentry";
 import { AUDIENCES, type Audience, type User } from "@/lib/schemas";
+import { STORAGE_KEYS, storage } from "@/lib/storage";
 import { useTheme, type ColorScheme } from "@/lib/theme-context";
 import { useClerk } from "@clerk/expo";
 import { useQueryClient } from "@tanstack/react-query";
@@ -21,6 +25,14 @@ const SITE = "https://echoreads.app";
 
 export type PrivacySetting = "profileVisibility" | "activityVisibility" | "reviewVisibility";
 export const PRIVACY_SETTINGS: Array<PrivacySetting> = ["profileVisibility", "activityVisibility", "reviewVisibility"];
+export type NotificationSetting = "notifyFollows" | "notifyActivity" | "notifyReviews" | "notifyCollectionFollows" | "notifyAnnouncements";
+export const NOTIFICATION_SETTINGS: Array<NotificationSetting> = [
+  "notifyFollows",
+  "notifyActivity",
+  "notifyReviews",
+  "notifyCollectionFollows",
+  "notifyAnnouncements",
+];
 
 /** Everything the Settings screen shows and does, independent of how it's drawn */
 export function useProfileQueriesForSettings() {
@@ -33,7 +45,9 @@ export function useProfileQueriesForSettings() {
   const { themeMode, setColorScheme } = useTheme();
   const [layout, setLayout] = useLibraryLayout();
   const { deleteAccount } = useProfileApi();
+  const { unregisterToken } = useNotificationsApi();
   const updateProfile = useUpdateProfile();
+  const pushPermission = usePushPermission();
 
   const me = profile.data;
   const sub = subscription.data;
@@ -103,10 +117,46 @@ export function useProfileQueriesForSettings() {
     }
   };
 
+  const setNotification = (setting: NotificationSetting, value: boolean) => {
+    const previous = me?.[setting];
+    const set = (v: boolean | undefined) =>
+      queryClient.setQueryData<User>(queryKeys.profile, (data) => (data ? { ...data, [setting]: v } : data));
+    set(value);
+    updateProfile.mutate({ [setting]: value }, {
+      onError: (e) => {
+        set(previous);
+        Alert.alert(getErrorMessage(e));
+      },
+    });
+  };
+
   const doSignOut = async () => {
+    const pushToken = storage.getString(STORAGE_KEYS.EXPO_PUSH_TOKEN);
+    if (pushToken) {
+      const unregister = unregisterToken(pushToken).catch((error: unknown) => {
+        Sentry.captureException(error);
+      });
+      await Promise.race([unregister, new Promise<void>((resolve) => setTimeout(resolve, 1_000))]);
+      storage.remove(STORAGE_KEYS.EXPO_PUSH_TOKEN);
+    }
     await signOut();
     queryClient.clear();
   };
+
+  const notificationSettings =
+    typeof me?.notifyFollows === "boolean" &&
+    typeof me.notifyActivity === "boolean" &&
+    typeof me.notifyReviews === "boolean" &&
+    typeof me.notifyCollectionFollows === "boolean" &&
+    typeof me.notifyAnnouncements === "boolean"
+      ? {
+          notifyFollows: me.notifyFollows,
+          notifyActivity: me.notifyActivity,
+          notifyReviews: me.notifyReviews,
+          notifyCollectionFollows: me.notifyCollectionFollows,
+          notifyAnnouncements: me.notifyAnnouncements,
+        }
+      : null;
 
   return {
     name: me ? displayName(me) : "",
@@ -126,6 +176,12 @@ export function useProfileQueriesForSettings() {
       ? { profileVisibility: me.profileVisibility, activityVisibility: me.activityVisibility, reviewVisibility: me.reviewVisibility }
       : null,
     setPrivacy,
+    // Absent until the server sends all notification preferences
+    notificationSettings,
+    setNotification,
+    pushPermissionStatus: pushPermission.status,
+    requestPushPermission: pushPermission.request,
+    openNotificationSettings: () => Linking.openSettings(),
     audienceLabel,
     audiences: AUDIENCES,
     version: t("settings.version", {

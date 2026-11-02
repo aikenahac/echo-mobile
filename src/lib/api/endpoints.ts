@@ -34,6 +34,10 @@ export const Endpoints = {
     create: "/v1/reports",
   },
 
+  notifications: {
+    token: "/v1/notifications/token",
+  },
+
   profile: {
     get: "/v1/profile",
     update: "/v1/profile",

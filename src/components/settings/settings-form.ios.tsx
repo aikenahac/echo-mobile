@@ -1,11 +1,11 @@
 import { Avatar, DisplayText, Stamp } from "@/components/echo";
 import { useColors } from "@/lib/theme";
 import { Host } from "@expo/ui";
-import { Button, Form, HStack, Image, LabeledContent, Picker, RNHostView, Section, Spacer, Text, VStack } from "@expo/ui/swift-ui";
+import { Button, Form, HStack, Image, LabeledContent, Picker, RNHostView, Section, Spacer, Text, Toggle, VStack } from "@expo/ui/swift-ui";
 import { accessibilityLabel, font, foregroundStyle, listRowBackground, listRowInsets, pickerStyle, scrollContentBackground, tag, tint } from "@expo/ui/swift-ui/modifiers";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
-import { PRIVACY_SETTINGS, useProfileQueriesForSettings } from "./use-settings";
+import { NOTIFICATION_SETTINGS, PRIVACY_SETTINGS, useProfileQueriesForSettings } from "./use-settings";
 import type { Audience } from "@/lib/schemas";
 
 /** Settings (r6 22) as a native grouped Form */
@@ -121,6 +121,33 @@ export function SettingsForm() {
                 ))}
               </Picker>
             ))}
+          </Section>
+        )}
+
+        {s.notificationSettings && (
+          <Section
+            title={t("settings.notificationsSection")}
+            modifiers={rows}
+            footer={<Text modifiers={[font({ textStyle: "footnote" }), secondary]}>{t("settings.notificationsFooter")}</Text>}
+          >
+            {NOTIFICATION_SETTINGS.map((setting) => (
+              <Toggle
+                key={setting}
+                isOn={s.notificationSettings![setting]}
+                onIsOnChange={(value) => s.setNotification(setting, value)}
+              >
+                <Text>{t(`settings.${setting}`)}</Text>
+                {setting === "notifyActivity" && (
+                  <Text modifiers={[font({ textStyle: "caption" }), secondary]}>{t("settings.notifyActivityDescription")}</Text>
+                )}
+              </Toggle>
+            ))}
+            {s.pushPermissionStatus === "denied" && (
+              <Button label={t("settings.turnOnNotificationsInSettings")} onPress={s.openNotificationSettings} />
+            )}
+            {s.pushPermissionStatus === "undetermined" && (
+              <Button label={t("settings.turnOnNotifications")} onPress={() => void s.requestPushPermission()} />
+            )}
           </Section>
         )}
 

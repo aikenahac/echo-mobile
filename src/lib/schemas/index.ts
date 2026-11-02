@@ -52,6 +52,11 @@ export const UserSchema = z.object({
   activityVisibility: AudienceSchema.optional(),
   /** Reviews not marked private */
   reviewVisibility: AudienceSchema.optional(),
+  notifyFollows: z.boolean().optional(),
+  notifyActivity: z.boolean().optional(),
+  notifyReviews: z.boolean().optional(),
+  notifyCollectionFollows: z.boolean().optional(),
+  notifyAnnouncements: z.boolean().optional(),
   followerCount: z.number().int().optional(),
   followingCount: z.number().int().optional(),
   createdAt: Timestamp,
@@ -310,6 +315,11 @@ export const UpdateProfileRequestSchema = z
     profileVisibility: AudienceSchema,
     activityVisibility: AudienceSchema,
     reviewVisibility: AudienceSchema,
+    notifyFollows: z.boolean(),
+    notifyActivity: z.boolean(),
+    notifyReviews: z.boolean(),
+    notifyCollectionFollows: z.boolean(),
+    notifyAnnouncements: z.boolean(),
   })
   .partial();
 

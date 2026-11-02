@@ -11,6 +11,10 @@ export const STORAGE_KEYS = {
   LIBRARY_SORT: "library_sort",
   /** Device-local `{ [userBookId]: { date, startPage } }` behind "+12 today" */
   DAILY_PAGE_SNAPSHOT: "daily_page_snapshot",
+  /** Whether Echo has automatically prompted for push permission on this device */
+  PUSH_PERMISSION_ASKED: "push_permission_asked",
+  /** Expo push token registered for the current signed-in user */
+  EXPO_PUSH_TOKEN: "expo_push_token",
 } as const
 
 export const storage = createMMKV({
