@@ -64,10 +64,11 @@ The UI follows the approved redesign in `design/redesign/` (spec: `shots/r6/*.pn
 ### Styling & Design System
 - Tokens: `src/global.css` (Uniwind CSS variables: `paper`, `field`, `ink`, `ink-2`, `ink-3`, `rule`, `tint`, `pink-ink`, `on-field`, `plate`, `surface`, …, light and dark) mirrored in `src/lib/theme.ts` (`useColors()`, `spacing`, `radius`, `fonts`, `type`, `motion`). Never hard-code colours, sizes or radii in screens
 - Dark mode is designed, not inverted; `ThemeProvider` (`src/lib/theme-context.tsx`) calls `Uniwind.setTheme()`
-- Shared primitives in `src/components/echo/`: `Cover`, `Stamp`, `PlateNumber`, `DisplayText`, `FieldBand`, `Avatar`, `Stars`, `ProgressBar`, `CapsuleButton`, `CircleButton`, `TextField`, `Hairline`, `SFIcon`, `CollectionTile`, `NativeMenu`, `NativeSwitch`
+- Shared primitives in `src/components/echo/`: `Cover`, `Stamp`, `PlateNumber`, `DisplayText`, `FieldBand`, `Avatar`, `Stars`, `ProgressBar`, `CapsuleButton`, `CircleButton`, `TextField`, `Hairline`, `SFIcon`, `CollectionTile`, `NativeMenu`, `NativeSwitch`, `Toolbar`, `Popover`
 - Feature components by area: `components/{library,book,search,feed,profile,settings,auth}`
 - Native controls come from **`@expo/ui`** (BottomSheet, Switch, segmented control, SwiftUI `Menu`/`Form`/`Picker`). Do not add React Native Reusables or `@rn-primitives`
-- Icons: SF Symbols via `expo-symbols` (`SFIcon`); `lucide-react-native` only for user-chosen collection icons (`src/lib/collection-icons.ts`)
+- Icons: `SFIcon` takes an SF Symbol name from `src/components/echo/icon-names.tsx` (`IconName`): SF Symbols on iOS, the mapped Lucide icon on Android. Add a new symbol to that map (a missing one is a type error). User-chosen collection icons are Lucide (`src/lib/collection-icons.ts`)
+- Header buttons and menus go through `<Toolbar>` (`Stack.Toolbar` on iOS; header icon buttons on Android, where expo-router's toolbar can't draw SF names). `NativeMenu` is a SwiftUI menu on iOS and a Compose dropdown on Android
 - Covers are the only things with a shadow; group content with space and 0.5pt hairlines, not cards
 - Display font: Archivo Condensed Black/ExtraBold static cuts in `src/lib/assets/fonts/` (embedded by the `expo-font` plugin; word spacing is baked into the space glyph)
 - Motion: Reanimated + Gesture Handler; the numbering stamp is `components/library/page-dial.tsx` + `page-wheels.tsx`; haptics via `expo-haptics`
@@ -116,7 +117,7 @@ src/
 ### Creating a New Screen
 1. Add the route under `src/app/(app)/` (or a tab's folder) and register its presentation in the parent `_layout.tsx`
 2. Build it from `src/components/echo` primitives and tokens; paper ground, the field only for "now"
-3. Toolbar buttons and menus via `Stack.Toolbar`; native forms and sheets via `@expo/ui` or `presentation: "formSheet"`
+3. Toolbar buttons and menus via `<Toolbar>` (from `@/components/echo`); native forms and sheets via `@expo/ui` or `presentation: "formSheet"`
 4. Compare with the matching `design/redesign/shots/r6` PNG in the simulator, in light and dark
 
 ### Local development

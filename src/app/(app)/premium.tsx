@@ -5,7 +5,7 @@ import { useOfferings } from "@/hooks/api/purchases/use-offerings";
 import { useRestorePurchases } from "@/hooks/api/purchases/use-restore-purchases";
 import { getErrorMessage } from "@/lib/api/errors";
 import { PLATE_OFFSET, spacing, useColors } from "@/lib/theme";
-import type { SFSymbol } from "expo-symbols";
+import type { IconName } from "@/components/echo";
 import { useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import { useMemo, useState } from "react";
@@ -16,7 +16,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const SITE = "https://echoreads.app";
 
-const BENEFITS: Array<[SFSymbol, string]> = [
+const BENEFITS: Array<[IconName, string]> = [
   ["folder", "premium.benefit1"],
   ["globe", "premium.benefit2"],
   ["checkmark", "premium.benefit3"],

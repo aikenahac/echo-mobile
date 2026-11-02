@@ -33,6 +33,10 @@ export function useCollectionsApi() {
   const getCollection = async (id: string): Promise<Collection> =>
     handleApiResponse(await authenticatedFetch(Endpoints.collections.getById(id)), CollectionSchema);
 
+  /** GET /collections/{id}/public: someone else's public collection (or one of yours) */
+  const getPublicCollection = async (id: string): Promise<Collection> =>
+    handleApiResponse(await authenticatedFetch(Endpoints.collections.getPublic(id)), CollectionSchema);
+
   /** POST /collections → 201 (403 when not Premium) */
   const createCollection = async (fields: CollectionFields & { name: string }): Promise<CollectionSummary> =>
     handleApiResponse(await authenticatedFetch(Endpoints.collections.create, json("POST", fields)), CollectionSummarySchema);
@@ -74,5 +78,5 @@ export function useCollectionsApi() {
     return signed.publicUrl;
   };
 
-  return { getCollections, getCollection, createCollection, updateCollection, deleteCollection, addBook, removeBook, uploadCover };
+  return { getCollections, getCollection, getPublicCollection, createCollection, updateCollection, deleteCollection, addBook, removeBook, uploadCover };
 }

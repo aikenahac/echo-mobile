@@ -1,4 +1,4 @@
-import { CapsuleButton, Cover, DisplayText, FieldBand, Hairline, Stars } from "@/components/echo";
+import { CapsuleButton, Cover, DisplayText, FieldBand, Hairline, Stars, Toolbar } from "@/components/echo";
 import { FollowingReviews, YourReview } from "@/components/book/review-rows";
 import { StatusStampMenu } from "@/components/book/status-stamp-menu";
 import { PageSheet } from "@/components/library/page-sheet";
@@ -15,7 +15,7 @@ import { daysBetween, shortDate } from "@/lib/dates";
 import type { ReadingStatus, UserBook } from "@/lib/schemas";
 import { spacing, useColors } from "@/lib/theme";
 import * as Haptics from "expo-haptics";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Alert, ScrollView, Text, View } from "react-native";
@@ -73,7 +73,7 @@ export default function BookDetailScreen() {
   const asUserBook: UserBook | null = userBook ? { ...userBook, book } : null;
 
   const changeStatus = (status: ReadingStatus) => {
-    Haptics.selectionAsync();
+    // The status ribbon plays its own haptics
     if (ids) {
       updateStatus.mutate({ ...ids, status }, { onError: alert });
     } else {
@@ -116,34 +116,39 @@ export default function BookDetailScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.paper }}>
-      <Stack.Toolbar placement="right">
-        {userBook && (
-          <Stack.Toolbar.Button
-            icon={userBook.isFavorite ? "heart.fill" : "heart"}
-            tintColor={userBook.isFavorite ? colors.pinkInk : colors.ink}
-            accessibilityLabel={userBook.isFavorite ? t("book.unfavourite") : t("book.favourite")}
-            onPress={() => {
-              Haptics.selectionAsync();
-              setFavorite.mutate({ ...ids!, isFavorite: !userBook.isFavorite }, { onError: alert });
-            }}
-          />
-        )}
-        {userBook && (
-          <Stack.Toolbar.Button
-            icon="folder"
-            tintColor={colors.ink}
-            accessibilityLabel={t("book.addToCollection")}
-            onPress={guard(() => router.push({ pathname: "/add-to-collection/[userBookId]", params: { userBookId: userBook.id } }))}
-          />
-        )}
-        {userBook && (
-          <Stack.Toolbar.Menu icon="ellipsis" tintColor={colors.ink} accessibilityLabel={t("book.more")}>
-            <Stack.Toolbar.MenuAction icon="trash" destructive onPress={confirmRemove}>
-              {t("book.remove")}
-            </Stack.Toolbar.MenuAction>
-          </Stack.Toolbar.Menu>
-        )}
-      </Stack.Toolbar>
+      <Toolbar
+        placement="right"
+        items={
+          userBook
+            ? [
+                {
+                  kind: "button",
+                  icon: userBook.isFavorite ? "heart.fill" : "heart",
+                  tint: userBook.isFavorite ? colors.pinkInk : colors.ink,
+                  label: userBook.isFavorite ? t("book.unfavourite") : t("book.favourite"),
+                  onPress: () => {
+                    Haptics.selectionAsync();
+                    setFavorite.mutate({ ...ids!, isFavorite: !userBook.isFavorite }, { onError: alert });
+                  },
+                },
+                {
+                  kind: "button",
+                  icon: "folder",
+                  tint: colors.ink,
+                  label: t("book.addToCollection"),
+                  onPress: guard(() => router.push({ pathname: "/add-to-collection/[userBookId]", params: { userBookId: userBook.id } })),
+                },
+                {
+                  kind: "menu",
+                  icon: "ellipsis",
+                  tint: colors.ink,
+                  label: t("book.more"),
+                  items: [{ title: t("book.remove"), systemImage: "trash", destructive: true, onPress: confirmRemove }],
+                },
+              ]
+            : []
+        }
+      />
 
       <ScrollView
         contentInsetAdjustmentBehavior="never"

@@ -1,9 +1,12 @@
 import { useSubscription } from "@/hooks/api/profile/use-profile-queries";
 import { useProfile } from "@/hooks/api/user/use-get-me";
+import { useUpdateProfile } from "@/hooks/api/user/use-update-me";
+import { queryKeys } from "@/hooks/query-keys";
 import { useLibraryLayout } from "@/hooks/use-library-layout";
 import { useProfileApi } from "@/lib/api/profile";
 import { getErrorMessage } from "@/lib/api/errors";
 import { displayName, isAdmin } from "@/lib/books";
+import { AUDIENCES, type Audience, type User } from "@/lib/schemas";
 import { useTheme, type ColorScheme } from "@/lib/theme-context";
 import { useClerk } from "@clerk/expo";
 import { useQueryClient } from "@tanstack/react-query";
@@ -16,6 +19,9 @@ import Purchases from "react-native-purchases";
 
 const SITE = "https://echoreads.app";
 
+export type PrivacySetting = "profileVisibility" | "activityVisibility" | "reviewVisibility";
+export const PRIVACY_SETTINGS: Array<PrivacySetting> = ["profileVisibility", "activityVisibility", "reviewVisibility"];
+
 /** Everything the Settings screen shows and does, independent of how it's drawn */
 export function useProfileQueriesForSettings() {
   const { t } = useTranslation();
@@ -27,10 +33,13 @@ export function useProfileQueriesForSettings() {
   const { themeMode, setColorScheme } = useTheme();
   const [layout, setLayout] = useLibraryLayout();
   const { deleteAccount } = useProfileApi();
+  const updateProfile = useUpdateProfile();
 
   const me = profile.data;
   const sub = subscription.data;
-  const lifetime = sub?.plan?.interval === "lifetime";
+  // A promo code grants the plan for the code's term, not the plan's interval
+  const promo = sub?.subscription?.source === "promo";
+  const lifetime = promo ? !sub?.subscription?.currentPeriodEnd : sub?.plan?.interval === "lifetime";
   const fmt = (iso: string | null | undefined) =>
     iso ? new Intl.DateTimeFormat(undefined, { day: "numeric", month: "short", year: "numeric" }).format(new Date(iso)) : "";
 
@@ -38,10 +47,10 @@ export function useProfileQueriesForSettings() {
   const planDate = !me?.isPremium
     ? null
     : lifetime
-      ? { label: t("settings.paidOnce"), value: fmt(sub?.subscription?.currentPeriodStart) }
+      ? { label: promo ? t("settings.promoGrant") : t("settings.paidOnce"), value: fmt(sub?.subscription?.currentPeriodStart) }
       : sub?.subscription?.currentPeriodEnd
         ? {
-            label: sub.subscription.cancelAtPeriodEnd ? t("settings.expires") : t("settings.renews"),
+            label: promo || sub.subscription.cancelAtPeriodEnd ? t("settings.expires") : t("settings.renews"),
             value: fmt(sub.subscription.currentPeriodEnd),
           }
         : null;
@@ -64,9 +73,35 @@ export function useProfileQueriesForSettings() {
         return open("/subscription");
     }
   };
-  // A store lifetime purchase has nothing to manage
-  const canManageBilling = !!me?.isPremium && !(lifetime && storeName);
+  // A store lifetime purchase or a promo grant has nothing to manage
+  const canManageBilling = !!me?.isPremium && !promo && !(lifetime && storeName);
   const storeSubscribed = !!storeName && !lifetime && sub?.isActive && !sub.subscription?.cancelAtPeriodEnd;
+
+  // Saved straight away, optimistic on the cached profile
+  const setPrivacy = (setting: PrivacySetting, value: Audience) => {
+    const previous = me?.[setting];
+    const set = (v: Audience | undefined) =>
+      queryClient.setQueryData<User>(queryKeys.profile, (data) => (data ? { ...data, [setting]: v } : data));
+    set(value);
+    updateProfile.mutate({ [setting]: value }, {
+      onError: (e) => {
+        set(previous);
+        Alert.alert(getErrorMessage(e));
+      },
+    });
+  };
+  const audienceLabel = (setting: PrivacySetting, value: Audience) => {
+    switch (value) {
+      case "public":
+        return t("settings.audiencePublic");
+      case "followers":
+        return t("settings.audienceFollowers");
+      case "friends":
+        return t("settings.audienceFriends");
+      case "private":
+        return setting === "activityVisibility" ? t("settings.audienceNoOne") : t("settings.audiencePrivate");
+    }
+  };
 
   const doSignOut = async () => {
     await signOut();
@@ -86,6 +121,13 @@ export function useProfileQueriesForSettings() {
     setThemeMode: (mode: ColorScheme) => setColorScheme(mode),
     layout,
     setLayout,
+    // Absent until the server has privacy settings; the section is hidden then
+    privacySettings: me?.profileVisibility && me.activityVisibility && me.reviewVisibility
+      ? { profileVisibility: me.profileVisibility, activityVisibility: me.activityVisibility, reviewVisibility: me.reviewVisibility }
+      : null,
+    setPrivacy,
+    audienceLabel,
+    audiences: AUDIENCES,
     version: t("settings.version", {
       version: Constants.expoConfig?.version ?? "",
       build: Constants.expoConfig?.ios?.buildNumber ?? "1",

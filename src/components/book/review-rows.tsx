@@ -4,6 +4,7 @@ import { displayName, isAdmin } from "@/lib/books";
 import { shortDate } from "@/lib/dates";
 import type { Review, ReviewWithUser } from "@/lib/schemas";
 import { useColors } from "@/lib/theme";
+import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Pressable, Text, View } from "react-native";
 
@@ -39,6 +40,8 @@ export function YourReview({ review, onEdit }: { review: Review | null; onEdit: 
 export function FollowingReviews({ reviews }: { reviews: Array<ReviewWithUser> }) {
   const colors = useColors();
   const { t } = useTranslation();
+  const router = useRouter();
+  const openUser = (userId: string) => router.push({ pathname: "/user/[userId]", params: { userId } });
   if (!reviews.length) return null;
   return (
     <View style={{ paddingTop: 32 }}>
@@ -49,10 +52,14 @@ export function FollowingReviews({ reviews }: { reviews: Array<ReviewWithUser> }
         <View key={r.id}>
           {i > 0 && <Hairline />}
           <View style={{ flexDirection: "row", gap: 12, paddingVertical: 14 }}>
-            <Avatar user={r.user} />
+            <Pressable accessibilityRole="link" accessibilityLabel={displayName(r.user)} onPress={() => openUser(r.user.id)}>
+              <Avatar user={r.user} />
+            </Pressable>
             <View style={{ flex: 1, minWidth: 0 }}>
               <Text style={{ fontSize: 15, color: colors.ink2 }}>
-                <Text style={{ fontWeight: "600", color: colors.ink }}>{displayName(r.user)}</Text>
+                <Text style={{ fontWeight: "600", color: colors.ink }} onPress={() => openUser(r.user.id)}>
+                  {displayName(r.user)}
+                </Text>
                 {isAdmin(r.user) && <>{" "}<AdminBadge /></>} · {shortDate(r.createdAt)}
               </Text>
               <Text style={{ fontSize: 15, lineHeight: 21, color: colors.ink, marginTop: 3 }}>{r.content}</Text>

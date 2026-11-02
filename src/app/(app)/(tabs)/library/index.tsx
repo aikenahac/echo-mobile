@@ -20,7 +20,7 @@ import { bookTotal } from "@/lib/books";
 import { heroBook, SHELF_KEY, type Shelf } from "@/lib/library-cache";
 import type { UserBook } from "@/lib/schemas";
 import { getFromLocalStorage, setInLocalStorage, STORAGE_KEYS } from "@/lib/storage";
-import { spacing, useColors } from "@/lib/theme";
+import { spacing, topGap, useColors } from "@/lib/theme";
 import * as Haptics from "expo-haptics";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
@@ -193,7 +193,7 @@ export default function LibraryScreen() {
         {/* Pink above the top so pull-to-refresh doesn't reveal paper behind the field */}
         {onField && !finishing && <View style={{ position: "absolute", top: -1000, left: 0, right: 0, height: 1000, backgroundColor: colors.field }} />}
 
-        <Top onField={onField} draining={!!finishing && onField} paddingTop={insets.top + 6}>
+        <Top onField={onField} draining={!!finishing && onField} paddingTop={insets.top + topGap}>
           <LibraryHeader onField={onField} view={view} onToggleView={toggleView} />
           <ShelfTabs active={shelf} counts={counts} onChange={setShelf} onField={onField} />
 

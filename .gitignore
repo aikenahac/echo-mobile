@@ -53,3 +53,7 @@ builds/*.tar.gz
 
 # Code signing private key (server-side secret, never commit it)
 private-key.pem
+
+# keys
+keys/*
+!keys/.gitkeep

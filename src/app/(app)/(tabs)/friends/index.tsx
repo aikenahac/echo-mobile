@@ -8,7 +8,7 @@ import { FeedItemView } from "@/components/feed/feed-item";
 import { useFeed } from "@/hooks/api/feed/use-feed";
 import { getErrorMessage } from "@/lib/api/errors";
 import type { FeedItem } from "@/lib/schemas";
-import { spacing, useColors } from "@/lib/theme";
+import { spacing, topGap, useColors } from "@/lib/theme";
 import { useRouter } from "expo-router";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -58,7 +58,7 @@ export default function FriendsScreen() {
         keyExtractor={itemKey}
         contentInsetAdjustmentBehavior="never"
         contentContainerStyle={{
-          paddingTop: insets.top + 6,
+          paddingTop: insets.top + topGap,
           paddingBottom: insets.bottom + 96,
         }}
         ListHeaderComponent={

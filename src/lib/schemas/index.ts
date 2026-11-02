@@ -16,7 +16,7 @@ const Timestamp = z.string();
 export const ReadingStatusSchema = z.enum(["want", "reading", "finished"]);
 export const UserRoleSchema = z.enum(["user", "moderator", "admin"]);
 export const BillingIntervalSchema = z.enum(["month", "year", "lifetime", "free"]);
-export const SubscriptionSourceSchema = z.enum(["lemonsqueezy", "app_store", "play_store", "manual"]);
+export const SubscriptionSourceSchema = z.enum(["lemonsqueezy", "app_store", "play_store", "manual", "promo"]);
 export const SubscriptionStatusSchema = z.enum([
   "active",
   "canceled",
@@ -30,6 +30,10 @@ export const SubscriptionStatusSchema = z.enum([
 // PEOPLE
 // ============================================================================
 
+/** Who can see a part of a profile; friends follow each other */
+export const AUDIENCES = ["public", "followers", "friends", "private"] as const;
+export const AudienceSchema = z.enum(AUDIENCES);
+
 /** The signed-in user (GET /profile) */
 export const UserSchema = z.object({
   id: z.string(),
@@ -42,6 +46,14 @@ export const UserSchema = z.object({
   role: UserRoleSchema,
   isPremium: z.boolean(),
   planName: z.string().nullable(),
+  /** Privacy (optional until every server sends them): shelves, stats, collections */
+  profileVisibility: AudienceSchema.optional(),
+  /** Activity on the profile and in feeds */
+  activityVisibility: AudienceSchema.optional(),
+  /** Reviews not marked private */
+  reviewVisibility: AudienceSchema.optional(),
+  followerCount: z.number().int().optional(),
+  followingCount: z.number().int().optional(),
   createdAt: Timestamp,
   updatedAt: Timestamp,
 });
@@ -55,6 +67,18 @@ export const PublicUserSchema = z.object({
   profilePictureBlurhash: z.string().nullable().optional(),
   /** System administrator (sparkle badge); optional until every server sends it */
   isAdmin: z.boolean().optional(),
+});
+
+export const FollowListUserSchema = PublicUserSchema.extend({
+  isSelf: z.boolean().default(false),
+  isFollowing: z.boolean(),
+  followsYou: z.boolean().default(false),
+  isFriend: z.boolean().default(false),
+});
+
+export const FollowListResponseSchema = z.object({
+  results: z.array(FollowListUserSchema),
+  hasMore: z.boolean(),
 });
 
 // ============================================================================
@@ -283,6 +307,9 @@ export const UpdateProfileRequestSchema = z
     displayName: z.string().nullable(),
     bio: z.string().nullable(),
     profilePictureUrl: z.string().nullable(),
+    profileVisibility: AudienceSchema,
+    activityVisibility: AudienceSchema,
+    reviewVisibility: AudienceSchema,
   })
   .partial();
 
@@ -297,19 +324,59 @@ export const UploadUrlResponseSchema = z.object({
   expiresIn: z.number(),
 });
 
+/**
+ * GET /users/{id}. Shelves, stats and collections are empty unless
+ * access.content; access.reviews / access.activity say whether the Reviews and
+ * Activity lists will answer. The privacy fields are optional until every
+ * server sends them (older servers show everything).
+ */
 export const OtherUserProfileSchema = z.object({
   user: PublicUserSchema.extend({ bio: z.string().nullable() }),
+  relationship: z
+    .object({
+      isSelf: z.boolean(),
+      isFollowing: z.boolean(),
+      followsYou: z.boolean(),
+      isFriend: z.boolean(),
+    })
+    .optional(),
+  access: z
+    .object({ content: z.boolean(), activity: z.boolean(), reviews: z.boolean() })
+    .optional(),
+  visibility: z
+    .object({ content: AudienceSchema, activity: AudienceSchema, reviews: AudienceSchema })
+    .optional(),
   stats: z.object({
     booksFinishedThisYear: z.number().int(),
+    pagesReadThisYear: z.number().int().optional(),
     finishedCount: z.number().int(),
   }),
+  counts: z.object({ want: z.number().int(), finished: z.number().int() }).optional(),
   followerCount: z.number().int(),
   followingCount: z.number().int(),
   isFollowing: z.boolean(),
   currentlyReading: z.array(UserBookSchema),
   recentlyFinished: z.array(UserBookSchema),
+  wantToRead: z.array(UserBookSchema).optional(),
   favorites: z.array(UserBookSchema),
   publicCollections: z.array(z.lazy(() => CollectionSummarySchema)),
+});
+
+export const PROFILE_SHELVES = ["reading", "want", "finished", "favourites"] as const;
+export const ProfileShelfSchema = z.enum(PROFILE_SHELVES);
+
+/** GET /users/{id}/books?shelf= */
+export const UserShelfPageSchema = z.object({
+  results: z.array(UserBookSchema),
+  hasMore: z.boolean(),
+});
+
+export const UserReviewSchema = ReviewSchema.extend({ book: BookSchema });
+
+/** GET /users/{id}/reviews */
+export const UserReviewsPageSchema = z.object({
+  results: z.array(UserReviewSchema),
+  hasMore: z.boolean(),
 });
 
 // ============================================================================
@@ -379,6 +446,8 @@ export const ApiErrorSchema = z.object({ error: z.string() });
 export type ReadingStatus = z.infer<typeof ReadingStatusSchema>;
 export type User = z.infer<typeof UserSchema>;
 export type PublicUser = z.infer<typeof PublicUserSchema>;
+export type FollowListUser = z.infer<typeof FollowListUserSchema>;
+export type FollowListResponse = z.infer<typeof FollowListResponseSchema>;
 export type Book = z.infer<typeof BookSchema>;
 export type UserBookWithoutBook = z.infer<typeof UserBookWithoutBookSchema>;
 export type UserBook = z.infer<typeof UserBookSchema>;
@@ -405,6 +474,11 @@ export type UpdateProfileRequest = z.infer<typeof UpdateProfileRequestSchema>;
 export type UsernameAvailability = z.infer<typeof UsernameAvailabilitySchema>;
 export type UploadUrlResponse = z.infer<typeof UploadUrlResponseSchema>;
 export type OtherUserProfile = z.infer<typeof OtherUserProfileSchema>;
+export type Audience = z.infer<typeof AudienceSchema>;
+export type ProfileShelf = z.infer<typeof ProfileShelfSchema>;
+export type UserShelfPage = z.infer<typeof UserShelfPageSchema>;
+export type UserReview = z.infer<typeof UserReviewSchema>;
+export type UserReviewsPage = z.infer<typeof UserReviewsPageSchema>;
 export type CollectionSummary = z.infer<typeof CollectionSummarySchema>;
 export type Collection = z.infer<typeof CollectionSchema>;
 export type SubscriptionSource = z.infer<typeof SubscriptionSourceSchema>;

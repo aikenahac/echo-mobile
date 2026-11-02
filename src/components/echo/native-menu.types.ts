@@ -1,10 +1,10 @@
-import type { SFSymbol } from "expo-symbols";
+import type { IconName } from "./icon-names";
 import type { ReactElement } from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 
 export type MenuItem = {
   title: string;
-  systemImage?: SFSymbol;
+  systemImage?: IconName;
   onPress: () => void;
   destructive?: boolean;
   /** Shows a checkmark (single-choice menus such as sort order) */

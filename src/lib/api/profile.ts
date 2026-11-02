@@ -1,19 +1,31 @@
 import {
+  type FeedResponse,
+  type FollowListResponse,
   type OtherUserProfile,
+  type ProfileShelf,
+  type UserReviewsPage,
+  type UserShelfPage,
   type ProfileStats,
   type SubscriptionResponse,
   type UploadUrlResponse,
   type UsernameAvailability,
+  FeedResponseSchema,
+  FollowListResponseSchema,
   MutationResponseSchema,
   OtherUserProfileSchema,
   ProfileStatsSchema,
   SubscriptionResponseSchema,
   UploadUrlResponseSchema,
   UsernameAvailabilitySchema,
+  UserReviewsPageSchema,
+  UserShelfPageSchema,
 } from "@/lib/schemas";
 import { Endpoints } from "./endpoints";
 import { ApiRequestError, handleApiResponse } from "./errors";
 import { useFetch } from "./fetch-wrapper";
+
+export const USER_SHELF_PAGE_SIZE = 30;
+export const USER_LIST_PAGE_SIZE = 20;
 
 export type ImageContentType = "image/jpeg" | "image/png" | "image/webp";
 
@@ -42,6 +54,37 @@ export function useProfileApi() {
   const getUser = async (userId: string): Promise<OtherUserProfile> =>
     handleApiResponse(await authenticatedFetch(Endpoints.users.get(userId)), OtherUserProfileSchema);
 
+  /** GET /users/{id}/books: one of their shelves, a page at a time (404 when hidden) */
+  const getUserShelf = async (userId: string, shelf: ProfileShelf, offset: number): Promise<UserShelfPage> => {
+    const params = new URLSearchParams({ shelf, limit: String(USER_SHELF_PAGE_SIZE), offset: String(offset) });
+    return handleApiResponse(await authenticatedFetch(`${Endpoints.users.books(userId)}?${params}`), UserShelfPageSchema);
+  };
+
+  /** GET /users/{id}/reviews: their reviews not marked private (404 when hidden) */
+  const getUserReviews = async (userId: string, offset: number): Promise<UserReviewsPage> => {
+    const params = new URLSearchParams({ limit: String(USER_LIST_PAGE_SIZE), offset: String(offset) });
+    return handleApiResponse(await authenticatedFetch(`${Endpoints.users.reviews(userId)}?${params}`), UserReviewsPageSchema);
+  };
+
+  /** GET /users/{id}/followers or /following (404 when profile content is hidden) */
+  const getFollowList = async (
+    userId: string,
+    direction: "followers" | "following",
+    offset: number,
+  ): Promise<FollowListResponse> => {
+    const params = new URLSearchParams({ limit: String(USER_LIST_PAGE_SIZE), offset: String(offset) });
+    return handleApiResponse(
+      await authenticatedFetch(`${Endpoints.users[direction](userId)}?${params}`),
+      FollowListResponseSchema,
+    );
+  };
+
+  /** GET /users/{id}/activity: their activity, shaped like the feed (404 when hidden) */
+  const getUserActivity = async (userId: string, offset: number): Promise<FeedResponse> => {
+    const params = new URLSearchParams({ limit: String(USER_LIST_PAGE_SIZE), offset: String(offset) });
+    return handleApiResponse(await authenticatedFetch(`${Endpoints.users.activity(userId)}?${params}`), FeedResponseSchema);
+  };
+
   /** DELETE /profile: permanently deletes the account (sign out afterwards) */
   const deleteAccount = async () =>
     handleApiResponse(await authenticatedFetch(Endpoints.profile.delete, { method: "DELETE" }), MutationResponseSchema);
@@ -66,5 +109,17 @@ export function useProfileApi() {
     return signed.publicUrl;
   };
 
-  return { getStats, getSubscription, syncSubscription, usernameAvailable, getUser, deleteAccount, uploadProfilePicture };
+  return {
+    getStats,
+    getSubscription,
+    syncSubscription,
+    usernameAvailable,
+    getUser,
+    getUserShelf,
+    getUserReviews,
+    getFollowList,
+    getUserActivity,
+    deleteAccount,
+    uploadProfilePicture,
+  };
 }

@@ -20,6 +20,9 @@
     },
     "preview": {
       "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
       "env": {
         "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_live_Y2xlcmsuZWNob3JlYWRzLmFwcCQ",
         "EXPO_PUBLIC_API_URL": "https://echoreads.app/api",
@@ -30,9 +33,6 @@
     },
     "production": {
       "autoIncrement": true,
-      "android": {
-        "buildType": "apk"
-      },
       "env": {
         "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_live_Y2xlcmsuZWNob3JlYWRzLmFwcCQ",
         "EXPO_PUBLIC_API_URL": "https://echoreads.app/api",
@@ -44,6 +44,10 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./keys/echo-app-479616-2ad76a3bfcfe.json"
+      }
+    }
   }
 }

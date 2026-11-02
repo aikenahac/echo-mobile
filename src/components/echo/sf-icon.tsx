@@ -1,9 +1,10 @@
 import { useColors } from "@/lib/theme";
-import { SymbolView, type SFSymbol, type SymbolWeight } from "expo-symbols";
-import type { ColorValue, StyleProp, ViewStyle } from "react-native";
+import type { SymbolWeight } from "expo-symbols";
+import { View, type ColorValue, type StyleProp, type ViewStyle } from "react-native";
+import { ICONS, type IconName } from "./icon-names";
 
-type Props = {
-  name: SFSymbol;
+export type SFIconProps = {
+  name: IconName;
   size?: number;
   /** Defaults to ink */
   color?: ColorValue;
@@ -11,16 +12,27 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-/** SF Symbols, tinted from the theme (HANDOFF.md § Icons) */
-export function SFIcon({ name, size = 22, color, weight = "medium", style }: Props) {
+/** Lucide strokes (24-unit grid) that read like the SF Symbol weights */
+const STROKE: Record<SymbolWeight, number> = {
+  unspecified: 2,
+  ultraLight: 1.25,
+  thin: 1.5,
+  light: 1.75,
+  regular: 1.9,
+  medium: 2,
+  semibold: 2.25,
+  bold: 2.5,
+  heavy: 2.75,
+  black: 3,
+};
+
+/** Android and web have no SF Symbols: the same names drawn with Lucide (icon-names.tsx) */
+export function SFIcon({ name, size = 22, color, weight = "medium", style }: SFIconProps) {
   const colors = useColors();
+  const Icon = ICONS[name];
   return (
-    <SymbolView
-      name={name}
-      size={size}
-      weight={weight}
-      tintColor={color ?? colors.ink}
-      style={[{ width: size, height: size }, style]}
-    />
+    <View style={[{ width: size, height: size }, style]}>
+      <Icon size={size} color={String(color ?? colors.ink)} strokeWidth={STROKE[weight]} />
+    </View>
   );
 }

@@ -5,7 +5,8 @@ import { Button, Form, HStack, Image, LabeledContent, Picker, RNHostView, Sectio
 import { accessibilityLabel, font, foregroundStyle, listRowBackground, listRowInsets, pickerStyle, scrollContentBackground, tag, tint } from "@expo/ui/swift-ui/modifiers";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
-import { useProfileQueriesForSettings } from "./use-settings";
+import { PRIVACY_SETTINGS, useProfileQueriesForSettings } from "./use-settings";
+import type { Audience } from "@/lib/schemas";
 
 /** Settings (r6 22) as a native grouped Form */
 export function SettingsForm() {
@@ -100,6 +101,28 @@ export function SettingsForm() {
             <Text modifiers={[tag("list")]}>{t("settings.list")}</Text>
           </Picker>
         </Section>
+
+        {s.privacySettings && (
+          <Section
+            title={t("settings.privacySection")}
+            modifiers={rows}
+            footer={<Text modifiers={[font({ textStyle: "footnote" }), secondary]}>{t("settings.privacyFooter")}</Text>}
+          >
+            {PRIVACY_SETTINGS.map((setting) => (
+              <Picker
+                key={setting}
+                label={t(`settings.${setting}`)}
+                selection={s.privacySettings![setting]}
+                onSelectionChange={(v) => s.setPrivacy(setting, v as Audience)}
+                modifiers={[pickerStyle("menu"), tint(colors.ink2)]}
+              >
+                {s.audiences.map((a) => (
+                  <Text key={a} modifiers={[tag(a)]}>{s.audienceLabel(setting, a)}</Text>
+                ))}
+              </Picker>
+            ))}
+          </Section>
+        )}
 
         <Section modifiers={rows}>
           <Button onPress={s.blockedUsers}>

@@ -1,12 +1,12 @@
-import { CapsuleButton } from "@/components/echo";
-import { ProfileHead, ReadingNowBand, ShelfStrip, YearStat } from "@/components/profile/profile-parts";
+import { CapsuleButton, Toolbar } from "@/components/echo";
+import { FollowCounts, ProfileHead, ReadingNowBand, ShelfStrip, YearStat } from "@/components/profile/profile-parts";
 import { useLibrary } from "@/hooks/api/library/use-library";
 import { useProfileStats } from "@/hooks/api/profile/use-profile-queries";
 import { useProfile } from "@/hooks/api/user/use-get-me";
 import { getErrorMessage } from "@/lib/api/errors";
 import type { Shelf } from "@/lib/library-cache";
 import { spacing, useColors } from "@/lib/theme";
-import { Stack, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, RefreshControl, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -31,10 +31,13 @@ export default function YouScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.paper }}>
-      <Stack.Toolbar placement="right">
-        <Stack.Toolbar.Button icon="pencil" tintColor={colors.ink} accessibilityLabel={t("profile.edit")} onPress={() => router.push("/edit-profile")} />
-        <Stack.Toolbar.Button icon="gearshape" tintColor={colors.ink} accessibilityLabel={t("profile.settings")} onPress={() => router.push("/settings")} />
-      </Stack.Toolbar>
+      <Toolbar
+        placement="right"
+        items={[
+          { kind: "button", icon: "pencil", tint: colors.ink, label: t("profile.edit"), onPress: () => router.push("/edit-profile") },
+          { kind: "button", icon: "gearshape", tint: colors.ink, label: t("profile.settings"), onPress: () => router.push("/settings") },
+        ]}
+      />
 
       <ScrollView
         contentInsetAdjustmentBehavior="never"
@@ -51,7 +54,15 @@ export default function YouScreen() {
           </View>
         ) : (
           <>
-            <ProfileHead user={profile.data} />
+            <ProfileHead user={profile.data}>
+              {profile.data.followerCount !== undefined ? (
+                <FollowCounts
+                  userId={profile.data.id}
+                  followerCount={profile.data.followerCount}
+                  followingCount={profile.data.followingCount ?? 0}
+                />
+              ) : null}
+            </ProfileHead>
             {stats.data && <YearStat count={stats.data.booksFinishedThisYear} pages={stats.data.pagesReadThisYear} />}
             <ReadingNowBand books={reading} onOpen={openBook} />
             <ShelfStrip title={t("profile.favourites")} books={(lib?.favoriteBooks ?? []).map((b) => b.book)} onOpen={openBook} />

@@ -1,6 +1,6 @@
 import { useTheme } from '@/lib/theme-context';
 import { DarkTheme, DefaultTheme, type Theme } from 'expo-router';
-import type { TextStyle } from 'react-native';
+import { Platform, type TextStyle } from 'react-native';
 
 /**
  * Echo design tokens (design/redesign/HANDOFF.md § Tokens).
@@ -34,6 +34,8 @@ const light = {
   fieldTile: 'rgba(255,235,243,0.6)',
   /** Lift under floating glass controls (system chrome, not content) */
   glassShadow: '0 6px 16px rgba(70,8,36,0.12)',
+  /** What floats over the page (the status ribbon): a contact shadow and a wide ambient one */
+  floatShadow: '0 1px 2px rgba(70,8,36,0.10), 0 18px 40px -12px rgba(70,8,36,0.35)',
   /** The one shadow: covers only */
   coverShadow: '0 1px 1px rgba(23,11,17,0.14), 0 14px 22px -12px rgba(70,8,36,0.5)',
 };
@@ -59,6 +61,7 @@ const dark: typeof light = {
   fieldGlass: 'rgba(255,140,191,0.16)',
   fieldTile: 'rgba(255,232,241,0.14)',
   glassShadow: '0 6px 16px rgba(0,0,0,0.35)',
+  floatShadow: '0 0 0 0.5px rgba(255,232,241,0.10), 0 22px 44px -10px rgba(0,0,0,0.75)',
   coverShadow: '0 0 0 0.5px rgba(255,255,255,0.08), 0 14px 22px -12px rgba(0,0,0,0.8)',
 };
 
@@ -99,6 +102,9 @@ export function useStatusBarStyle(): 'light' | 'dark' {
 
 /** Spacing scale (pt). `lg` (20) is the screen side margin. */
 export const spacing = { xs: 4, sm: 8, md: 12, lg: 20, xl: 32, xxl: 48 } as const;
+
+/** Extra space under the status bar on screens that draw their own top (iOS insets already clear the island) */
+export const topGap = Platform.select({ ios: 6, default: 20 });
 
 export const radius = {
   /** Covers: spine side smaller */

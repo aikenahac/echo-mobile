@@ -1,4 +1,4 @@
-import { CapsuleButton, NativeSwitch, SFIcon, TextField } from "@/components/echo";
+import { CapsuleButton, NativeSwitch, SFIcon, TextField, Toolbar } from "@/components/echo";
 import { useCollections, useCreateCollection, useDeleteCollection, useUpdateCollection } from "@/hooks/api/collections/use-collections";
 import { useLibrary } from "@/hooks/api/library/use-library";
 import { queryKeys } from "@/hooks/query-keys";
@@ -149,12 +149,11 @@ function Editor({ existing, addUserBookId }: { existing?: Collection; addUserBoo
   return (
     <>
       <Stack.Screen.Title>{existing ? t("collections.editTitle") : t("collections.newTitle")}</Stack.Screen.Title>
-      <Stack.Toolbar placement="left">
-        <Stack.Toolbar.Button icon="xmark" accessibilityLabel={t("editProfile.close")} onPress={() => router.back()} />
-      </Stack.Toolbar>
-      <Stack.Toolbar placement="right">
-        <Stack.Toolbar.Button icon="checkmark" variant="prominent" tintColor={colors.ink} accessibilityLabel={t("common.save")} disabled={saving} onPress={save} />
-      </Stack.Toolbar>
+      <Toolbar placement="left" items={[{ kind: "button", icon: "xmark", label: t("editProfile.close"), onPress: () => router.back() }]} />
+      <Toolbar
+        placement="right"
+        items={[{ kind: "button", icon: "checkmark", prominent: true, tint: colors.ink, label: t("common.save"), disabled: saving, onPress: save }]}
+      />
 
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"

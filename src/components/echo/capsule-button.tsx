@@ -1,5 +1,5 @@
 import { useColors, type Palette } from "@/lib/theme";
-import type { SFSymbol } from "expo-symbols";
+import type { IconName } from "./icon-names";
 import { ActivityIndicator, Pressable, Text, View, type StyleProp, type ViewStyle } from "react-native";
 import { SFIcon } from "./sf-icon";
 
@@ -25,7 +25,7 @@ type Size = "lg" | "md" | "sm";
 
 type Props = {
   title?: string;
-  icon?: SFSymbol;
+  icon?: IconName;
   /** Put the icon after the title (an outward arrow) */
   iconTrailing?: boolean;
   variant?: Variant;

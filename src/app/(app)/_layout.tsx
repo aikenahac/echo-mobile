@@ -104,6 +104,26 @@ export default function AppLayout() {
           headerShadowVisible: false,
         }}
       />
+      <Stack.Screen
+        name="user-shelf/[userId]/[shelf]"
+        options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: "",
+          headerBackButtonDisplayMode: "minimal",
+          headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="follows/[userId]/[direction]"
+        options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: "",
+          headerBackButtonDisplayMode: "minimal",
+          headerShadowVisible: false,
+        }}
+      />
       <Stack.Screen name="premium" options={{ presentation: "fullScreenModal", statusBarStyle: "dark" }} />
       <Stack.Screen
         name="add-to-collection/[userBookId]"

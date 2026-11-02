@@ -18,6 +18,10 @@ export const queryKeys = {
   blockedUsers: ["users", "blocked"] as const,
   users: ["users"] as const,
   user: (userId: string) => ["users", userId] as const,
+  userShelf: (userId: string, shelf: string) => ["users", userId, "books", shelf] as const,
+  userReviews: (userId: string) => ["users", userId, "reviews"] as const,
+  userActivity: (userId: string) => ["users", userId, "activity"] as const,
+  userFollows: (userId: string, direction: "followers" | "following") => ["users", userId, direction] as const,
 };
 
 /**

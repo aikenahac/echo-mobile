@@ -27,6 +27,7 @@ export default function AppTabsLayout() {
       {/* TODO(phase 5): confirm the system separates this into its own glass button once the
           search screen has a native search bar (r6 shows it apart from the three tabs) */}
       <NativeTabs.Trigger name="search" role="search">
+        <NativeTabs.Trigger.Icon sf="magnifyingglass" md="search" />
         <NativeTabs.Trigger.Label>{t("tabs.search")}</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
     </NativeTabs>

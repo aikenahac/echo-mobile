@@ -1,4 +1,4 @@
-import { CollectionTile, DisplayText, Hairline, SFIcon } from "@/components/echo";
+import { CollectionTile, DisplayText, Hairline, SFIcon, Toolbar } from "@/components/echo";
 import { ShelfGridCell, ShelfListRow } from "@/components/library/shelf-rows";
 import { useCollection, useDeleteCollection, useUpdateCollection } from "@/hooks/api/collections/use-collections";
 import { useLibraryLayout } from "@/hooks/use-library-layout";
@@ -8,7 +8,7 @@ import type { UserBook } from "@/lib/schemas";
 import { fixed, spacing, useColors } from "@/lib/theme";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Alert, ScrollView, Text, useWindowDimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -23,13 +23,15 @@ const WHITE_2 = fixed.onColor2;
  * a cover image fills the banner behind a scrim. Books in a 3-column grid (or the list).
  */
 export default function CollectionScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  // shared: someone else's public collection, opened from their profile (read-only)
+  const { id, shared } = useLocalSearchParams<{ id: string; shared?: string }>();
+  const isShared = shared === "1";
   const colors = useColors();
   const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
-  const collection = useCollection(id);
+  const collection = useCollection(id, isShared);
   const update = useUpdateCollection();
   const remove = useDeleteCollection();
   const [layout, setLayout] = useLibraryLayout();
@@ -67,31 +69,37 @@ export default function CollectionScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.paper }}>
-      <Stack.Toolbar placement="right">
-        <Stack.Toolbar.Button
-          icon={layout === "grid" ? "square.grid.2x2" : "list.bullet"}
-          tintColor={WHITE}
-          accessibilityLabel={layout === "grid" ? t("collections.showList") : t("collections.showGrid")}
-          onPress={() => {
-            Haptics.selectionAsync();
-            setLayout(layout === "grid" ? "list" : "grid");
-          }}
-        />
-        <Stack.Toolbar.Menu icon="ellipsis" tintColor={WHITE} accessibilityLabel={t("collections.more")}>
-          <Stack.Toolbar.MenuAction icon="pencil" onPress={() => router.push({ pathname: "/collection-editor", params: { id: c.id } })}>
-            {t("collections.edit")}
-          </Stack.Toolbar.MenuAction>
-          <Stack.Toolbar.MenuAction
-            icon={c.isPublic ? "lock" : "globe"}
-            onPress={() => update.mutate({ id: c.id, isPublic: !c.isPublic }, { onError: (e) => Alert.alert(getErrorMessage(e)) })}
-          >
-            {c.isPublic ? t("collections.makePrivate") : t("collections.makePublic")}
-          </Stack.Toolbar.MenuAction>
-          <Stack.Toolbar.MenuAction icon="trash" destructive onPress={confirmDelete}>
-            {t("collections.delete")}
-          </Stack.Toolbar.MenuAction>
-        </Stack.Toolbar.Menu>
-      </Stack.Toolbar>
+      <Toolbar
+        placement="right"
+        items={[
+          {
+            kind: "button",
+            icon: layout === "grid" ? "square.grid.2x2" : "list.bullet",
+            tint: WHITE,
+            label: layout === "grid" ? t("collections.showList") : t("collections.showGrid"),
+            onPress: () => {
+              Haptics.selectionAsync();
+              setLayout(layout === "grid" ? "list" : "grid");
+            },
+          },
+          // Someone else's collection is read-only
+          !isShared && {
+            kind: "menu",
+            icon: "ellipsis",
+            tint: WHITE,
+            label: t("collections.more"),
+            items: [
+              { title: t("collections.edit"), systemImage: "pencil", onPress: () => router.push({ pathname: "/collection-editor", params: { id: c.id } }) },
+              {
+                title: c.isPublic ? t("collections.makePrivate") : t("collections.makePublic"),
+                systemImage: c.isPublic ? "lock" : "globe",
+                onPress: () => update.mutate({ id: c.id, isPublic: !c.isPublic }, { onError: (e) => Alert.alert(getErrorMessage(e)) }),
+              },
+              { title: t("collections.delete"), systemImage: "trash", destructive: true, onPress: confirmDelete },
+            ],
+          },
+        ]}
+      />
 
       <ScrollView contentInsetAdjustmentBehavior="never" contentContainerStyle={{ paddingBottom: insets.bottom + 48 }}>
         {/* The banner colour continues above the top on overscroll */}

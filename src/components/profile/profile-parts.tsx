@@ -8,13 +8,15 @@ import {
 } from "@/components/echo";
 import { bookTotal, displayName, isAdmin } from "@/lib/books";
 import type { Book, PublicUser, User, UserBook } from "@/lib/schemas";
-import { spacing, useColors } from "@/lib/theme";
+import { spacing, type, useColors } from "@/lib/theme";
+import { useRouter } from "expo-router";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Pressable,
   ScrollView,
   Text,
+  type TextStyle,
   useWindowDimensions,
   View,
 } from "react-native";
@@ -81,6 +83,52 @@ export function ProfileHead({
         </Text>
       )}
       {children}
+    </View>
+  );
+}
+
+/** Compact follower counts; privacy can leave the visible counts non-interactive. */
+export function FollowCounts({
+  userId,
+  followerCount,
+  followingCount,
+  interactive = true,
+}: {
+  userId: string;
+  followerCount: number;
+  followingCount: number;
+  interactive?: boolean;
+}) {
+  const colors = useColors();
+  const { t } = useTranslation();
+  const router = useRouter();
+  const textStyle: TextStyle = { ...type.meta, color: colors.ink2, fontVariant: ["tabular-nums"] };
+
+  if (!interactive) {
+    return (
+      <Text style={{ ...textStyle, marginTop: spacing.md }}>
+        {t("profile.followers", { count: followerCount })} · {t("profile.following", { count: followingCount })}
+      </Text>
+    );
+  }
+
+  return (
+    <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.xs, marginTop: spacing.md }}>
+      <Pressable
+        accessibilityRole="link"
+        hitSlop={spacing.sm}
+        onPress={() => router.push({ pathname: "/follows/[userId]/[direction]", params: { userId, direction: "followers" } })}
+      >
+        <Text style={textStyle}>{t("profile.followers", { count: followerCount })}</Text>
+      </Pressable>
+      <Text style={textStyle}>·</Text>
+      <Pressable
+        accessibilityRole="link"
+        hitSlop={spacing.sm}
+        onPress={() => router.push({ pathname: "/follows/[userId]/[direction]", params: { userId, direction: "following" } })}
+      >
+        <Text style={textStyle}>{t("profile.following", { count: followingCount })}</Text>
+      </Pressable>
     </View>
   );
 }

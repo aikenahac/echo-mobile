@@ -9,10 +9,14 @@ export const useCollections = () => {
   return useQuery({ queryKey: queryKeys.collections, queryFn: getCollections });
 };
 
-/** GET /collections/{id} */
-export const useCollection = (id: string) => {
-  const { getCollection } = useCollectionsApi();
-  return useQuery({ queryKey: queryKeys.collection(id), queryFn: () => getCollection(id), enabled: !!id });
+/** GET /collections/{id}, or GET /collections/{id}/public for someone else's (`shared`) */
+export const useCollection = (id: string, shared = false) => {
+  const { getCollection, getPublicCollection } = useCollectionsApi();
+  return useQuery({
+    queryKey: shared ? [...queryKeys.collection(id), "public"] : queryKeys.collection(id),
+    queryFn: () => (shared ? getPublicCollection(id) : getCollection(id)),
+    enabled: !!id,
+  });
 };
 
 const refresh = (queryClient: ReturnType<typeof useQueryClient>) =>

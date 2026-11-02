@@ -1,4 +1,4 @@
-import { Avatar, CapsuleButton, SFIcon, TextField } from "@/components/echo";
+import { Avatar, CapsuleButton, SFIcon, TextField, Toolbar } from "@/components/echo";
 import { useUsernameAvailability } from "@/hooks/api/profile/use-profile-queries";
 import { useProfile } from "@/hooks/api/user/use-get-me";
 import { useUpdateProfile } from "@/hooks/api/user/use-update-me";
@@ -141,19 +141,21 @@ function Editor({ me }: { me: User }) {
   return (
     <>
       <Stack.Screen.Title>{t("editProfile.title")}</Stack.Screen.Title>
-      <Stack.Toolbar placement="left">
-        <Stack.Toolbar.Button icon="xmark" accessibilityLabel={t("editProfile.close")} onPress={close} />
-      </Stack.Toolbar>
-      <Stack.Toolbar placement="right">
-        <Stack.Toolbar.Button
-          icon="checkmark"
-          variant="prominent"
-          tintColor={colors.ink}
-          accessibilityLabel={t("editProfile.save")}
-          disabled={updateProfile.isPending || uploading}
-          onPress={save}
-        />
-      </Stack.Toolbar>
+      <Toolbar placement="left" items={[{ kind: "button", icon: "xmark", label: t("editProfile.close"), onPress: close }]} />
+      <Toolbar
+        placement="right"
+        items={[
+          {
+            kind: "button",
+            icon: "checkmark",
+            prominent: true,
+            tint: colors.ink,
+            label: t("editProfile.save"),
+            disabled: updateProfile.isPending || uploading,
+            onPress: save,
+          },
+        ]}
+      />
 
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"

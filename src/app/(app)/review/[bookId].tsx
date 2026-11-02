@@ -1,4 +1,4 @@
-import { CapsuleButton, Cover, DisplayText, NativeSwitch, Stars, TextField } from "@/components/echo";
+import { CapsuleButton, Cover, DisplayText, NativeSwitch, Stars, TextField, Toolbar } from "@/components/echo";
 import { useCatalogBook } from "@/hooks/api/catalog/use-catalog-book";
 import { useRateBook } from "@/hooks/api/library/use-rate-book";
 import { useDeleteReview, useSaveReview } from "@/hooks/api/reviews/use-review-mutations";
@@ -86,19 +86,11 @@ function Editor({ data }: { data: NonNullable<ReturnType<typeof useCatalogBook>[
   return (
     <>
       <Stack.Screen.Title>{t("review.title")}</Stack.Screen.Title>
-      <Stack.Toolbar placement="left">
-        <Stack.Toolbar.Button icon="xmark" accessibilityLabel={t("review.close")} onPress={close} />
-      </Stack.Toolbar>
-      <Stack.Toolbar placement="right">
-        <Stack.Toolbar.Button
-          icon="checkmark"
-          variant="prominent"
-          tintColor={colors.ink}
-          accessibilityLabel={t("review.save")}
-          disabled={saveReview.isPending}
-          onPress={save}
-        />
-      </Stack.Toolbar>
+      <Toolbar placement="left" items={[{ kind: "button", icon: "xmark", label: t("review.close"), onPress: close }]} />
+      <Toolbar
+        placement="right"
+        items={[{ kind: "button", icon: "checkmark", prominent: true, tint: colors.ink, label: t("review.save"), disabled: saveReview.isPending, onPress: save }]}
+      />
 
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"

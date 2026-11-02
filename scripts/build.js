@@ -85,11 +85,20 @@ main().catch((error) => {
 });
 
 function createBuildName({ platform, profile }) {
-  let extension = platform === 'ios' ? 'ipa' : 'apk';
+  let extension = platform === 'ios' ? 'ipa' : androidBuildsApk(profile) ? 'apk' : 'aab';
 
   if (profile === 'ios-simulator' && platform === 'ios') {
     extension = 'tar.gz'; // iOS Simulator builds are packaged as tar.gz
   }
 
   return `./builds/${profile}-${appConfig.expo.slug}.${extension}`;
+}
+
+// EAS builds an .aab unless the profile (or one it extends) asks for an APK or is a dev client
+function androidBuildsApk(profile) {
+  const config = easConfig[profile];
+  if (!config) return false;
+  if (config.android?.buildType) return config.android.buildType === 'apk';
+  if (config.android?.gradleCommand || config.developmentClient) return true;
+  return config.extends ? androidBuildsApk(config.extends) : false;
 }

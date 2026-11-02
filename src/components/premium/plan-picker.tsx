@@ -63,7 +63,7 @@ export function PlanPicker({ packages, selected, onSelect }: Props) {
                   <Text style={{ fontSize: 17, fontWeight: "600", letterSpacing: -0.3, color: colors.onField }}>
                     {t(`premium.plan.${type}`)}
                   </Text>
-                  {pkg.packageType === PACKAGE_TYPE.ANNUAL && <Stamp label={t("stamp.bestValue")} size={11} rotate={-3} />}
+                  {pkg.packageType === PACKAGE_TYPE.LIFETIME && <Stamp label={t("stamp.bestValue")} size={11} rotate={-3} />}
                 </View>
                 {note && <Text style={{ fontSize: 13, marginTop: 1, color: colors.onField2 }}>{note}</Text>}
               </View>

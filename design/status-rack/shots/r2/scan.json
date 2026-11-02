@@ -1,0 +1,175 @@
+{
+  "surfaces": [
+    {
+      "name": "a-reading-dark",
+      "type": "screen",
+      "fails": [],
+      "warns": [
+        "Largest text is 17px. No element owns the screen. (Mark data-dense if this is deliberate.)"
+      ],
+      "facts": {
+        "os": "ios",
+        "kind": "detail",
+        "fonts": {
+          "SF Pro": 7
+        },
+        "sizes": [
+          17,
+          13
+        ],
+        "weights": [
+          "400",
+          "600",
+          "700"
+        ],
+        "leftEdges": 1,
+        "words": 44,
+        "headline": "17px, 3 words, 1 line(s)",
+        "accentHues": [
+          336,
+          192
+        ],
+        "cards": 1
+      }
+    },
+    {
+      "name": "a-finished-light",
+      "type": "screen",
+      "fails": [],
+      "warns": [
+        "Largest text is 17px. No element owns the screen. (Mark data-dense if this is deliberate.)"
+      ],
+      "facts": {
+        "os": "ios",
+        "kind": "detail",
+        "fonts": {
+          "SF Pro": 7
+        },
+        "sizes": [
+          17,
+          13
+        ],
+        "weights": [
+          "400",
+          "600",
+          "700"
+        ],
+        "leftEdges": 1,
+        "words": 55,
+        "headline": "17px, 3 words, 1 line(s)",
+        "accentHues": [
+          48,
+          336
+        ],
+        "cards": 1
+      }
+    },
+    {
+      "name": "b-reading-dark",
+      "type": "screen",
+      "fails": [],
+      "warns": [],
+      "facts": {
+        "os": "ios",
+        "kind": "detail",
+        "fonts": {
+          "Archivo": 3
+        },
+        "sizes": [
+          17
+        ],
+        "weights": [
+          "400"
+        ],
+        "leftEdges": 2,
+        "words": 27,
+        "headline": "17px, 1 words, 1 line(s)",
+        "accentHues": [
+          336,
+          192
+        ],
+        "cards": 0
+      }
+    },
+    {
+      "name": "b-finished-light",
+      "type": "screen",
+      "fails": [],
+      "warns": [],
+      "facts": {
+        "os": "ios",
+        "kind": "detail",
+        "fonts": {
+          "Archivo": 3
+        },
+        "sizes": [
+          17
+        ],
+        "weights": [
+          "400"
+        ],
+        "leftEdges": 2,
+        "words": 40,
+        "headline": "17px, 1 words, 1 line(s)",
+        "accentHues": [
+          48
+        ],
+        "cards": 0
+      }
+    },
+    {
+      "name": "c-reading-dark",
+      "type": "screen",
+      "fails": [],
+      "warns": [],
+      "facts": {
+        "os": "ios",
+        "kind": "detail",
+        "fonts": {
+          "Archivo": 3
+        },
+        "sizes": [
+          17
+        ],
+        "weights": [
+          "400"
+        ],
+        "leftEdges": 2,
+        "words": 26,
+        "headline": "17px, 1 words, 1 line(s)",
+        "accentHues": [
+          336,
+          192
+        ],
+        "cards": 0
+      }
+    },
+    {
+      "name": "c-finished-light",
+      "type": "screen",
+      "fails": [],
+      "warns": [],
+      "facts": {
+        "os": "ios",
+        "kind": "detail",
+        "fonts": {
+          "Archivo": 3
+        },
+        "sizes": [
+          17
+        ],
+        "weights": [
+          "400"
+        ],
+        "leftEdges": 2,
+        "words": 39,
+        "headline": "17px, 1 words, 1 line(s)",
+        "accentHues": [
+          48
+        ],
+        "cards": 0
+      }
+    }
+  ],
+  "exports": []
+}

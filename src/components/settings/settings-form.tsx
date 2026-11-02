@@ -3,7 +3,7 @@ import { spacing, useColors } from "@/lib/theme";
 import { useTranslation } from "react-i18next";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useProfileQueriesForSettings } from "./use-settings";
+import { PRIVACY_SETTINGS, useProfileQueriesForSettings } from "./use-settings";
 
 /** Plain fallback where the SwiftUI form isn't available */
 export function SettingsForm() {
@@ -34,6 +34,25 @@ export function SettingsForm() {
       <Hairline />
       <Row title={t("settings.appearance")} value={s.themeMode} onPress={() => s.setThemeMode(s.themeMode === "dark" ? "light" : "dark")} />
       <Row title={t("settings.libraryLayout")} value={s.layout} onPress={() => s.setLayout(s.layout === "grid" ? "list" : "grid")} />
+      {s.privacySettings && (
+        <>
+          <Hairline />
+          {PRIVACY_SETTINGS.map((setting) => {
+            const value = s.privacySettings![setting];
+            // Tapping steps to the next audience
+            const next = s.audiences[(s.audiences.indexOf(value) + 1) % s.audiences.length];
+            return (
+              <Row
+                key={setting}
+                title={t(`settings.${setting}`)}
+                value={s.audienceLabel(setting, value)}
+                onPress={() => s.setPrivacy(setting, next)}
+              />
+            );
+          })}
+          <Text style={{ fontSize: 13, lineHeight: 18, color: colors.ink2, marginBottom: 8 }}>{t("settings.privacyFooter")}</Text>
+        </>
+      )}
       <Hairline />
       <Row title={t("settings.blockedUsers")} onPress={s.blockedUsers} />
       <Row title={t("settings.terms")} onPress={s.terms} />

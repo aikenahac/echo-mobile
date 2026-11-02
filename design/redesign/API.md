@@ -272,7 +272,7 @@ type FeedItem =
 
 | Element | Call |
 |---|---|
-| Avatar, name, @username, bio | `GET /profile` → `{ id, email, username, displayName, bio, profilePictureUrl, role, isPremium, planName, … }` |
+| Avatar, name, @username, bio | `GET /profile` → `{ id, email, username, displayName, bio, profilePictureUrl, role, isPremium, planName, followerCount, followingCount, … }` |
 | "19 books finished in 2026" + "6,412 pages" | `GET /profile/stats` → `booksFinishedThisYear`, `pagesReadThisYear` (calendar year, server time; pages use the catalog page counts) |
 | "Reading now" band, "p. 168 / 245" | `GET /books` → `currentlyReading`, `currentPage / total` |
 | Favourites / Want to read 7 / Finished shelves, "See all" | `GET /books` → the arrays; "See all" opens the Library on that shelf |
@@ -283,12 +283,28 @@ type FeedItem =
 counts don't need the full library. There's no streak; don't show one.
 
 ### 7.1 Other people's profiles (not drawn; build it in the same language when a feed or reader row is tapped)
-- `GET /users/{userId}` → `{ user: PublicUser & { bio }, stats: { booksFinishedThisYear, finishedCount }, followerCount,
-  followingCount, isFollowing, currentlyReading, recentlyFinished, favorites (each up to 6 UserBook with book),
-  publicCollections (with bookCount, no books) }`. 404 for an unknown user. It never includes reviews or email.
+Each reader chooses who sees three parts of their profile, each `"public" | "followers" | "friends" | "private"`
+(friends follow each other): **profile content** (shelves, stats, public collections, follow lists; default
+friends), **activity** (their Activity tab and their items in your feed; default followers) and **reviews** (reviews
+not marked private, everywhere; default public). The header is always visible so anyone can follow.
+- `GET /users/{userId}` (id or username) → `{ user: PublicUser & { bio }, relationship: { isSelf, isFollowing,
+  followsYou, isFriend }, access: { content, activity, reviews }, visibility: { content, activity, reviews },
+  stats: { booksFinishedThisYear, pagesReadThisYear, finishedCount }, counts: { want, finished }, followerCount,
+  followingCount, isFollowing, currentlyReading, recentlyFinished, wantToRead, favorites (each up to 6 UserBook with
+  book), publicCollections (with bookCount, no books) }`. Shelves, stats and collections are empty unless
+  `access.content`. 404 for an unknown or blocked user. Never email.
+- Shelves in full: `GET /users/{userId}/books?shelf=reading|want|finished|favourites&limit=(max 60)&offset=` →
+  `{ results: UserBook[], hasMore }`. 404 unless `access.content`.
+- Reviews: `GET /users/{userId}/reviews?limit=(max 50)&offset=` → `{ results: (Review & { book })[], hasMore }`.
+  404 unless `access.reviews`.
+- Activity: `GET /users/{userId}/activity?limit=&offset=` → the `/feed` shape. 404 unless `access.activity`.
 - Follower and following lists: `GET /users/{userId}/followers` and `/following` with `limit` (max 50) and `offset` →
-  `{ results: (PublicUser & { isFollowing })[], hasMore }`. Here `isFollowing` is whether **you** follow that person.
-- Follow button: the same `/social/follow` calls as §5.
+  `{ results: (PublicUser & { isSelf, isFollowing, followsYou, isFriend })[], hasMore }`. `isFollowing` means **you**
+  follow that row's reader, `followsYou` means they follow you, `isFriend` means both, and `isSelf` identifies your row.
+  404 unless `access.content`.
+- Follow button: the same `/social/follow` calls as §5. Refetch the profile afterwards: following can unlock parts.
+- Your own settings: `GET /profile` returns `profileVisibility`, `activityVisibility`, `reviewVisibility`;
+  `PUT /profile` takes any of them.
 
 ---
 

@@ -48,6 +48,7 @@ export const Endpoints = {
     create: "/v1/collections",
     order: "/v1/collections/order",
     getById: (id: string) => `/v1/collections/${id}`,
+    getPublic: (id: string) => `/v1/collections/${id}/public`,
     update: (id: string) => `/v1/collections/${id}`,
     delete: (id: string) => `/v1/collections/${id}`,
     addBook: (id: string) => `/v1/collections/${id}/books`,
@@ -69,5 +70,8 @@ export const Endpoints = {
     get: (userId: string) => `/v1/users/${userId}`,
     followers: (userId: string) => `/v1/users/${userId}/followers`,
     following: (userId: string) => `/v1/users/${userId}/following`,
+    books: (userId: string) => `/v1/users/${userId}/books`,
+    reviews: (userId: string) => `/v1/users/${userId}/reviews`,
+    activity: (userId: string) => `/v1/users/${userId}/activity`,
   },
 };

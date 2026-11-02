@@ -1,10 +1,10 @@
 import { useColors } from "@/lib/theme";
-import type { SFSymbol } from "expo-symbols";
+import type { IconName } from "./icon-names";
 import { Pressable, type StyleProp, type ViewStyle } from "react-native";
 import { SFIcon } from "./sf-icon";
 
 type Props = {
-  icon: SFSymbol;
+  icon: IconName;
   accessibilityLabel: string;
   onPress?: () => void;
   /** On the field the button is a light glass wash; on paper it is a surface disc */
