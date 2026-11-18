@@ -57,6 +57,10 @@ export const UserSchema = z.object({
   notifyReviews: z.boolean().optional(),
   notifyCollectionFollows: z.boolean().optional(),
   notifyAnnouncements: z.boolean().optional(),
+  /** Discord community: linked account, whether linking is set up, the invite */
+  discordConnected: z.boolean().optional(),
+  discordLinkingAvailable: z.boolean().optional(),
+  discordInviteUrl: z.string().nullable().optional(),
   followerCount: z.number().int().optional(),
   followingCount: z.number().int().optional(),
   createdAt: Timestamp,

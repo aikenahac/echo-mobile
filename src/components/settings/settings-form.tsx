@@ -86,6 +86,21 @@ export function SettingsForm() {
       <Row title={t("settings.blockedUsers")} onPress={s.blockedUsers} />
       <Row title={t("settings.terms")} onPress={s.terms} />
       <Row title={t("settings.privacy")} onPress={s.privacy} />
+      {(s.joinDiscord || s.discordLinkingAvailable) && (
+        <>
+          <Hairline />
+          {s.joinDiscord && <Row title={t("settings.joinDiscord")} onPress={s.joinDiscord} />}
+          {s.discordLinkingAvailable &&
+            (s.discordConnected ? (
+              <Row title={t("settings.discordConnected")} value={t("settings.disconnectDiscord")} onPress={s.disconnectDiscord} />
+            ) : (
+              <>
+                <Row title={t("settings.connectDiscord")} onPress={s.connectDiscord} />
+                <Text style={{ fontSize: 13, lineHeight: 18, color: colors.ink2, marginBottom: 8 }}>{t("settings.connectDiscordHint")}</Text>
+              </>
+            ))}
+        </>
+      )}
       <CapsuleButton title={t("settings.signOut")} variant="outline" onPress={s.signOut} style={{ marginTop: 24 }} />
       <CapsuleButton title={t("settings.deleteAccount")} variant="plain" destructive onPress={s.deleteAccount} style={{ marginTop: 8 }} />
       <Text style={{ fontSize: 13, color: colors.ink2, textAlign: "center", marginTop: 16 }}>{s.version}</Text>

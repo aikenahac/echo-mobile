@@ -38,6 +38,8 @@ export const Endpoints = {
     token: "/v1/notifications/token",
   },
 
+  discord: "/v1/discord",
+
   profile: {
     get: "/v1/profile",
     update: "/v1/profile",

@@ -163,6 +163,28 @@ export function SettingsForm() {
           <LinkRow title={t("settings.privacy")} onPress={s.privacy} />
         </Section>
 
+        {(s.joinDiscord || s.discordLinkingAvailable) && (
+          <Section
+            title={t("settings.communitySection")}
+            modifiers={rows}
+            footer={
+              s.discordLinkingAvailable && !s.discordConnected ? (
+                <Text modifiers={[font({ textStyle: "footnote" }), secondary]}>{t("settings.connectDiscordHint")}</Text>
+              ) : undefined
+            }
+          >
+            {s.joinDiscord && <LinkRow title={t("settings.joinDiscord")} onPress={s.joinDiscord} />}
+            {s.discordLinkingAvailable &&
+              (s.discordConnected ? (
+                <LabeledContent label={t("settings.discordConnected")}>
+                  <Button label={t("settings.disconnectDiscord")} onPress={s.disconnectDiscord} />
+                </LabeledContent>
+              ) : (
+                <LinkRow title={t("settings.connectDiscord")} onPress={s.connectDiscord} />
+              ))}
+          </Section>
+        )}
+
         <Section modifiers={rows} footer={<Text modifiers={[font({ textStyle: "footnote" }), secondary]}>{s.version}</Text>}>
           <Button label={t("settings.signOut")} onPress={s.signOut} modifiers={[foregroundStyle({ type: "color", color: colors.ink })]} />
           <Button label={t("settings.deleteAccount")} role="destructive" onPress={s.deleteAccount} />

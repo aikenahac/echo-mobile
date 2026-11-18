@@ -6,6 +6,7 @@ import { useLibraryLayout } from "@/hooks/use-library-layout";
 import { usePushPermission } from "@/hooks/use-push-registration";
 import { useProfileApi } from "@/lib/api/profile";
 import { useNotificationsApi } from "@/lib/api/notifications";
+import { useDiscordApi } from "@/lib/api/discord";
 import { getErrorMessage } from "@/lib/api/errors";
 import { displayName, isAdmin } from "@/lib/books";
 import { Sentry } from "@/lib/sentry";
@@ -46,6 +47,7 @@ export function useProfileQueriesForSettings() {
   const [layout, setLayout] = useLibraryLayout();
   const { deleteAccount } = useProfileApi();
   const { unregisterToken } = useNotificationsApi();
+  const discordApi = useDiscordApi();
   const updateProfile = useUpdateProfile();
   const pushPermission = usePushPermission();
 
@@ -143,6 +145,41 @@ export function useProfileQueriesForSettings() {
     queryClient.clear();
   };
 
+  // Discord community: the invite and account linking come from the server
+  const discordInvite = me?.discordInviteUrl ?? null;
+  const connectDiscord = async () => {
+    try {
+      const { url } = await discordApi.connectUrl();
+      const result = await WebBrowser.openAuthSessionAsync(url, "echo://settings");
+      if (result.type === "success") {
+        const outcome = /[?&]discord=([a-z]+)/.exec(result.url)?.[1];
+        if (outcome === "taken") Alert.alert(t("settings.discordTaken"));
+        else if (outcome === "error") Alert.alert(t("settings.discordError"));
+      }
+    } catch (e) {
+      Alert.alert(getErrorMessage(e));
+    } finally {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.profile });
+    }
+  };
+  const disconnectDiscord = () =>
+    Alert.alert(t("settings.disconnectDiscordConfirm"), undefined, [
+      { text: t("common.cancel"), style: "cancel" },
+      {
+        text: t("settings.disconnectDiscord"),
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await discordApi.disconnect();
+          } catch (e) {
+            Alert.alert(getErrorMessage(e));
+          } finally {
+            await queryClient.invalidateQueries({ queryKey: queryKeys.profile });
+          }
+        },
+      },
+    ]);
+
   const notificationSettings =
     typeof me?.notifyFollows === "boolean" &&
     typeof me.notifyActivity === "boolean" &&
@@ -193,6 +230,11 @@ export function useProfileQueriesForSettings() {
     getPremium: () => router.push("/premium"),
     canManageBilling,
     billing,
+    joinDiscord: discordInvite ? () => Linking.openURL(discordInvite) : null,
+    discordLinkingAvailable: !!me?.discordLinkingAvailable,
+    discordConnected: !!me?.discordConnected,
+    connectDiscord,
+    disconnectDiscord,
     terms: () => open("/documents/terms-of-service"),
     privacy: () => open("/documents/privacy-policy"),
     signOut: () =>
